@@ -21,6 +21,10 @@ public class TaskList {
         return tasks;
     }
 
+    public Task get(int index) {
+        return tasks[index];
+    }
+
     public int getTaskCount() {
         return taskCount;
     }
