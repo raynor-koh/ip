@@ -28,6 +28,11 @@ public class Ui {
         }
     }
 
+    public void showMarked(Task task) {
+        System.out.println(MESSAGE_PREFIX + "Nice! I've marked this task as done:");
+        System.out.println(MESSAGE_PREFIX + "  [" + task.getStatusIcon() + "] " + task.getDescription());
+    }
+
     public void showDivider() {
         System.out.println(DIVIDER);
     }
