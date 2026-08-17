@@ -16,8 +16,14 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "Bye. Hope to see you again soon!");
     }
 
-    public void showEcho(String message) {
-        System.out.println(MESSAGE_PREFIX + message);
+    public void showAdded(String task) {
+        System.out.println(MESSAGE_PREFIX + "added: " + task);
+    }
+
+    public void showTasks(String[] tasks, int taskCount) {
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println(MESSAGE_PREFIX + (i + 1) + ". " + tasks[i]);
+        }
     }
 
     public void showDivider() {

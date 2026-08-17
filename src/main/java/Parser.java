@@ -7,6 +7,9 @@ public class Parser {
         if (input.equals("bye")) {
             return new ByeCommand();
         }
-        return new EchoCommand(input);
+        if (input.equals("list")) {
+            return new ListCommand();
+        }
+        return new AddCommand(input);
     }
 }
