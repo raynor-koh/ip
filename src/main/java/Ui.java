@@ -22,7 +22,8 @@ public class Ui {
 
     public void showTasks(String[] tasks, int taskCount) {
         for (int i = 0; i < taskCount; i++) {
-            System.out.println(MESSAGE_PREFIX + (i + 1) + ". " + tasks[i]);
+            Task task = tasks[i];
+            System.out.println(MESSAGE_PREFIX + (i + 1) + ".[" + task.getStatusIcon() + "] " + task.getDescription());
         }
     }
 
