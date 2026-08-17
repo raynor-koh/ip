@@ -16,6 +16,10 @@ public class Parser {
             int taskNumber = Integer.parseInt(words[1].trim());
             return new MarkCommand(taskNumber);
         }
+        if (words[0].equals("unmark")) {
+            int taskNumber = Integer.parseInt(words[1].trim());
+            return new UnmarkCommand(taskNumber);
+        }
         return new AddCommand(input);
     }
 }
