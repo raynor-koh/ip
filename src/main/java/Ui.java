@@ -33,6 +33,11 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "  [" + task.getStatusIcon() + "] " + task.getDescription());
     }
 
+    public void showUnmarked(Task task) {
+        System.out.println(MESSAGE_PREFIX + "OK, I've marked this task as not done yet:");
+        System.out.println(MESSAGE_PREFIX + "  [" + task.getStatusIcon() + "] " + task.getDescription());
+    }
+
     public void showDivider() {
         System.out.println(DIVIDER);
     }
