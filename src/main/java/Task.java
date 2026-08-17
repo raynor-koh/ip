@@ -18,6 +18,10 @@ public class Task {
         isDone = true;
     }
 
+    public void markAsNotDone() {
+        isDone = false;
+    }
+
     public String getDescription() {
         return description;
     }
