@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class ChatBot {
     private final Ui ui;
     private final Parser parser;
+    private final TaskList tasks;
 
     /**
      * Creates a chatbot with its user interface and input parser.
@@ -13,6 +14,7 @@ public class ChatBot {
     public ChatBot() {
         this.ui = new Ui();
         this.parser = new Parser();
+        this.tasks = new TaskList();
     }
 
     /**
@@ -27,7 +29,7 @@ public class ChatBot {
             Command command = parser.parse(input);
 
             ui.showDivider();
-            command.execute(ui);
+            command.execute(ui, tasks);
             ui.showDivider();
 
             if (command.isExit()) {
