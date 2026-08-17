@@ -1,26 +1,41 @@
+import java.util.Scanner;
+
 public class Bob {
     public static void main(String[] args) {
         String chatBotName = "Bob";
-        String divider = "____________________________________________________________";
+        String linePrefix = "    ";
+        String messagePrefix = "     ";
+        String divider = linePrefix + "____________________________________________________________";
         System.out.println(divider);
 
         // @formatter:off
-        String banner = " ____        _     \n"
-                + "| __ )  ___ | |__\n"
-                + "|  _ \\ / _ \\| '_ \\\n"
-                + "| |_) | (_) | |_) |\n"
-                + "|____/ \\___/|_.__/";
+        String banner = messagePrefix + " ____        _     \n"
+                + messagePrefix + "| __ )  ___ | |__\n"
+                + messagePrefix + "|  _ \\ / _ \\| '_ \\\n"
+                + messagePrefix + "| |_) | (_) | |_) |\n"
+                + messagePrefix + "|____/ \\___/|_.__/";
         // @formatter:on
         System.out.println(banner);
 
-        String helloMessage = "Hello! I'm " + chatBotName + ".\n" + "What can I do for you?";
+        String helloMessage = messagePrefix + "Hello! I'm " + chatBotName + ".\n" + messagePrefix
+                                        + "What can I do for you?";
         System.out.println(helloMessage);
 
         System.out.println(divider);
 
         String goodbyeMessage = "Bye. Hope to see you again soon!";
-        System.out.println(goodbyeMessage);
-
-        System.out.println(divider);
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            String command = scanner.nextLine();
+            System.out.println(divider);
+            if (command.equals("bye")) {
+                System.out.println(messagePrefix + goodbyeMessage);
+                System.out.println(divider);
+                break;
+            }
+            System.out.println(messagePrefix + command);
+            System.out.println(divider);
+        }
+        scanner.close();
     }
 }
