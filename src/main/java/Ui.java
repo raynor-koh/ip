@@ -20,7 +20,8 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "added: " + task);
     }
 
-    public void showTasks(String[] tasks, int taskCount) {
+    public void showTasks(Task[] tasks, int taskCount) {
+        System.out.println(MESSAGE_PREFIX + "Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
             Task task = tasks[i];
             System.out.println(MESSAGE_PREFIX + (i + 1) + ".[" + task.getStatusIcon() + "] " + task.getDescription());
