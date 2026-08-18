@@ -16,26 +16,28 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "Bye. Hope to see you again soon!");
     }
 
-    public void showAdded(String task) {
+    public void showAdded(Task task, int taskCount) {
+        System.out.println(MESSAGE_PREFIX + "Got it. I've added this task:");
         System.out.println(MESSAGE_PREFIX + "added: " + task);
+        System.out.println(MESSAGE_PREFIX + "Now you have " + taskCount + " tasks in the list.");
     }
 
     public void showTasks(Task[] tasks, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
             Task task = tasks[i];
-            System.out.println(MESSAGE_PREFIX + (i + 1) + ".[" + task.getStatusIcon() + "] " + task.getDescription());
+            System.out.println(MESSAGE_PREFIX + (i + 1) + "." + task);
         }
     }
 
     public void showMarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "Nice! I've marked this task as done:");
-        System.out.println(MESSAGE_PREFIX + "  [" + task.getStatusIcon() + "] " + task.getDescription());
+        System.out.println(MESSAGE_PREFIX + "  " + task);
     }
 
     public void showUnmarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "OK, I've marked this task as not done yet:");
-        System.out.println(MESSAGE_PREFIX + "  [" + task.getStatusIcon() + "] " + task.getDescription());
+        System.out.println(MESSAGE_PREFIX + "  " + task);
     }
 
     public void showDivider() {
