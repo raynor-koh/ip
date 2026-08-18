@@ -1,7 +1,7 @@
 /**
  * Represents a task tracked by the chatbot.
  */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -22,7 +22,8 @@ public class Task {
         isDone = false;
     }
 
-    public String getDescription() {
-        return description;
+    @Override
+    public String toString() {
+        return "[" + this.getStatusIcon() + "] " + this.description;
     }
 }
