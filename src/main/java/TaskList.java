@@ -12,8 +12,8 @@ public class TaskList {
         this.taskCount = 0;
     }
 
-    public void add(String description) {
-        tasks[taskCount] = new Task(description);
+    public void add(Task task) {
+        tasks[taskCount] = task;
         taskCount++;
     }
 
