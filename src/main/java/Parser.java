@@ -1,3 +1,5 @@
+import java.util.Locale;
+
 /**
  * Converts raw user input into command objects.
  */
@@ -9,32 +11,36 @@ public class Parser {
         }
 
         String[] words = input.trim().split("\\s+", 2);
-        String command = words[0].toLowerCase();
+        CommandType command = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT));
         String argument = words.length == 2 ? words[1].trim() : "";
 
-        switch (command) {
-        case "bye":
-            requireNoArgument(argument, "bye");
-            return new ByeCommand();
-        case "list":
-            requireNoArgument(argument, "list");
-            return new ListCommand();
-        case "mark":
-            return new MarkCommand(parseTaskNumber(argument, "mark"));
-        case "unmark":
-            return new UnmarkCommand(parseTaskNumber(argument, "unmark"));
-        case "delete":
-            return new DeleteCommand(parseTaskNumber(argument, "delete"));
-        case "todo":
-            return new AddCommand(new ToDo(requireText(argument,
-                                            "A todo needs a description. Try: todo read chapter 1")));
-        case "deadline":
-            return parseDeadline(argument);
-        case "event":
-            return parseEvent(argument);
-        default:
+        if (command == null) {
             throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
         }
+
+        switch (command) {
+        case BYE:
+            requireNoArgument(argument, command);
+            return new ByeCommand();
+        case LIST:
+            requireNoArgument(argument, command);
+            return new ListCommand();
+        case MARK:
+            return new MarkCommand(parseTaskNumber(argument, command));
+        case UNMARK:
+            return new UnmarkCommand(parseTaskNumber(argument, command));
+        case DELETE:
+            return new DeleteCommand(parseTaskNumber(argument, command));
+        case TODO:
+            return new AddCommand(new ToDo(requireText(argument,
+                                            "A todo needs a description. Try: todo read chapter 1")));
+        case DEADLINE:
+            return parseDeadline(argument);
+        case EVENT:
+            return parseEvent(argument);
+        }
+
+        throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
     }
 
     private Command parseDeadline(String argument) throws BobException {
@@ -63,9 +69,10 @@ public class Parser {
         return new AddCommand(new Event(description, from, to));
     }
 
-    private int parseTaskNumber(String argument, String command) throws BobException {
+    private int parseTaskNumber(String argument, CommandType command) throws BobException {
         if (argument.isEmpty()) {
-            throw new BobException("'" + command + "' needs a task number. Try: " + command + " 1");
+            throw new BobException("'" + command.getKeyword() + "' needs a task number. Try: "
+                    + command.getKeyword() + " 1");
         }
         try {
             int taskNumber = Integer.parseInt(argument);
@@ -74,7 +81,8 @@ public class Parser {
             }
             return taskNumber;
         } catch (NumberFormatException exception) {
-            throw new BobException("'" + command + "' needs a whole-number task index, such as 1.");
+            throw new BobException("'" + command.getKeyword()
+                    + "' needs a whole-number task index, such as 1.");
         }
     }
 
@@ -85,9 +93,9 @@ public class Parser {
         return text;
     }
 
-    private void requireNoArgument(String argument, String command) throws BobException {
+    private void requireNoArgument(String argument, CommandType command) throws BobException {
         if (!argument.isEmpty()) {
-            throw new BobException("'" + command + "' does not take extra arguments.");
+            throw new BobException("'" + command.getKeyword() + "' does not take extra arguments.");
         }
     }
 }
