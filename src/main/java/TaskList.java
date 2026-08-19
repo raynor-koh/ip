@@ -1,37 +1,43 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Stores tasks entered by the user during the current chatbot run.
  */
 public class TaskList {
-    private static final int MAX_TASKS = 100;
-
-    private final Task[] tasks;
-    private int taskCount;
+    private final List<Task> tasks;
 
     public TaskList() {
-        this.tasks = new Task[MAX_TASKS];
-        this.taskCount = 0;
+        this.tasks = new ArrayList<>();
     }
 
-    public void add(Task task) throws BobException {
-        if (taskCount == MAX_TASKS) {
-            throw new BobException("Your task list is full. Remove a task before adding another one.");
-        }
-        tasks[taskCount] = task;
-        taskCount++;
+    public void add(Task task) {
+        tasks.add(task);
     }
 
-    public Task[] getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
     public Task get(int index) throws BobException {
-        if (index < 0 || index >= taskCount) {
+        if (!isValidIndex(index)) {
             throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
         }
-        return tasks[index];
+        return tasks.get(index);
     }
 
     public int getTaskCount() {
-        return taskCount;
+        return tasks.size();
+    }
+
+    public Task remove(int index) throws BobException {
+        if (!isValidIndex(index)) {
+            throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
+        }
+        return tasks.remove(index);
+    }
+
+    private boolean isValidIndex(int index) {
+        return index >= 0 && index < tasks.size();
     }
 }

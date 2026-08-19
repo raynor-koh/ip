@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Ui {
     private static final String CHATBOT_NAME = "Bob";
     private static final String LINE_PREFIX = "    ";
@@ -22,10 +24,10 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "Now you have " + taskCount + " tasks in the list.");
     }
 
-    public void showTasks(Task[] tasks, int taskCount) {
+    public void showTasks(List<Task> tasks, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
-            Task task = tasks[i];
+            Task task = tasks.get(i);
             System.out.println(MESSAGE_PREFIX + (i + 1) + "." + task);
         }
     }
