@@ -3,12 +3,12 @@
  */
 public abstract class Task {
     protected String description;
-    protected boolean isDone;
+    private TaskStatus status;
     private final TaskType type;
 
     public Task(String description, TaskType type) {
         this.description = description;
-        this.isDone = false;
+        this.status = TaskStatus.NOT_DONE;
         this.type = type;
     }
 
@@ -17,16 +17,21 @@ public abstract class Task {
         return type;
     }
 
+    /** Returns the current completion state of this task. */
+    public TaskStatus getStatus() {
+        return status;
+    }
+
     public String getStatusIcon() {
-        return isDone ? "X" : " ";
+        return status.getIcon();
     }
 
     public void markAsDone() {
-        isDone = true;
+        status = TaskStatus.DONE;
     }
 
     public void markAsNotDone() {
-        isDone = false;
+        status = TaskStatus.NOT_DONE;
     }
 
     @Override
