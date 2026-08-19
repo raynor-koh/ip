@@ -25,16 +25,19 @@ public class ChatBot {
 
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
-            String input = scanner.nextLine();
-            Command command = parser.parse(input);
-
             ui.showDivider();
-            command.execute(ui, tasks);
-            ui.showDivider();
+            try {
+                String input = scanner.nextLine();
+                Command command = parser.parse(input);
+                command.execute(ui, tasks);
 
-            if (command.isExit()) {
-                break;
+                if (command.isExit()) {
+                    break;
+                }
+            } catch (BobException exception) {
+                ui.showError(exception.getMessage());
             }
+            ui.showDivider();
         }
         scanner.close();
     }

@@ -40,6 +40,11 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "  " + task);
     }
 
+    /** Displays a recoverable input error. */
+    public void showError(String message) {
+        System.out.println(MESSAGE_PREFIX + "I couldn't process that: " + message);
+    }
+
     public void showDivider() {
         System.out.println(DIVIDER);
     }

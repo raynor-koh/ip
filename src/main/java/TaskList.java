@@ -12,7 +12,10 @@ public class TaskList {
         this.taskCount = 0;
     }
 
-    public void add(Task task) {
+    public void add(Task task) throws BobException {
+        if (taskCount == MAX_TASKS) {
+            throw new BobException("Your task list is full. Remove a task before adding another one.");
+        }
         tasks[taskCount] = task;
         taskCount++;
     }
@@ -21,7 +24,10 @@ public class TaskList {
         return tasks;
     }
 
-    public Task get(int index) {
+    public Task get(int index) throws BobException {
+        if (index < 0 || index >= taskCount) {
+            throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
+        }
         return tasks[index];
     }
 
