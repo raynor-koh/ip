@@ -23,6 +23,8 @@ public class Parser {
             return new MarkCommand(parseTaskNumber(argument, "mark"));
         case "unmark":
             return new UnmarkCommand(parseTaskNumber(argument, "unmark"));
+        case "delete":
+            return new DeleteCommand(parseTaskNumber(argument, "delete"));
         case "todo":
             return new AddCommand(new ToDo(requireText(argument,
                                             "A todo needs a description. Try: todo read chapter 1")));
@@ -31,7 +33,7 @@ public class Parser {
         case "event":
             return parseEvent(argument);
         default:
-            throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', or 'bye'.");
+            throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
         }
     }
 

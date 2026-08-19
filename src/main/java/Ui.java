@@ -32,6 +32,13 @@ public class Ui {
         }
     }
 
+    public void showDeleted(Task task, int taskCount) {
+        System.out.println(MESSAGE_PREFIX + "Noted. I've removed this task:");
+        System.out.println(MESSAGE_PREFIX + task);
+        String taskLabel = taskCount == 1 ? "task" : "tasks";
+        System.out.println(MESSAGE_PREFIX + "Now you have " + taskCount + " " + taskLabel + " in the list.");
+    }
+
     public void showMarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "Nice! I've marked this task as done:");
         System.out.println(MESSAGE_PREFIX + "  " + task);
