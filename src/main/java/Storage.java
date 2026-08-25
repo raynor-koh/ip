@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import  java.nio.file.Path;
 import java.util.ArrayList;
@@ -34,7 +35,43 @@ public class Storage {
             }
         }
 
-        Files.write(filePath, lines);
+        Files.write(filePath, lines, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Loads tasks from the storage file.
+     */
+    public TaskList load() throws IOException {
+        TaskList taskList = new TaskList();
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+
+        for (String line: lines) {
+            String[] parts = line.split("\\s*\\|\\s*", -1);
+
+            String type = parts[0];
+            boolean isDone = parts[1].equals("1");
+
+            Task task;
+
+            switch (type) {
+                case "T":
+                    task = new ToDo(parts[2]);
+                    break;
+                case "D":
+                    task = new Deadline(parts[2], parts[3]);
+                    break;
+                case "E":
+                    task = new Event(parts[2], parts[3], parts[4]);
+                default:
+                    throw new IOException("Unknown task type: " + type);
+            }
+
+            if (isDone) {
+                task.markAsDone();
+            }
+            taskList.add(task);
+        }
+
+        return taskList;
+    }
 }
