@@ -1,9 +1,15 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 /**
  * Converts raw user input into command objects.
  */
 public class Parser {
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu");
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
 
     public Command parse(String input) throws BobException {
         if (input == null || input.trim().isEmpty()) {
@@ -49,7 +55,7 @@ public class Parser {
             throw new BobException("A deadline needs a due date. Try: deadline submit report /by Friday");
         }
         String description = requireText(parts[0].trim(), "A deadline needs a description before '/by'.");
-        String dueDate = requireText(parts[1].trim(), "A deadline needs a due date after '/by'.");
+        TaskDateTime dueDate = parseDateTime(parts[1].trim());
         return new AddCommand(new Deadline(description, dueDate));
     }
 
@@ -64,8 +70,8 @@ public class Parser {
         if (toParts.length < 2) {
             throw new BobException("An event needs an end time after '/to'. Try: event meeting /from 2pm /to 3pm");
         }
-        String from = requireText(toParts[0].trim(), "An event needs a start time after '/from'.");
-        String to = requireText(toParts[1].trim(), "An event needs an end time after '/to'.");
+        TaskDateTime from = parseDateTime(toParts[0].trim());
+        TaskDateTime to = parseDateTime(toParts[1].trim());
         return new AddCommand(new Event(description, from, to));
     }
 
@@ -99,5 +105,22 @@ public class Parser {
         if (!argument.isEmpty()) {
             throw new BobException("'" + command.getKeyword() + "' does not take extra arguments.");
         }
+    }
+
+    private TaskDateTime parseDateTime(String text) throws BobException {
+        try {
+            if (text.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) {
+                LocalDate date = LocalDate.parse(text, DATE_FORMAT);
+                return new TaskDateTime(date, null);
+            }
+
+            LocalDateTime dateTime = LocalDateTime.parse(text, DATE_TIME_FORMAT);
+            return new TaskDateTime(dateTime.toLocalDate(), dateTime.toLocalTime());
+
+        } catch (DateTimeParseException exception) {
+            throw new BobException("Invalid date format. Use d/M/yyyy or d/M/yyyy HHmm, "
+                                            + "such as 2/12/2019 or 2/12/2019 1800.");
+        }
+
     }
 }

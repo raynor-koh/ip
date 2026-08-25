@@ -1,8 +1,8 @@
 public class Event extends Task {
-    protected String from;
-    protected String to;
+    private final TaskDateTime from;
+    private final TaskDateTime to;
 
-    public Event(String description, String from, String to) {
+    public Event(String description, TaskDateTime from, TaskDateTime to) {
         super(description, TaskType.EVENT);
         this.from = from;
         this.to = to;
@@ -12,11 +12,11 @@ public class Event extends Task {
         return super.toString() + " (from: " + getFrom() + " to: " + getTo() + ")";
     }
 
-    public String getFrom() {
+    public TaskDateTime getFrom() {
         return from;
     }
 
-    public String getTo() {
+    public TaskDateTime getTo() {
         return to;
     }
 }

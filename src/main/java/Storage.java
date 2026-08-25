@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +24,13 @@ public class Storage {
 
         case DEADLINE:
             Deadline deadline = (Deadline) task;
-            return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(), deadline.getBy());
+            return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
+                                            deadline.getBy().toStorageString());
 
         case EVENT:
             Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(), event.getFrom(), event.getTo());
+            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(), event.getFrom().toStorageString(),
+                                            event.getTo().toStorageString());
 
         default:
             throw new IllegalArgumentException("Unsupported task type: " + task.getType());
@@ -94,11 +97,20 @@ public class Storage {
             break;
 
         case DEADLINE:
-            task = new Deadline(parts[2], parts[3]);
+            try {
+                task = new Deadline(parts[2], TaskDateTime.fromStorageString(parts[3]));
+            } catch (DateTimeParseException exception) {
+                throw corruptedFile(lineNumber, "invalid deadline date");
+            }
             break;
 
         case EVENT:
-            task = new Event(parts[2], parts[3], parts[4]);
+            try {
+                task = new Event(parts[2], TaskDateTime.fromStorageString(parts[3]),
+                                                TaskDateTime.fromStorageString(parts[4]));
+            } catch (DateTimeParseException exception) {
+                throw corruptedFile(lineNumber, "invalid event date");
+            }
             break;
 
         default:
