@@ -25,12 +25,13 @@ public class Storage {
         case DEADLINE:
             Deadline deadline = (Deadline) task;
             return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
-                                            deadline.getBy().toStorageString());
+                                            DateTimeParser.formatForStorage(deadline.getBy()));
 
         case EVENT:
             Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(), event.getFrom().toStorageString(),
-                                            event.getTo().toStorageString());
+            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
+                                            DateTimeParser.formatForStorage(event.getFrom()),
+                                            DateTimeParser.formatForStorage((event.getTo())));
 
         default:
             throw new IllegalArgumentException("Unsupported task type: " + task.getType());
@@ -98,7 +99,7 @@ public class Storage {
 
         case DEADLINE:
             try {
-                task = new Deadline(parts[2], TaskDateTime.fromStorageString(parts[3]));
+                task = new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
             } catch (DateTimeParseException exception) {
                 throw corruptedFile(lineNumber, "invalid deadline date");
             }
@@ -106,8 +107,8 @@ public class Storage {
 
         case EVENT:
             try {
-                task = new Event(parts[2], TaskDateTime.fromStorageString(parts[3]),
-                                                TaskDateTime.fromStorageString(parts[4]));
+                task = new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
+                                                DateTimeParser.parseStorage(parts[4]));
             } catch (DateTimeParseException exception) {
                 throw corruptedFile(lineNumber, "invalid event date");
             }

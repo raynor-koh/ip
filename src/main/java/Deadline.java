@@ -8,7 +8,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + " (by: " + getBy() + ")";
+        return super.toString() + " (by: " + DateTimeParser.formatForDisplay(by) + ")";
     }
 
     public TaskDateTime getBy() {
