@@ -9,8 +9,9 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public void execute(Ui ui, TaskList taskList) throws BobException {
+    public boolean execute(Ui ui, TaskList taskList) throws BobException {
         Task deletedTask = taskList.remove(taskNumber - 1);
         ui.showDeleted(deletedTask, taskList.getTaskCount());
+        return true;
     }
 }

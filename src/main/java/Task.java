@@ -17,6 +17,11 @@ public abstract class Task {
         return type;
     }
 
+    /** Returns the task description */
+    public String getDescription() {
+        return description;
+    }
+
     /** Returns the current completion state of this task. */
     public TaskStatus getStatus() {
         return status;
@@ -36,6 +41,6 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return "[" + type.getSymbol() + "][" + this.getStatusIcon() + "] " + this.description;
+        return "[" + type.getSymbol() + "][" + this.getStatusIcon() + "] " + this.getDescription();
     }
 }

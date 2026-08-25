@@ -8,7 +8,12 @@ public class Bob {
      * @param args command-line arguments, currently unused
      */
     public static void main(String[] args) {
-        ChatBot chatBot = new ChatBot();
-        chatBot.run();
+        try {
+            ChatBot chatBot = new ChatBot();
+            chatBot.run();
+        } catch (BobException exception) {
+            System.out.println(exception.getMessage());
+        }
+
     }
 }

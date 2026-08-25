@@ -6,8 +6,9 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public void execute(Ui ui, TaskList tasks) throws BobException {
+    public boolean execute(Ui ui, TaskList tasks) throws BobException {
         tasks.add(task);
         ui.showAdded(task, tasks.getTaskCount());
+        return true;
     }
 }

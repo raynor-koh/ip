@@ -9,6 +9,14 @@ public class Event extends Task {
     }
 
     public String toString() {
-        return super.toString() + " (from: " + this.from + " to: " + this.to + ")";
+        return super.toString() + " (from: " + getFrom() + " to: " + getTo() + ")";
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
     }
 }

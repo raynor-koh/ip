@@ -9,9 +9,10 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public void execute(Ui ui, TaskList taskList) throws BobException {
+    public boolean execute(Ui ui, TaskList taskList) throws BobException {
         Task task = taskList.get(taskNumber - 1);
         task.markAsDone();
         ui.showMarked(task);
+        return true;
     }
 }
