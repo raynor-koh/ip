@@ -7,9 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-    private final Path filePath = Path.of("data", "bob.txt");
+    private final Path filePath;
 
     static final String FIELD_SEPARATOR = "|";
+
+    /** Creates storage using Bob's default data file. */
+    public Storage() {
+        this(Path.of("data", "bob.txt").toString());
+    }
+
+    /** Creates storage using the supplied data file path. */
+    public Storage(String filePath) {
+        this.filePath = Path.of(filePath);
+    }
 
     /**
      * Converts a task into its pipe-generated storage representation.
@@ -25,12 +35,13 @@ public class Storage {
         case DEADLINE:
             Deadline deadline = (Deadline) task;
             return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
-                                            deadline.getBy().toStorageString());
+                                            DateTimeParser.formatForStorage(deadline.getBy()));
 
         case EVENT:
             Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(), event.getFrom().toStorageString(),
-                                            event.getTo().toStorageString());
+            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
+                                            DateTimeParser.formatForStorage(event.getFrom()),
+                                            DateTimeParser.formatForStorage((event.getTo())));
 
         default:
             throw new IllegalArgumentException("Unsupported task type: " + task.getType());
@@ -41,12 +52,12 @@ public class Storage {
     /**
      * Saves all tasks, replacing the previous file contents.
      */
-    public void save(TaskList taskList) throws IOException {
+    public void save(List<Task> tasks) throws IOException {
         try {
             Files.createDirectories(filePath.getParent());
             List<String> lines = new ArrayList<>();
 
-            for (Task task : taskList.getTasks()) {
+            for (Task task : tasks) {
                 lines.add(serializeTask(task));
             }
 
@@ -98,7 +109,7 @@ public class Storage {
 
         case DEADLINE:
             try {
-                task = new Deadline(parts[2], TaskDateTime.fromStorageString(parts[3]));
+                task = new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
             } catch (DateTimeParseException exception) {
                 throw corruptedFile(lineNumber, "invalid deadline date");
             }
@@ -106,8 +117,8 @@ public class Storage {
 
         case EVENT:
             try {
-                task = new Event(parts[2], TaskDateTime.fromStorageString(parts[3]),
-                                                TaskDateTime.fromStorageString(parts[4]));
+                task = new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
+                                                DateTimeParser.parseStorage(parts[4]));
             } catch (DateTimeParseException exception) {
                 throw corruptedFile(lineNumber, "invalid event date");
             }
@@ -127,12 +138,12 @@ public class Storage {
     /**
      * Loads tasks from the storage file.
      */
-    public TaskList load() throws IOException {
-        TaskList taskList = new TaskList();
+    public List<Task> load() throws IOException {
+        List<Task> tasks = new ArrayList<>();
 
         // A new installation does not have a data file yet.
         if (Files.notExists(filePath)) {
-            return taskList;
+            return tasks;
         }
 
         List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
@@ -142,10 +153,10 @@ public class Storage {
             String[] parts = line.split("\\s*\\|\\s*", -1);
 
             Task task = deserializeTask(parts, lineNumber);
-            taskList.add(task);
+            tasks.add(task);
         }
 
-        return taskList;
+        return tasks;
     }
 
     /** Creates a consistent error for malformed storage records. */

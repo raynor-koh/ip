@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class AddCommand extends Command {
     private final Task task;
 
@@ -6,9 +8,9 @@ public class AddCommand extends Command {
     }
 
     @Override
-    public boolean execute(Ui ui, TaskList tasks) throws BobException {
+    public void execute(TaskList tasks, Ui ui, Storage storage) throws BobException, IOException {
         tasks.add(task);
         ui.showAdded(task, tasks.getTaskCount());
-        return true;
+        storage.save(tasks.getTasks());
     }
 }

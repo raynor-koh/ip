@@ -9,7 +9,8 @@ public class Event extends Task {
     }
 
     public String toString() {
-        return super.toString() + " (from: " + getFrom() + " to: " + getTo() + ")";
+        return super.toString() + " (from: " + DateTimeParser.formatForDisplay(from) + " to: "
+                                        + DateTimeParser.formatForDisplay(to) + ")";
     }
 
     public TaskDateTime getFrom() {

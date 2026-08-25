@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 /**
  * Command that removes a task from the list.
  */
@@ -9,9 +11,9 @@ public class DeleteCommand extends Command {
     }
 
     @Override
-    public boolean execute(Ui ui, TaskList taskList) throws BobException {
+    public void execute(TaskList taskList, Ui ui, Storage storage) throws BobException, IOException {
         Task deletedTask = taskList.remove(taskNumber - 1);
         ui.showDeleted(deletedTask, taskList.getTaskCount());
-        return true;
+        storage.save(taskList.getTasks());
     }
 }

@@ -1,17 +1,39 @@
 import java.util.List;
+import java.util.Scanner;
 
 public class Ui {
     private static final String CHATBOT_NAME = "Bob";
     private static final String LINE_PREFIX = "    ";
     private static final String MESSAGE_PREFIX = "     ";
     private static final String DIVIDER = LINE_PREFIX + "____________________________________________________________";
+    private final Scanner scanner;
+
+    /** Creates a user interface that reads commands from standard input. */
+    public Ui() {
+        this.scanner = new Scanner(System.in);
+    }
+
+    /** Returns whether another command is available from the user. */
+    public boolean hasNextLine() {
+        return scanner.hasNextLine();
+    }
+
+    /** Reads the next command entered by the user. */
+    public String readCommand() {
+        return scanner.nextLine();
+    }
+
+    /** Closes the input stream owned by this user interface. */
+    public void close() {
+        scanner.close();
+    }
 
     public void showWelcome() {
-        showDivider();
+        showLine();
         showBanner();
         System.out.println(MESSAGE_PREFIX + "Hello! I'm " + CHATBOT_NAME + ".");
         System.out.println(MESSAGE_PREFIX + "What can I do for you?");
-        showDivider();
+        showLine();
     }
 
     public void showGoodbye() {
@@ -54,7 +76,7 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "I couldn't process that: " + message);
     }
 
-    public void showDivider() {
+    public void showLine() {
         System.out.println(DIVIDER);
     }
 
