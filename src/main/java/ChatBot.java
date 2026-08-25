@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -7,14 +8,22 @@ public class ChatBot {
     private final Ui ui;
     private final Parser parser;
     private final TaskList tasks;
+    private final Storage storage;
 
     /**
      * Creates a chatbot with its user interface and input parser.
      */
-    public ChatBot() {
+    public ChatBot() throws BobException {
         this.ui = new Ui();
         this.parser = new Parser();
-        this.tasks = new TaskList();
+        this.storage = new Storage();
+
+        // Load once when the chatbot starts
+        try {
+            this.tasks = storage.load();
+        } catch (IOException exception) {
+            throw new BobException("I could not load your saved tasks");
+        }
     }
 
     /**
@@ -31,10 +40,13 @@ public class ChatBot {
                 Command command = parser.parse(input);
                 command.execute(ui, tasks);
 
+                // TODO: Implement save whenever the task list changes
+                storage.save(tasks);
+
                 if (command.isExit()) {
                     break;
                 }
-            } catch (BobException exception) {
+            } catch (BobException | IOException exception) {
                 ui.showError(exception.getMessage());
             }
             ui.showDivider();

@@ -1,13 +1,13 @@
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import  java.nio.file.Path;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
     private final Path filePath = Path.of("data", "bob.txt");
-        
+
     /**
      * Saves all tasks, replacing the previous file contents.
      */
@@ -15,23 +15,23 @@ public class Storage {
         Files.createDirectories(filePath.getParent());
         List<String> lines = new ArrayList<>();
 
-        for (Task task: taskList.getTasks()) {
+        for (Task task : taskList.getTasks()) {
             String status = task.getStatus() == TaskStatus.DONE ? "1" : "0";
 
             switch (task.getType()) {
-                case TODO:
-                    lines.add(String.join("|", "T", status, task.getDescription()));
-                    break;
-                
-                case DEADLINE:
-                    Deadline deadline = (Deadline) task;
-                    lines.add(String.join("|", "D", status, deadline.getDescription(), deadline.getBy()));
-                    break;
-                
-                case EVENT:
-                    Event event = (Event) task;
-                    lines.add(String.join("|", "E", status, event.getDescription(), event.getFrom(), event.getTo()));
-                    break;
+            case TODO:
+                lines.add(String.join("|", "T", status, task.getDescription()));
+                break;
+
+            case DEADLINE:
+                Deadline deadline = (Deadline) task;
+                lines.add(String.join("|", "D", status, deadline.getDescription(), deadline.getBy()));
+                break;
+
+            case EVENT:
+                Event event = (Event) task;
+                lines.add(String.join("|", "E", status, event.getDescription(), event.getFrom(), event.getTo()));
+                break;
             }
         }
 
@@ -45,7 +45,7 @@ public class Storage {
         TaskList taskList = new TaskList();
         List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
 
-        for (String line: lines) {
+        for (String line : lines) {
             String[] parts = line.split("\\s*\\|\\s*", -1);
 
             String type = parts[0];
@@ -54,16 +54,16 @@ public class Storage {
             Task task;
 
             switch (type) {
-                case "T":
-                    task = new ToDo(parts[2]);
-                    break;
-                case "D":
-                    task = new Deadline(parts[2], parts[3]);
-                    break;
-                case "E":
-                    task = new Event(parts[2], parts[3], parts[4]);
-                default:
-                    throw new IOException("Unknown task type: " + type);
+            case "T":
+                task = new ToDo(parts[2]);
+                break;
+            case "D":
+                task = new Deadline(parts[2], parts[3]);
+                break;
+            case "E":
+                task = new Event(parts[2], parts[3], parts[4]);
+            default:
+                throw new IOException("Unknown task type: " + type);
             }
 
             if (isDone) {
