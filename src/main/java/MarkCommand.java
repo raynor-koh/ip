@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 /**
  * Command that marks a task as done.
  */
@@ -9,10 +11,10 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public boolean execute(Ui ui, TaskList taskList) throws BobException {
+    public void execute(TaskList taskList, Ui ui, Storage storage) throws BobException, IOException {
         Task task = taskList.get(taskNumber - 1);
         task.markAsDone();
         ui.showMarked(task);
-        return true;
+        storage.save(taskList.getTasks());
     }
 }

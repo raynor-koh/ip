@@ -1,8 +1,7 @@
 public class ByeCommand extends Command {
     @Override
-    public boolean execute(Ui ui, TaskList tasks) {
+    public void execute(TaskList tasks, Ui ui, Storage storage) {
         ui.showGoodbye();
-        return false;
     }
 
     @Override

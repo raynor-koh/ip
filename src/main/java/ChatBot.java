@@ -45,11 +45,7 @@ public class ChatBot {
             try {
                 String input = ui.readLine();
                 Command command = parser.parse(input);
-                boolean changed = command.execute(ui, tasks);
-
-                if (changed) {
-                    storage.save(tasks.getTasks());
-                }
+                command.execute(tasks, ui, storage);
 
                 if (command.isExit()) {
                     break;
