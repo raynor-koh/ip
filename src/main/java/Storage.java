@@ -8,6 +8,33 @@ import java.util.List;
 public class Storage {
     private final Path filePath = Path.of("data", "bob.txt");
 
+    private static final String FIELD_SEPARATOR = "|";
+
+    /**
+     * Converts a task into its pipe-generated storage representation.
+     */
+    private String serializeTask(Task task) {
+        String type = task.getType().getSymbol();
+        String status = task.getStatus().getStorageCode();
+
+        switch (task.getType()) {
+        case TODO:
+            return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
+
+        case DEADLINE:
+            Deadline deadline = (Deadline) task;
+            return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(), deadline.getBy());
+
+        case EVENT:
+            Event event = (Event) task;
+            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(), event.getFrom(), event.getTo());
+
+        default:
+            throw new IllegalArgumentException("Unsupported task type: " + task.getType());
+
+        }
+    }
+
     /**
      * Saves all tasks, replacing the previous file contents.
      */
@@ -17,29 +44,72 @@ public class Storage {
             List<String> lines = new ArrayList<>();
 
             for (Task task : taskList.getTasks()) {
-                String status = task.getStatus() == TaskStatus.DONE ? "1" : "0";
-
-                switch (task.getType()) {
-                case TODO:
-                    lines.add(String.join("|", "T", status, task.getDescription()));
-                    break;
-
-                case DEADLINE:
-                    Deadline deadline = (Deadline) task;
-                    lines.add(String.join("|", "D", status, deadline.getDescription(), deadline.getBy()));
-                    break;
-
-                case EVENT:
-                    Event event = (Event) task;
-                    lines.add(String.join("|", "E", status, event.getDescription(), event.getFrom(), event.getTo()));
-                    break;
-                }
+                lines.add(serializeTask(task));
             }
 
             Files.write(filePath, lines, StandardCharsets.UTF_8);
         } catch (IOException exception) {
             throw new IOException("Could not save tasks to " + filePath + ".", exception);
         }
+    }
+
+    /**
+     * Converts one stored record into a task.
+     *
+     * @throws IOException if the stored record is malformed
+     */
+    public Task deserializeTask(String[] parts, int lineNumber) throws IOException {
+        if (parts.length == 0 || parts[0].isBlank()) {
+            throw corruptedFile(lineNumber, "missing task type");
+        }
+
+        if (parts.length < 2) {
+            throw corruptedFile(lineNumber, "missing task status");
+        }
+
+        TaskType type;
+        try {
+            type = TaskType.fromSymbol(parts[0]);
+        } catch (IllegalArgumentException exception) {
+            throw corruptedFile(lineNumber, "unknown task type '" + parts[0] + "'");
+        }
+
+        TaskStatus status;
+        try {
+            status = TaskStatus.fromStorageCode(parts[1]);
+        } catch (IllegalArgumentException exception) {
+            throw corruptedFile(lineNumber, "invalid task status");
+        }
+
+        if (parts.length != type.getStorageFieldCount()) {
+            throw corruptedFile(lineNumber, "expected " + type.getStorageFieldCount() + " fields but found "
+                                            + parts.length);
+        }
+
+        Task task;
+
+        switch (type) {
+        case TODO:
+            task = new ToDo(parts[2]);
+            break;
+
+        case DEADLINE:
+            task = new Deadline(parts[2], parts[3]);
+            break;
+
+        case EVENT:
+            task = new Event(parts[2], parts[3], parts[4]);
+            break;
+
+        default:
+            throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
+        }
+
+        if (status == TaskStatus.DONE) {
+            task.markAsDone();
+        }
+
+        return task;
     }
 
     /**
@@ -59,56 +129,17 @@ public class Storage {
             String line = lines.get(lineNumber);
             String[] parts = line.split("\\s*\\|\\s*", -1);
 
-            if (parts.length == 0 || parts[0].isBlank()) {
-                throw corruptedFile(lineNumber, "missing task type");
-            }
-
-            String type = parts[0];
-            if (parts.length < 2 || !(parts[1].equals("0") || parts[1].equals("1"))) {
-                throw corruptedFile(lineNumber, "invalid task status");
-            }
-            boolean isDone = parts[1].equals("1");
-
-            Task task;
-
-            switch (type) {
-            case "T":
-                requirePartCount(parts, 3, lineNumber);
-                task = new ToDo(parts[2]);
-                break;
-            case "D":
-                requirePartCount(parts, 4, lineNumber);
-                task = new Deadline(parts[2], parts[3]);
-                break;
-            case "E":
-                requirePartCount(parts, 5, lineNumber);
-                task = new Event(parts[2], parts[3], parts[4]);
-                break;
-            default:
-                throw corruptedFile(lineNumber, "unknown task type '" + type + "'");
-            }
-
-            if (isDone) {
-                task.markAsDone();
-            }
+            Task task = deserializeTask(parts, lineNumber);
             taskList.add(task);
         }
 
         return taskList;
     }
 
-    /** Ensures that a stored task has exactly the fields required by its type. */
-    private void requirePartCount(String[] parts, int expectedCount, int lineNumber)
-            throws IOException {
-        if (parts.length != expectedCount) {
-            throw corruptedFile(lineNumber, "expected " + expectedCount + " fields but found "
-                    + parts.length);
-        }
-    }
-
     /** Creates a consistent error for malformed storage records. */
     private IOException corruptedFile(int lineNumber, String reason) {
-        return new IOException("Could not load saved tasks: corrupted data on line "
-                + (lineNumber + 1) + " (" + reason + ").");
+        return new IOException("Could not load saved tasks: corrupted data on line " + (lineNumber + 1) + " (" + reason
+                                        + ").");
     }
+
 }
