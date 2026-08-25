@@ -3,7 +3,7 @@
  */
 public abstract class Command {
 
-    public abstract void execute(Ui ui, TaskList tasks) throws BobException;
+    public abstract boolean execute(Ui ui, TaskList tasks) throws BobException;
 
     public boolean isExit() {
         return false;

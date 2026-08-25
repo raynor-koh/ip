@@ -38,10 +38,11 @@ public class ChatBot {
             try {
                 String input = scanner.nextLine();
                 Command command = parser.parse(input);
-                command.execute(ui, tasks);
+                boolean changed = command.execute(ui, tasks);
 
-                // TODO: Implement save whenever the task list changes
-                storage.save(tasks);
+                if (changed) {
+                    storage.save(tasks);
+                }
 
                 if (command.isExit()) {
                     break;
