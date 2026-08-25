@@ -14,9 +14,18 @@ public class ChatBot {
      * Creates a chatbot with its user interface and input parser.
      */
     public ChatBot() throws BobException {
+        this("data/bob.txt");
+    }
+
+    /**
+     * Creates a chatbot that persists tasks at the supplied path.
+     *
+     * @param filePath path of the file used to load and save tasks
+     */
+    public ChatBot(String filePath) throws BobException {
         this.ui = new Ui();
         this.parser = new Parser();
-        this.storage = new Storage();
+        this.storage = new Storage(filePath);
 
         // Load once when the chatbot starts
         try {

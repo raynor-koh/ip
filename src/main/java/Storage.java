@@ -7,9 +7,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-    private final Path filePath = Path.of("data", "bob.txt");
+    private final Path filePath;
 
     static final String FIELD_SEPARATOR = "|";
+
+    /** Creates storage using Bob's default data file. */
+    public Storage() {
+        this(Path.of("data", "bob.txt").toString());
+    }
+
+    /** Creates storage using the supplied data file path. */
+    public Storage(String filePath) {
+        this.filePath = Path.of(filePath);
+    }
 
     /**
      * Converts a task into its pipe-generated storage representation.
