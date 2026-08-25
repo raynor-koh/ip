@@ -55,7 +55,7 @@ public class Parser {
             throw new BobException("A deadline needs a due date. Try: deadline submit report /by Friday");
         }
         String description = requireText(parts[0].trim(), "A deadline needs a description before '/by'.");
-        String dueDate = requireText(parts[1].trim(), "A deadline needs a due date after '/by'.");
+        TaskDateTime dueDate = parseDateTime(parts[1].trim());
         return new AddCommand(new Deadline(description, dueDate));
     }
 
@@ -70,8 +70,8 @@ public class Parser {
         if (toParts.length < 2) {
             throw new BobException("An event needs an end time after '/to'. Try: event meeting /from 2pm /to 3pm");
         }
-        String from = requireText(toParts[0].trim(), "An event needs a start time after '/from'.");
-        String to = requireText(toParts[1].trim(), "An event needs an end time after '/to'.");
+        TaskDateTime from = parseDateTime(toParts[0].trim());
+        TaskDateTime to = parseDateTime(toParts[1].trim());
         return new AddCommand(new Event(description, from, to));
     }
 

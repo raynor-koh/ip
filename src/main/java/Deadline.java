@@ -1,7 +1,7 @@
 public class Deadline extends Task {
-    protected String by;
+    protected TaskDateTime by;
 
-    public Deadline(String description, String by) {
+    public Deadline(String description, TaskDateTime by) {
         super(description, TaskType.DEADLINE);
         this.by = by;
     }
@@ -11,7 +11,7 @@ public class Deadline extends Task {
         return super.toString() + " (by: " + getBy() + ")";
     }
 
-    public String getBy() {
+    public TaskDateTime getBy() {
         return by;
     }
 }
