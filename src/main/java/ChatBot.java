@@ -28,7 +28,7 @@ public class ChatBot {
 
         // Load once when the chatbot starts
         try {
-            this.tasks = storage.load();
+            this.tasks = new TaskList(storage.load());
         } catch (IOException exception) {
             throw new BobException("I could not load your saved tasks");
         }

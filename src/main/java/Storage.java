@@ -138,12 +138,12 @@ public class Storage {
     /**
      * Loads tasks from the storage file.
      */
-    public TaskList load() throws IOException {
-        TaskList taskList = new TaskList();
+    public List<Task> load() throws IOException {
+        List<Task> tasks = new ArrayList<>();
 
         // A new installation does not have a data file yet.
         if (Files.notExists(filePath)) {
-            return taskList;
+            return tasks;
         }
 
         List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
@@ -153,10 +153,10 @@ public class Storage {
             String[] parts = line.split("\\s*\\|\\s*", -1);
 
             Task task = deserializeTask(parts, lineNumber);
-            taskList.add(task);
+            tasks.add(task);
         }
 
-        return taskList;
+        return tasks;
     }
 
     /** Creates a consistent error for malformed storage records. */

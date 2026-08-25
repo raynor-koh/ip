@@ -9,7 +9,12 @@ public class TaskList {
     private final List<Task> tasks;
 
     public TaskList() {
-        this.tasks = new ArrayList<>();
+        this(List.of());
+    }
+
+    /** Creates a task list containing a copy of the supplied tasks. */
+    public TaskList(List<Task> tasks) {
+        this.tasks = new ArrayList<>(tasks);
     }
 
     public void add(Task task) {
