@@ -19,7 +19,7 @@ public class Ui {
     }
 
     /** Reads the next command entered by the user. */
-    public String readLine() {
+    public String readCommand() {
         return scanner.nextLine();
     }
 
@@ -29,11 +29,11 @@ public class Ui {
     }
 
     public void showWelcome() {
-        showDivider();
+        showLine();
         showBanner();
         System.out.println(MESSAGE_PREFIX + "Hello! I'm " + CHATBOT_NAME + ".");
         System.out.println(MESSAGE_PREFIX + "What can I do for you?");
-        showDivider();
+        showLine();
     }
 
     public void showGoodbye() {
@@ -76,7 +76,7 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "I couldn't process that: " + message);
     }
 
-    public void showDivider() {
+    public void showLine() {
         System.out.println(DIVIDER);
     }
 

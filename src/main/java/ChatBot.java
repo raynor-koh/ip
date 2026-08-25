@@ -41,9 +41,9 @@ public class ChatBot {
         ui.showWelcome();
 
         while (ui.hasNextLine()) {
-            ui.showDivider();
+            ui.showLine();
             try {
-                String input = ui.readLine();
+                String input = ui.readCommand();
                 Command command = parser.parse(input);
                 command.execute(tasks, ui, storage);
 
@@ -53,7 +53,7 @@ public class ChatBot {
             } catch (BobException | IOException exception) {
                 ui.showError(exception.getMessage());
             }
-            ui.showDivider();
+            ui.showLine();
         }
         ui.close();
     }
