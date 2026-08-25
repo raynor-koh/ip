@@ -8,7 +8,7 @@ import java.util.List;
 public class Storage {
     private final Path filePath = Path.of("data", "bob.txt");
 
-    private static final String FIELD_SEPARATOR = "|";
+    static final String FIELD_SEPARATOR = "|";
 
     /**
      * Converts a task into its pipe-generated storage representation.

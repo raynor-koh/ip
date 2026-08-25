@@ -71,8 +71,8 @@ public class Parser {
 
     private int parseTaskNumber(String argument, CommandType command) throws BobException {
         if (argument.isEmpty()) {
-            throw new BobException("'" + command.getKeyword() + "' needs a task number. Try: "
-                    + command.getKeyword() + " 1");
+            throw new BobException("'" + command.getKeyword() + "' needs a task number. Try: " + command.getKeyword()
+                                            + " 1");
         }
         try {
             int taskNumber = Integer.parseInt(argument);
@@ -81,14 +81,16 @@ public class Parser {
             }
             return taskNumber;
         } catch (NumberFormatException exception) {
-            throw new BobException("'" + command.getKeyword()
-                    + "' needs a whole-number task index, such as 1.");
+            throw new BobException("'" + command.getKeyword() + "' needs a whole-number task index, such as 1.");
         }
     }
 
     private String requireText(String text, String message) throws BobException {
         if (text.isEmpty()) {
             throw new BobException(message);
+        }
+        if (text.contains(Storage.FIELD_SEPARATOR)) {
+            throw new BobException("The character '|' is not allowed in task details.");
         }
         return text;
     }
