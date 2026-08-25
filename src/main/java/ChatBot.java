@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * Coordinates the chatbot's input-processing loop.
@@ -41,11 +40,10 @@ public class ChatBot {
     public void run() {
         ui.showWelcome();
 
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine()) {
+        while (ui.hasNextLine()) {
             ui.showDivider();
             try {
-                String input = scanner.nextLine();
+                String input = ui.readLine();
                 Command command = parser.parse(input);
                 boolean changed = command.execute(ui, tasks);
 
@@ -61,6 +59,6 @@ public class ChatBot {
             }
             ui.showDivider();
         }
-        scanner.close();
+        ui.close();
     }
 }
