@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class TaskList {
     }
 
     public List<Task> getTasks() {
-        return tasks;
+        return Collections.unmodifiableList(tasks);
     }
 
     public Task get(int index) throws BobException {
