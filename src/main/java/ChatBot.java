@@ -48,7 +48,7 @@ public class ChatBot {
                 boolean changed = command.execute(ui, tasks);
 
                 if (changed) {
-                    storage.save(tasks);
+                    storage.save(tasks.getTasks());
                 }
 
                 if (command.isExit()) {

@@ -52,12 +52,12 @@ public class Storage {
     /**
      * Saves all tasks, replacing the previous file contents.
      */
-    public void save(TaskList taskList) throws IOException {
+    public void save(List<Task> tasks) throws IOException {
         try {
             Files.createDirectories(filePath.getParent());
             List<String> lines = new ArrayList<>();
 
-            for (Task task : taskList.getTasks()) {
+            for (Task task : tasks) {
                 lines.add(serializeTask(task));
             }
 
