@@ -12,6 +12,7 @@ public class Storage {
      * Saves all tasks, replacing the previous file contents.
      */
     public void save(TaskList taskList) throws IOException {
+        try {
         Files.createDirectories(filePath.getParent());
         List<String> lines = new ArrayList<>();
 
@@ -36,6 +37,9 @@ public class Storage {
         }
 
         Files.write(filePath, lines, StandardCharsets.UTF_8);
+        } catch (IOException exception) {
+            throw new IOException("Could not save tasks to " + filePath + ".", exception);
+        }
     }
 
     /**
