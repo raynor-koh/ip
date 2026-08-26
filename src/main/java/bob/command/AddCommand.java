@@ -1,4 +1,12 @@
+package bob.command;
+
 import java.io.IOException;
+
+import bob.exception.BobException;
+import bob.storage.Storage;
+import bob.task.Task;
+import bob.task.TaskList;
+import bob.ui.Ui;
 
 public class AddCommand extends Command {
     private final Task task;

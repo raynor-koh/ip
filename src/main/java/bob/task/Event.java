@@ -1,3 +1,7 @@
+package bob.task;
+
+import bob.parser.DateTimeParser;
+
 public class Event extends Task {
     private final TaskDateTime from;
     private final TaskDateTime to;

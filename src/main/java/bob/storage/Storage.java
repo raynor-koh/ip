@@ -1,3 +1,5 @@
+package bob.storage;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -6,10 +8,18 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import bob.parser.DateTimeParser;
+import bob.task.Deadline;
+import bob.task.Event;
+import bob.task.Task;
+import bob.task.TaskStatus;
+import bob.task.TaskType;
+import bob.task.ToDo;
+
 public class Storage {
     private final Path filePath;
 
-    static final String FIELD_SEPARATOR = "|";
+    public static final String FIELD_SEPARATOR = "|";
 
     /** Creates storage using Bob's default data file. */
     public Storage() {

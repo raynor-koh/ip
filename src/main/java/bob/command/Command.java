@@ -1,4 +1,11 @@
+package bob.command;
+
 import java.io.IOException;
+
+import bob.exception.BobException;
+import bob.storage.Storage;
+import bob.task.TaskList;
+import bob.ui.Ui;
 
 /**
  * Represents an executable user command.

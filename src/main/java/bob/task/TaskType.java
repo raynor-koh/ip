@@ -1,3 +1,5 @@
+package bob.task;
+
 /**
  * Identifies the kind of task stored by the chatbot.
  */

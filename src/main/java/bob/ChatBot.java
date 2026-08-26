@@ -1,4 +1,13 @@
+package bob;
+
 import java.io.IOException;
+
+import bob.exception.BobException;
+import bob.command.Command;
+import bob.parser.Parser;
+import bob.storage.Storage;
+import bob.task.TaskList;
+import bob.ui.Ui;
 
 /**
  * Coordinates the chatbot's input-processing loop.
