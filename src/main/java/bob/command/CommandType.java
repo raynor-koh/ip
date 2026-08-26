@@ -1,3 +1,5 @@
+package bob.command;
+
 /**
  * Represents a command that can be entered by the user.
  */

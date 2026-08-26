@@ -1,3 +1,7 @@
+package bob;
+
+import bob.exception.BobException;
+
 /**
  * Entry point for the Bob chatbot application.
  */

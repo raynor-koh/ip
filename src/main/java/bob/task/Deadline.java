@@ -1,3 +1,7 @@
+package bob.task;
+
+import bob.parser.DateTimeParser;
+
 public class Deadline extends Task {
     protected TaskDateTime by;
 

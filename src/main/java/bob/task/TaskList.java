@@ -1,6 +1,10 @@
+package bob.task;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import bob.exception.BobException;
 
 /**
  * Stores tasks entered by the user during the current chatbot run.
