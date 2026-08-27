@@ -7,6 +7,7 @@ import bob.command.ByeCommand;
 import bob.command.Command;
 import bob.command.CommandType;
 import bob.command.DeleteCommand;
+import bob.command.FindCommand;
 import bob.command.ListCommand;
 import bob.command.MarkCommand;
 import bob.command.UnmarkCommand;
@@ -55,6 +56,8 @@ public class Parser {
             case LIST:
                 requireNoArgument(argument, commandType);
                 return new ListCommand();
+            case FIND:
+                return new FindCommand(requireText(argument, "'find' needs a keyword. Try: find book"));
             case MARK:
                 return new MarkCommand(parseTaskNumber(argument, commandType));
             case UNMARK:
@@ -173,7 +176,7 @@ public class Parser {
     }
 
     private BobException createUnknownCommandException() {
-        return new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', "
+        return new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'find', "
                 + "'mark', 'unmark', 'delete', or 'bye'.");
     }
 }

@@ -72,6 +72,7 @@ class UiTest {
 
         ui.showAdded(firstTask, 2);
         ui.showTasks(List.of(firstTask, secondTask), 2);
+        ui.showMatchingTasks(List.of(secondTask));
         ui.showDeleted(firstTask, 1);
         ui.showDeleted(secondTask, 0);
         ui.showMarked(secondTask);
@@ -82,6 +83,7 @@ class UiTest {
         assertTrue(displayedText.contains("Now you have 2 tasks in the list."));
         assertTrue(displayedText.contains("1.[T][ ] first task"));
         assertTrue(displayedText.contains("2.[T][X] second task"));
+        assertTrue(displayedText.contains("Here are the matching tasks in your list:"));
         assertTrue(displayedText.contains("Now you have 1 task in the list."));
         assertTrue(displayedText.contains("Now you have 0 tasks in the list."));
         assertTrue(displayedText.contains("marked this task as done"));

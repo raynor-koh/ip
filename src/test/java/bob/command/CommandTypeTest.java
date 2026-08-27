@@ -22,6 +22,6 @@ class CommandTypeTest {
 
     @Test
     void fromKeyword_unknownKeyword_returnsNull() {
-        assertNull(CommandType.fromKeyword("find"));
+        assertNull(CommandType.fromKeyword("search"));
     }
 }

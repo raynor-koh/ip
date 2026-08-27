@@ -84,4 +84,23 @@ class TaskListTest {
                 () -> taskList.getTasks().add(new ToDo("write report")));
         assertEquals(1, taskList.getTaskCount());
     }
+
+    @Test
+    void find_keywordWithDifferentCase_returnsMatchingTasksInOriginalOrder() {
+        Task firstMatch = new ToDo("read book");
+        Task nonMatch = new ToDo("write report");
+        Task secondMatch = new ToDo("return BOOK");
+        TaskList taskList = new TaskList(List.of(firstMatch, nonMatch, secondMatch));
+
+        List<Task> matchingTasks = taskList.find("book");
+
+        assertEquals(List.of(firstMatch, secondMatch), matchingTasks);
+    }
+
+    @Test
+    void find_noMatchingDescription_returnsEmptyList() {
+        TaskList taskList = new TaskList(List.of(new ToDo("write report")));
+
+        assertEquals(List.of(), taskList.find("book"));
+    }
 }

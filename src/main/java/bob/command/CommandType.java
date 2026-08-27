@@ -8,6 +8,8 @@ public enum CommandType {
     BYE("bye"),
     /** Displays all tasks. */
     LIST("list"),
+    /** Finds tasks by description keyword. */
+    FIND("find"),
     /** Marks a task as done. */
     MARK("mark"),
     /** Marks a task as not done. */

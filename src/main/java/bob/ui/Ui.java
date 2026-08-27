@@ -92,6 +92,14 @@ public class Ui {
         }
     }
 
+    /** Displays the tasks whose descriptions match a find keyword. */
+    public void showMatchingTasks(List<Task> tasks) {
+        System.out.println(MESSAGE_PREFIX + "Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(MESSAGE_PREFIX + (i + 1) + "." + tasks.get(i));
+        }
+    }
+
     /**
      * Confirms that a task was deleted and displays the remaining task count.
      *
