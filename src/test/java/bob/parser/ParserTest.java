@@ -106,6 +106,7 @@ class ParserTest {
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> parser.parse("event project meeting /from invalid /to 2/12/2019 1900")),
                 () -> assertThrows(BobException.class,
-                        () -> parser.parse("event project | meeting /from 2/12/2019 1800 /to 2/12/2019 1900")));
+                        () -> parser.parse(
+                                "event project | meeting /from 2/12/2019 1800 /to 2/12/2019 1900")));
     }
 }

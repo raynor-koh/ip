@@ -23,6 +23,9 @@ public enum TaskStatus {
         return storageCode;
     }
 
+    /**
+     * Returns the task status represented by the specified storage code.
+     */
     public static TaskStatus fromStorageCode(String code) {
         for (TaskStatus status : values()) {
             if (status.storageCode.equals(code)) {

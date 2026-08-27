@@ -8,9 +8,15 @@ import bob.task.Task;
 import bob.task.TaskList;
 import bob.ui.Ui;
 
+/**
+ * Adds a task to the task list and saves the updated list.
+ */
 public class AddCommand extends Command {
     private final Task task;
 
+    /**
+     * Creates a command that adds the specified task.
+     */
     public AddCommand(Task task) {
         this.task = task;
     }

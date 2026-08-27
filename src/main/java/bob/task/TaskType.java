@@ -23,6 +23,9 @@ public enum TaskType {
         return storageFieldCount;
     }
 
+    /**
+     * Returns the task type represented by the specified storage symbol.
+     */
     public static TaskType fromSymbol(String symbol) {
         for (TaskType type : values()) {
             if (type.symbol.equals(symbol)) {

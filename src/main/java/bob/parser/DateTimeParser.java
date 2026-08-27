@@ -12,12 +12,11 @@ import bob.task.TaskDateTime;
  */
 public final class DateTimeParser {
     private static final DateTimeFormatter USER_DATE_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu");
-
-    private static final DateTimeFormatter USER_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
-
+    private static final DateTimeFormatter USER_DATE_TIME_FORMAT =
+            DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu");
-
-    private static final DateTimeFormatter DISPLAY_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
+    private static final DateTimeFormatter DISPLAY_DATE_TIME_FORMAT =
+            DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
 
     private DateTimeParser() {
         // Utility class; do not instantiate.
@@ -39,8 +38,7 @@ public final class DateTimeParser {
 
         } catch (DateTimeParseException exception) {
             throw new IllegalArgumentException(
-                                            "Use d/M/yyyy or d/M/yyyy HHmm, such as " + "2/12/2019 or 2/12/2019 1800.",
-                                            exception);
+                    "Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.", exception);
         }
     }
 

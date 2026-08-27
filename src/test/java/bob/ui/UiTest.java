@@ -29,7 +29,8 @@ class UiTest {
     void setUpStreams() {
         originalInput = System.in;
         originalOutput = System.out;
-        System.setIn(new ByteArrayInputStream("first command\nsecond command\n".getBytes(StandardCharsets.UTF_8)));
+        System.setIn(new ByteArrayInputStream(
+                "first command\nsecond command\n".getBytes(StandardCharsets.UTF_8)));
         output = new ByteArrayOutputStream();
         System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
         ui = new Ui();

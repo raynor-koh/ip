@@ -8,6 +8,9 @@ public abstract class Task {
     private TaskStatus status;
     private final TaskType type;
 
+    /**
+     * Creates a task with the specified description and type.
+     */
     public Task(String description, TaskType type) {
         this.description = description;
         this.status = TaskStatus.NOT_DONE;
@@ -19,7 +22,7 @@ public abstract class Task {
         return type;
     }
 
-    /** Returns the task description */
+    /** Returns the task description. */
     public String getDescription() {
         return description;
     }
@@ -33,10 +36,12 @@ public abstract class Task {
         return status.getIcon();
     }
 
+    /** Marks this task as done. */
     public void markAsDone() {
         status = TaskStatus.DONE;
     }
 
+    /** Marks this task as not done. */
     public void markAsNotDone() {
         status = TaskStatus.NOT_DONE;
     }

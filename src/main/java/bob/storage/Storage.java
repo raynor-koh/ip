@@ -16,10 +16,13 @@ import bob.task.TaskStatus;
 import bob.task.TaskType;
 import bob.task.ToDo;
 
+/**
+ * Loads and saves tasks in Bob's local data file.
+ */
 public class Storage {
-    private final Path filePath;
-
     public static final String FIELD_SEPARATOR = "|";
+
+    private final Path filePath;
 
     /** Creates storage using Bob's default data file. */
     public Storage() {
@@ -39,23 +42,19 @@ public class Storage {
         String status = task.getStatus().getStorageCode();
 
         switch (task.getType()) {
-        case TODO:
-            return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
-
-        case DEADLINE:
-            Deadline deadline = (Deadline) task;
-            return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
-                                            DateTimeParser.formatForStorage(deadline.getBy()));
-
-        case EVENT:
-            Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
-                                            DateTimeParser.formatForStorage(event.getFrom()),
-                                            DateTimeParser.formatForStorage((event.getTo())));
-
-        default:
-            throw new IllegalArgumentException("Unsupported task type: " + task.getType());
-
+            case TODO:
+                return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
+            case DEADLINE:
+                Deadline deadline = (Deadline) task;
+                return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
+                        DateTimeParser.formatForStorage(deadline.getBy()));
+            case EVENT:
+                Event event = (Event) task;
+                return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
+                        DateTimeParser.formatForStorage(event.getFrom()),
+                        DateTimeParser.formatForStorage(event.getTo()));
+            default:
+                throw new IllegalArgumentException("Unsupported task type: " + task.getType());
         }
     }
 
@@ -80,7 +79,7 @@ public class Storage {
     /**
      * Converts one stored record into a task.
      *
-     * @throws IOException if the stored record is malformed
+     * @throws IOException If the stored record is malformed.
      */
     public Task deserializeTask(String[] parts, int lineNumber) throws IOException {
         if (parts.length == 0 || parts[0].isBlank()) {
@@ -107,35 +106,32 @@ public class Storage {
 
         if (parts.length != type.getStorageFieldCount()) {
             throw corruptedFile(lineNumber, "expected " + type.getStorageFieldCount() + " fields but found "
-                                            + parts.length);
+                    + parts.length);
         }
 
         Task task;
 
         switch (type) {
-        case TODO:
-            task = new ToDo(parts[2]);
-            break;
-
-        case DEADLINE:
-            try {
-                task = new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
-            } catch (DateTimeParseException exception) {
-                throw corruptedFile(lineNumber, "invalid deadline date");
-            }
-            break;
-
-        case EVENT:
-            try {
-                task = new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
-                                                DateTimeParser.parseStorage(parts[4]));
-            } catch (DateTimeParseException exception) {
-                throw corruptedFile(lineNumber, "invalid event date");
-            }
-            break;
-
-        default:
-            throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
+            case TODO:
+                task = new ToDo(parts[2]);
+                break;
+            case DEADLINE:
+                try {
+                    task = new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
+                } catch (DateTimeParseException exception) {
+                    throw corruptedFile(lineNumber, "invalid deadline date");
+                }
+                break;
+            case EVENT:
+                try {
+                    task = new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
+                            DateTimeParser.parseStorage(parts[4]));
+                } catch (DateTimeParseException exception) {
+                    throw corruptedFile(lineNumber, "invalid event date");
+                }
+                break;
+            default:
+                throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
         }
 
         if (status == TaskStatus.DONE) {
@@ -171,8 +167,7 @@ public class Storage {
 
     /** Creates a consistent error for malformed storage records. */
     private IOException corruptedFile(int lineNumber, String reason) {
-        return new IOException("Could not load saved tasks: corrupted data on line " + (lineNumber + 1) + " (" + reason
-                                        + ").");
+        return new IOException("Could not load saved tasks: corrupted data on line " + (lineNumber + 1) + " ("
+                + reason + ").");
     }
-
 }

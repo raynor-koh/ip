@@ -5,11 +5,15 @@ import java.util.Scanner;
 
 import bob.task.Task;
 
+/**
+ * Reads commands from the console and displays Bob's responses.
+ */
 public class Ui {
     private static final String CHATBOT_NAME = "Bob";
     private static final String LINE_PREFIX = "    ";
     private static final String MESSAGE_PREFIX = "     ";
-    private static final String DIVIDER = LINE_PREFIX + "____________________________________________________________";
+    private static final String DIVIDER =
+            LINE_PREFIX + "____________________________________________________________";
     private final Scanner scanner;
 
     /** Creates a user interface that reads commands from standard input. */
@@ -32,6 +36,7 @@ public class Ui {
         scanner.close();
     }
 
+    /** Displays Bob's welcome banner and greeting. */
     public void showWelcome() {
         showLine();
         showBanner();
@@ -40,16 +45,19 @@ public class Ui {
         showLine();
     }
 
+    /** Displays Bob's farewell message. */
     public void showGoodbye() {
         System.out.println(MESSAGE_PREFIX + "Bye. Hope to see you again soon!");
     }
 
+    /** Displays the task that was added and the updated task count. */
     public void showAdded(Task task, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Got it. I've added this task:");
         System.out.println(MESSAGE_PREFIX + "added: " + task);
         System.out.println(MESSAGE_PREFIX + "Now you have " + taskCount + " tasks in the list.");
     }
 
+    /** Displays every task and the supplied task count. */
     public void showTasks(List<Task> tasks, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
@@ -58,6 +66,7 @@ public class Ui {
         }
     }
 
+    /** Displays the task that was deleted and the updated task count. */
     public void showDeleted(Task task, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Noted. I've removed this task:");
         System.out.println(MESSAGE_PREFIX + task);
@@ -65,11 +74,13 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "Now you have " + taskCount + " " + taskLabel + " in the list.");
     }
 
+    /** Displays the task that was marked as done. */
     public void showMarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "Nice! I've marked this task as done:");
         System.out.println(MESSAGE_PREFIX + "  " + task);
     }
 
+    /** Displays the task that was marked as not done. */
     public void showUnmarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "OK, I've marked this task as not done yet:");
         System.out.println(MESSAGE_PREFIX + "  " + task);
@@ -80,6 +91,7 @@ public class Ui {
         System.out.println(MESSAGE_PREFIX + "I couldn't process that: " + message);
     }
 
+    /** Displays a horizontal divider. */
     public void showLine() {
         System.out.println(DIVIDER);
     }

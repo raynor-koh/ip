@@ -12,6 +12,7 @@ import bob.exception.BobException;
 public class TaskList {
     private final List<Task> tasks;
 
+    /** Creates an empty task list. */
     public TaskList() {
         this(List.of());
     }
@@ -21,6 +22,7 @@ public class TaskList {
         this.tasks = new ArrayList<>(tasks);
     }
 
+    /** Adds a task to this list. */
     public void add(Task task) {
         tasks.add(task);
     }
@@ -29,9 +31,13 @@ public class TaskList {
         return Collections.unmodifiableList(tasks);
     }
 
+    /**
+     * Returns the task at the specified zero-based index.
+     */
     public Task get(int index) throws BobException {
         if (!isValidIndex(index)) {
-            throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
+            throw new BobException(
+                    "That task number does not exist. Use 'list' to see the available tasks.");
         }
         return tasks.get(index);
     }
@@ -40,9 +46,13 @@ public class TaskList {
         return tasks.size();
     }
 
+    /**
+     * Removes and returns the task at the specified zero-based index.
+     */
     public Task remove(int index) throws BobException {
         if (!isValidIndex(index)) {
-            throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
+            throw new BobException(
+                    "That task number does not exist. Use 'list' to see the available tasks.");
         }
         return tasks.remove(index);
     }

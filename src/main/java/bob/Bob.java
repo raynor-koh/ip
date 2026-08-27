@@ -11,7 +11,7 @@ public class Bob {
     /**
      * Starts the chatbot.
      *
-     * @param args command-line arguments, currently unused
+     * @param args Command-line arguments, currently unused.
      */
     public static void main(String[] args) {
         try {

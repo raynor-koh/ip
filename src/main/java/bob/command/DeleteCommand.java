@@ -14,6 +14,9 @@ import bob.ui.Ui;
 public class DeleteCommand extends Command {
     private final int taskNumber;
 
+    /**
+     * Creates a command that deletes the task at the specified one-based position.
+     */
     public DeleteCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }

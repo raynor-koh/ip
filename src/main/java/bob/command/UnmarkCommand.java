@@ -14,6 +14,9 @@ import bob.ui.Ui;
 public class UnmarkCommand extends Command {
     private final int taskNumber;
 
+    /**
+     * Creates a command that marks the task at the specified one-based position as not done.
+     */
     public UnmarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }
