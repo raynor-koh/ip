@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import bob.command.AddCommand;
 import bob.command.ByeCommand;
 import bob.command.DeleteCommand;
+import bob.command.FindCommand;
 import bob.command.ListCommand;
 import bob.command.MarkCommand;
 import bob.command.UnmarkCommand;
@@ -31,6 +32,11 @@ class ParserTest {
                 () -> assertInstanceOf(MarkCommand.class, parser.parse("mark 1")),
                 () -> assertInstanceOf(UnmarkCommand.class, parser.parse("unmark 2")),
                 () -> assertInstanceOf(DeleteCommand.class, parser.parse("delete 3")));
+    }
+
+    @Test
+    void parse_findWithKeyword_returnsFindCommand() throws BobException {
+        assertInstanceOf(FindCommand.class, parser.parse("find book"));
     }
 
     @Test
@@ -58,7 +64,12 @@ class ParserTest {
 
     @Test
     void parse_unknownCommand_bobExceptionThrown() {
-        assertThrows(BobException.class, () -> parser.parse("find book"));
+        assertThrows(BobException.class, () -> parser.parse("search book"));
+    }
+
+    @Test
+    void parse_findWithoutKeyword_bobExceptionThrown() {
+        assertThrows(BobException.class, () -> parser.parse("find"));
     }
 
     @Test

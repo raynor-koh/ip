@@ -7,6 +7,7 @@ import bob.command.ByeCommand;
 import bob.command.Command;
 import bob.command.CommandType;
 import bob.command.DeleteCommand;
+import bob.command.FindCommand;
 import bob.command.ListCommand;
 import bob.command.MarkCommand;
 import bob.command.UnmarkCommand;
@@ -32,7 +33,8 @@ public class Parser {
         String argument = words.length == 2 ? words[1].trim() : "";
 
         if (command == null) {
-            throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
+            throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'find', "
+                    + "'mark', 'unmark', 'delete', or 'bye'.");
         }
 
         switch (command) {
@@ -42,6 +44,8 @@ public class Parser {
         case LIST:
             requireNoArgument(argument, command);
             return new ListCommand();
+        case FIND:
+            return new FindCommand(requireText(argument, "'find' needs a keyword. Try: find book"));
         case MARK:
             return new MarkCommand(parseTaskNumber(argument, command));
         case UNMARK:
@@ -57,7 +61,8 @@ public class Parser {
             return parseEvent(argument);
         }
 
-        throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
+        throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'find', "
+                + "'mark', 'unmark', 'delete', or 'bye'.");
     }
 
     private Command parseDeadline(String argument) throws BobException {
