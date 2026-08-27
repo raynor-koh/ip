@@ -12,8 +12,7 @@ public class Ui {
     private static final String CHATBOT_NAME = "Bob";
     private static final String LINE_PREFIX = "    ";
     private static final String MESSAGE_PREFIX = "     ";
-    private static final String DIVIDER =
-            LINE_PREFIX + "____________________________________________________________";
+    private static final String DIVIDER = LINE_PREFIX + "____________________________________________________________";
     private final Scanner scanner;
 
     /** Creates a user interface that reads commands from standard input. */
@@ -97,13 +96,9 @@ public class Ui {
     }
 
     private void showBanner() {
-        // @formatter:off
-        String banner = MESSAGE_PREFIX + " ____        _     \n"
-                + MESSAGE_PREFIX + "| __ )  ___ | |__\n"
-                + MESSAGE_PREFIX + "|  _ \\ / _ \\| '_ \\\n"
-                + MESSAGE_PREFIX + "| |_) | (_) | |_) |\n"
-                + MESSAGE_PREFIX + "|____/ \\___/|_.__/";
-        // @formatter:on
+        String banner = MESSAGE_PREFIX + " ____        _     \n" + MESSAGE_PREFIX + "| __ )  ___ | |__\n"
+                                        + MESSAGE_PREFIX + "|  _ \\ / _ \\| '_ \\\n" + MESSAGE_PREFIX
+                                        + "| |_) | (_) | |_) |\n" + MESSAGE_PREFIX + "|____/ \\___/|_.__/";
 
         System.out.println(banner);
     }
