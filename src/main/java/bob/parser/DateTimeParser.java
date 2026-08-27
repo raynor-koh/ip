@@ -25,6 +25,10 @@ public final class DateTimeParser {
 
     /**
      * Parses a user-entered date or date-time.
+     *
+     * @param text date in {@code d/M/yyyy} format, optionally followed by a time
+     * @return parsed task date and optional time
+     * @throws IllegalArgumentException if the text does not use a supported format
      */
     public static TaskDateTime parseUserInput(String text) {
         try {
@@ -46,6 +50,9 @@ public final class DateTimeParser {
 
     /**
      * Converts a date-time into the format shown to the user.
+     *
+     * @param value task date-time to format
+     * @return human-readable date or date-time
      */
     public static String formatForDisplay(TaskDateTime value) {
         if (value.getTime().isEmpty()) {
@@ -59,6 +66,9 @@ public final class DateTimeParser {
 
     /**
      * Converts a date-time into the format used in storage.
+     *
+     * @param value task date-time to format
+     * @return ISO date or date-time representation
      */
     public static String formatForStorage(TaskDateTime value) {
         if (value.getTime().isEmpty()) {
@@ -70,6 +80,10 @@ public final class DateTimeParser {
 
     /**
      * Reconstructs a date-time from storage.
+     *
+     * @param text stored ISO date or date-time
+     * @return reconstructed task date and optional time
+     * @throws IllegalArgumentException if the stored value is invalid
      */
     public static TaskDateTime parseStorage(String text) {
         try {

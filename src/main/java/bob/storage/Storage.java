@@ -16,23 +16,37 @@ import bob.task.TaskStatus;
 import bob.task.TaskType;
 import bob.task.ToDo;
 
+/**
+ * Loads and saves tasks in Bob's pipe-delimited text format.
+ */
 public class Storage {
     private final Path filePath;
 
+    /** Separator between fields in a stored task record. */
     public static final String FIELD_SEPARATOR = "|";
 
-    /** Creates storage using Bob's default data file. */
+    /**
+     * Creates storage using Bob's default data file.
+     */
     public Storage() {
         this(Path.of("data", "bob.txt").toString());
     }
 
-    /** Creates storage using the supplied data file path. */
+    /**
+     * Creates storage using the supplied data file path.
+     *
+     * @param filePath path of the task data file
+     */
     public Storage(String filePath) {
         this.filePath = Path.of(filePath);
     }
 
     /**
-     * Converts a task into its pipe-generated storage representation.
+     * Converts a task into its pipe-delimited storage representation.
+     *
+     * @param task task to serialize
+     * @return one storage record for the task
+     * @throws IllegalArgumentException if the task has an unsupported type
      */
     private String serializeTask(Task task) {
         String type = task.getType().getSymbol();
@@ -61,6 +75,9 @@ public class Storage {
 
     /**
      * Saves all tasks, replacing the previous file contents.
+     *
+     * @param tasks tasks to save
+     * @throws IOException if the data directory or file cannot be written
      */
     public void save(List<Task> tasks) throws IOException {
         try {
@@ -80,6 +97,9 @@ public class Storage {
     /**
      * Converts one stored record into a task.
      *
+     * @param parts fields from a pipe-delimited storage record
+     * @param lineNumber zero-based line number used in error messages
+     * @return task represented by the record
      * @throws IOException if the stored record is malformed
      */
     public Task deserializeTask(String[] parts, int lineNumber) throws IOException {
@@ -147,6 +167,9 @@ public class Storage {
 
     /**
      * Loads tasks from the storage file.
+     *
+     * @return tasks reconstructed from storage, or an empty list if no file exists
+     * @throws IOException if the file cannot be read or contains malformed data
      */
     public List<Task> load() throws IOException {
         List<Task> tasks = new ArrayList<>();
@@ -169,7 +192,13 @@ public class Storage {
         return tasks;
     }
 
-    /** Creates a consistent error for malformed storage records. */
+    /**
+     * Creates a consistent error for a malformed storage record.
+     *
+     * @param lineNumber zero-based line number containing the error
+     * @param reason explanation of the malformed data
+     * @return exception containing the line and reason
+     */
     private IOException corruptedFile(int lineNumber, String reason) {
         return new IOException("Could not load saved tasks: corrupted data on line " + (lineNumber + 1) + " (" + reason
                                         + ").");
