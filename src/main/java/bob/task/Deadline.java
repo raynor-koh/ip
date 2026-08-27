@@ -12,8 +12,8 @@ public class Deadline extends Task {
     /**
      * Creates a deadline task.
      *
-     * @param description description of the task
-     * @param by date and optional time by which the task is due
+     * @param description description of the task.
+     * @param by date and optional time by which the task is due.
      */
     public Deadline(String description, TaskDateTime by) {
         super(description, TaskType.DEADLINE);
@@ -23,7 +23,7 @@ public class Deadline extends Task {
     /**
      * Returns a display representation that includes the due date.
      *
-     * @return formatted deadline
+     * @return formatted deadline.
      */
     @Override
     public String toString() {
@@ -33,7 +33,7 @@ public class Deadline extends Task {
     /**
      * Returns the date and optional time by which this task is due.
      *
-     * @return deadline date-time
+     * @return deadline date-time.
      */
     public TaskDateTime getBy() {
         return by;

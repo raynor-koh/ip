@@ -26,7 +26,7 @@ public enum CommandType {
     /**
      * Creates a command type with its user-facing keyword.
      *
-     * @param keyword word used to invoke the command
+     * @param keyword word used to invoke the command.
      */
     CommandType(String keyword) {
         this.keyword = keyword;
@@ -35,7 +35,7 @@ public enum CommandType {
     /**
      * Returns the word that identifies this command in user input.
      *
-     * @return command keyword
+     * @return command keyword.
      */
     public String getKeyword() {
         return keyword;
@@ -44,8 +44,8 @@ public enum CommandType {
     /**
      * Finds the command type represented by a keyword, ignoring letter case.
      *
-     * @param keyword keyword to look up
-     * @return matching command type, or null if the keyword is unknown
+     * @param keyword keyword to look up.
+     * @return matching command type, or null if the keyword is unknown.
      */
     public static CommandType fromKeyword(String keyword) {
         for (CommandType commandType : values()) {

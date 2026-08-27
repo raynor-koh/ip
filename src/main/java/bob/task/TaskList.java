@@ -22,7 +22,7 @@ public class TaskList {
     /**
      * Creates a task list containing a copy of the supplied tasks.
      *
-     * @param tasks initial tasks
+     * @param tasks initial tasks.
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
@@ -31,7 +31,7 @@ public class TaskList {
     /**
      * Adds a task to the end of the list.
      *
-     * @param task task to add
+     * @param task task to add.
      */
     public void add(Task task) {
         tasks.add(task);
@@ -40,7 +40,7 @@ public class TaskList {
     /**
      * Returns a read-only view of the tasks.
      *
-     * @return unmodifiable task list
+     * @return unmodifiable task list.
      */
     public List<Task> getTasks() {
         return Collections.unmodifiableList(tasks);
@@ -49,9 +49,9 @@ public class TaskList {
     /**
      * Returns the task at a zero-based index.
      *
-     * @param index zero-based task index
-     * @return task at the index
-     * @throws BobException if the index is outside the list
+     * @param index zero-based task index.
+     * @return task at the index.
+     * @throws BobException if the index is outside the list.
      */
     public Task get(int index) throws BobException {
         if (!isValidIndex(index)) {
@@ -63,7 +63,7 @@ public class TaskList {
     /**
      * Returns the number of tasks in the list.
      *
-     * @return task count
+     * @return task count.
      */
     public int getTaskCount() {
         return tasks.size();
@@ -72,9 +72,9 @@ public class TaskList {
     /**
      * Removes and returns the task at a zero-based index.
      *
-     * @param index zero-based task index
-     * @return removed task
-     * @throws BobException if the index is outside the list
+     * @param index zero-based task index.
+     * @return removed task.
+     * @throws BobException if the index is outside the list.
      */
     public Task remove(int index) throws BobException {
         if (!isValidIndex(index)) {
@@ -86,8 +86,8 @@ public class TaskList {
     /**
      * Checks whether an index identifies a task in the list.
      *
-     * @param index zero-based index to check
-     * @return true if the index is valid
+     * @param index zero-based index to check.
+     * @return true if the index is valid.
      */
     private boolean isValidIndex(int index) {
         return index >= 0 && index < tasks.size();

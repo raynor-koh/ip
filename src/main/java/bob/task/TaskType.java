@@ -17,8 +17,8 @@ public enum TaskType {
     /**
      * Creates a task type with its display symbol and storage shape.
      *
-     * @param symbol symbol used to display and persist the type
-     * @param storageFieldCount number of fields in a stored record of this type
+     * @param symbol symbol used to display and persist the type.
+     * @param storageFieldCount number of fields in a stored record of this type.
      */
     TaskType(String symbol, int storageFieldCount) {
         this.symbol = symbol;
@@ -28,7 +28,7 @@ public enum TaskType {
     /**
      * Returns the symbol used when displaying this task type.
      *
-     * @return task type symbol
+     * @return task type symbol.
      */
     public String getSymbol() {
         return symbol;
@@ -37,7 +37,7 @@ public enum TaskType {
     /**
      * Returns the expected number of fields in this type's storage record.
      *
-     * @return storage field count
+     * @return storage field count.
      */
     public int getStorageFieldCount() {
         return storageFieldCount;
@@ -46,9 +46,9 @@ public enum TaskType {
     /**
      * Finds the task type represented by a display or storage symbol.
      *
-     * @param symbol symbol to look up
-     * @return matching task type
-     * @throws IllegalArgumentException if the symbol is unknown
+     * @param symbol symbol to look up.
+     * @return matching task type.
+     * @throws IllegalArgumentException if the symbol is unknown.
      */
     public static TaskType fromSymbol(String symbol) {
         for (TaskType type : values()) {

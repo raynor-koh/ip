@@ -15,8 +15,8 @@ public enum TaskStatus {
     /**
      * Creates a status with its display icon and persistent code.
      *
-     * @param icon symbol shown to the user
-     * @param storageCode value written to storage
+     * @param icon symbol shown to the user.
+     * @param storageCode value written to storage.
      */
     TaskStatus(String icon, String storageCode) {
         this.icon = icon;
@@ -26,7 +26,7 @@ public enum TaskStatus {
     /**
      * Returns the symbol used when displaying this status.
      *
-     * @return display icon
+     * @return display icon.
      */
     public String getIcon() {
         return icon;
@@ -35,7 +35,7 @@ public enum TaskStatus {
     /**
      * Returns the value used to persist this status.
      *
-     * @return storage code
+     * @return storage code.
      */
     public String getStorageCode() {
         return storageCode;
@@ -44,9 +44,9 @@ public enum TaskStatus {
     /**
      * Finds the status represented by a storage code.
      *
-     * @param code storage code to look up
-     * @return matching task status
-     * @throws IllegalArgumentException if the code is unknown
+     * @param code storage code to look up.
+     * @return matching task status.
+     * @throws IllegalArgumentException if the code is unknown.
      */
     public static TaskStatus fromStorageCode(String code) {
         for (TaskStatus status : values()) {

@@ -31,9 +31,9 @@ public class Parser {
     /**
      * Parses a line of user input into an executable command.
      *
-     * @param input complete line entered by the user
-     * @return command represented by the input
-     * @throws BobException if the command or its arguments are invalid
+     * @param input complete line entered by the user.
+     * @return command represented by the input.
+     * @throws BobException if the command or its arguments are invalid.
      */
     public Command parse(String input) throws BobException {
         if (input == null || input.trim().isEmpty()) {
@@ -41,44 +41,44 @@ public class Parser {
         }
 
         String[] words = input.trim().split("\\s+", 2);
-        CommandType command = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT));
+        CommandType commandType = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT));
         String argument = words.length == 2 ? words[1].trim() : "";
 
-        if (command == null) {
-            throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
+        if (commandType == null) {
+            throw createUnknownCommandException();
         }
 
-        switch (command) {
-        case BYE:
-            requireNoArgument(argument, command);
-            return new ByeCommand();
-        case LIST:
-            requireNoArgument(argument, command);
-            return new ListCommand();
-        case MARK:
-            return new MarkCommand(parseTaskNumber(argument, command));
-        case UNMARK:
-            return new UnmarkCommand(parseTaskNumber(argument, command));
-        case DELETE:
-            return new DeleteCommand(parseTaskNumber(argument, command));
-        case TODO:
-            return new AddCommand(new ToDo(requireText(argument,
-                                            "A todo needs a description. Try: todo read chapter 1")));
-        case DEADLINE:
-            return parseDeadline(argument);
-        case EVENT:
-            return parseEvent(argument);
+        switch (commandType) {
+            case BYE:
+                requireNoArgument(argument, commandType);
+                return new ByeCommand();
+            case LIST:
+                requireNoArgument(argument, commandType);
+                return new ListCommand();
+            case MARK:
+                return new MarkCommand(parseTaskNumber(argument, commandType));
+            case UNMARK:
+                return new UnmarkCommand(parseTaskNumber(argument, commandType));
+            case DELETE:
+                return new DeleteCommand(parseTaskNumber(argument, commandType));
+            case TODO:
+                return new AddCommand(new ToDo(requireText(argument,
+                        "A todo needs a description. Try: todo read chapter 1")));
+            case DEADLINE:
+                return parseDeadline(argument);
+            case EVENT:
+                return parseEvent(argument);
+            default:
+                throw createUnknownCommandException();
         }
-
-        throw new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', 'mark', 'unmark', 'delete', or 'bye'.");
     }
 
     /**
      * Parses a deadline description and due date into an add command.
      *
-     * @param argument text following the deadline keyword
-     * @return command that adds the parsed deadline
-     * @throws BobException if the description or due date is missing
+     * @param argument text following the deadline keyword.
+     * @return command that adds the parsed deadline.
+     * @throws BobException if the description or due date is missing.
      */
     private Command parseDeadline(String argument) throws BobException {
         String[] parts = argument.split("\\s+/by\\s+", 2);
@@ -93,20 +93,22 @@ public class Parser {
     /**
      * Parses an event description and date range into an add command.
      *
-     * @param argument text following the event keyword
-     * @return command that adds the parsed event
-     * @throws BobException if the description or either date is missing
+     * @param argument text following the event keyword.
+     * @return command that adds the parsed event.
+     * @throws BobException if the description or either date is missing.
      */
     private Command parseEvent(String argument) throws BobException {
         String[] fromParts = argument.split("\\s+/from\\s+", 2);
         if (fromParts.length < 2) {
             throw new BobException("An event needs a time range. Try: event meeting /from 2pm /to 3pm");
         }
-        String description = requireText(fromParts[0].trim(), "An event needs a description before '/from'.");
+        String description = requireText(fromParts[0].trim(),
+                "An event needs a description before '/from'.");
 
         String[] toParts = fromParts[1].split("\\s+/to\\s+", 2);
         if (toParts.length < 2) {
-            throw new BobException("An event needs an end time after '/to'. Try: event meeting /from 2pm /to 3pm");
+            throw new BobException(
+                    "An event needs an end time after '/to'. Try: event meeting /from 2pm /to 3pm");
         }
         TaskDateTime from = DateTimeParser.parseUserInput(toParts[0].trim());
         TaskDateTime to = DateTimeParser.parseUserInput(toParts[1].trim());
@@ -117,15 +119,15 @@ public class Parser {
     /**
      * Parses and validates the one-based task number used by a command.
      *
-     * @param argument text expected to contain a task number
-     * @param command command for which the number is being parsed
-     * @return positive one-based task number
-     * @throws BobException if the argument is not a positive whole number
+     * @param argument text expected to contain a task number.
+     * @param command command for which the number is being parsed.
+     * @return positive one-based task number.
+     * @throws BobException if the argument is not a positive whole number.
      */
     private int parseTaskNumber(String argument, CommandType command) throws BobException {
         if (argument.isEmpty()) {
-            throw new BobException("'" + command.getKeyword() + "' needs a task number. Try: " + command.getKeyword()
-                                            + " 1");
+            throw new BobException("'" + command.getKeyword() + "' needs a task number. Try: "
+                    + command.getKeyword() + " 1");
         }
         try {
             int taskNumber = Integer.parseInt(argument);
@@ -134,17 +136,18 @@ public class Parser {
             }
             return taskNumber;
         } catch (NumberFormatException exception) {
-            throw new BobException("'" + command.getKeyword() + "' needs a whole-number task index, such as 1.");
+            throw new BobException("'" + command.getKeyword()
+                    + "' needs a whole-number task index, such as 1.");
         }
     }
 
     /**
      * Ensures that a task detail is present and safe for pipe-delimited storage.
      *
-     * @param text task detail to validate
-     * @param message error message used when the detail is empty
-     * @return the validated text
-     * @throws BobException if the text is empty or contains the field separator
+     * @param text task detail to validate.
+     * @param message error message used when the detail is empty.
+     * @return the validated text.
+     * @throws BobException if the text is empty or contains the field separator.
      */
     private String requireText(String text, String message) throws BobException {
         if (text.isEmpty()) {
@@ -159,13 +162,18 @@ public class Parser {
     /**
      * Rejects unexpected arguments supplied to an argument-free command.
      *
-     * @param argument text following the command keyword
-     * @param command command being validated
-     * @throws BobException if an argument was supplied
+     * @param argument text following the command keyword.
+     * @param command command being validated.
+     * @throws BobException if an argument was supplied.
      */
     private void requireNoArgument(String argument, CommandType command) throws BobException {
         if (!argument.isEmpty()) {
             throw new BobException("'" + command.getKeyword() + "' does not take extra arguments.");
         }
+    }
+
+    private BobException createUnknownCommandException() {
+        return new BobException("I don't recognise that command. Try 'todo', 'deadline', 'event', 'list', "
+                + "'mark', 'unmark', 'delete', or 'bye'.");
     }
 }

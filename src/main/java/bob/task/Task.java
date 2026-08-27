@@ -12,8 +12,8 @@ public abstract class Task {
     /**
      * Creates an incomplete task of the specified type.
      *
-     * @param description description of the work to complete
-     * @param type kind of task
+     * @param description description of the work to complete.
+     * @param type kind of task.
      */
     public Task(String description, TaskType type) {
         this.description = description;
@@ -24,7 +24,7 @@ public abstract class Task {
     /**
      * Returns the kind of this task.
      *
-     * @return task type
+     * @return task type.
      */
     public TaskType getType() {
         return type;
@@ -33,7 +33,7 @@ public abstract class Task {
     /**
      * Returns the task description.
      *
-     * @return task description
+     * @return task description.
      */
     public String getDescription() {
         return description;
@@ -42,7 +42,7 @@ public abstract class Task {
     /**
      * Returns the current completion state of this task.
      *
-     * @return task status
+     * @return task status.
      */
     public TaskStatus getStatus() {
         return status;
@@ -51,7 +51,7 @@ public abstract class Task {
     /**
      * Returns the icon representing the current completion state.
      *
-     * @return status icon
+     * @return status icon.
      */
     public String getStatusIcon() {
         return status.getIcon();
@@ -74,7 +74,7 @@ public abstract class Task {
     /**
      * Returns a display representation containing the type, status, and description.
      *
-     * @return formatted task
+     * @return formatted task.
      */
     @Override
     public String toString() {

@@ -12,7 +12,8 @@ public class Ui {
     private static final String CHATBOT_NAME = "Bob";
     private static final String LINE_PREFIX = "    ";
     private static final String MESSAGE_PREFIX = "     ";
-    private static final String DIVIDER = LINE_PREFIX + "____________________________________________________________";
+    private static final String DIVIDER =
+            LINE_PREFIX + "____________________________________________________________";
     private final Scanner scanner;
 
     /**
@@ -25,7 +26,7 @@ public class Ui {
     /**
      * Returns whether another command is available from the user.
      *
-     * @return true if another line can be read
+     * @return true if another line can be read.
      */
     public boolean hasNextLine() {
         return scanner.hasNextLine();
@@ -34,7 +35,7 @@ public class Ui {
     /**
      * Reads the next command entered by the user.
      *
-     * @return the next input line
+     * @return the next input line.
      */
     public String readCommand() {
         return scanner.nextLine();
@@ -68,8 +69,8 @@ public class Ui {
     /**
      * Confirms that a task was added and displays the new task count.
      *
-     * @param task task that was added
-     * @param taskCount number of tasks after the addition
+     * @param task task that was added.
+     * @param taskCount number of tasks after the addition.
      */
     public void showAdded(Task task, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Got it. I've added this task:");
@@ -80,8 +81,8 @@ public class Ui {
     /**
      * Displays all tasks in their numbered list order.
      *
-     * @param tasks tasks to display
-     * @param taskCount number of tasks to display
+     * @param tasks tasks to display.
+     * @param taskCount number of tasks to display.
      */
     public void showTasks(List<Task> tasks, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Here are the tasks in your list:");
@@ -94,8 +95,8 @@ public class Ui {
     /**
      * Confirms that a task was deleted and displays the remaining task count.
      *
-     * @param task task that was deleted
-     * @param taskCount number of tasks after the deletion
+     * @param task task that was deleted.
+     * @param taskCount number of tasks after the deletion.
      */
     public void showDeleted(Task task, int taskCount) {
         System.out.println(MESSAGE_PREFIX + "Noted. I've removed this task:");
@@ -107,7 +108,7 @@ public class Ui {
     /**
      * Confirms that a task was marked as done.
      *
-     * @param task task whose status changed
+     * @param task task whose status changed.
      */
     public void showMarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "Nice! I've marked this task as done:");
@@ -117,7 +118,7 @@ public class Ui {
     /**
      * Confirms that a task was marked as not done.
      *
-     * @param task task whose status changed
+     * @param task task whose status changed.
      */
     public void showUnmarked(Task task) {
         System.out.println(MESSAGE_PREFIX + "OK, I've marked this task as not done yet:");
@@ -127,7 +128,7 @@ public class Ui {
     /**
      * Displays a recoverable input error.
      *
-     * @param message explanation of the error
+     * @param message explanation of the error.
      */
     public void showError(String message) {
         System.out.println(MESSAGE_PREFIX + "I couldn't process that: " + message);

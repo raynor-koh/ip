@@ -15,8 +15,8 @@ public class TaskDateTime {
     /**
      * Creates a task date-time.
      *
-     * @param date task date
-     * @param time optional time of day; null represents a date without a time
+     * @param date task date.
+     * @param time optional time of day; null represents a date without a time.
      */
     public TaskDateTime(LocalDate date, LocalTime time) {
         this.date = date;
@@ -26,7 +26,7 @@ public class TaskDateTime {
     /**
      * Returns the task date.
      *
-     * @return task date
+     * @return task date.
      */
     public LocalDate getDate() {
         return date;
@@ -35,7 +35,7 @@ public class TaskDateTime {
     /**
      * Returns the time of day when one was specified.
      *
-     * @return optional task time
+     * @return optional task time.
      */
     public Optional<LocalTime> getTime() {
         return Optional.ofNullable(time);

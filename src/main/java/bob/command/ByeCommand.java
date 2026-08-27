@@ -17,9 +17,9 @@ public class ByeCommand extends Command {
     /**
      * Displays the farewell message.
      *
-     * @param tasks current task list
-     * @param ui user interface used to display the farewell
-     * @param storage task storage, which is unchanged
+     * @param tasks current task list.
+     * @param ui user interface used to display the farewell.
+     * @param storage task storage, which is unchanged.
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
@@ -29,7 +29,7 @@ public class ByeCommand extends Command {
     /**
      * Indicates that this command ends the chatbot session.
      *
-     * @return true
+     * @return true.
      */
     @Override
     public boolean isExit() {

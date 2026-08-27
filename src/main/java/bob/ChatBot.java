@@ -2,8 +2,8 @@ package bob;
 
 import java.io.IOException;
 
-import bob.exception.BobException;
 import bob.command.Command;
+import bob.exception.BobException;
 import bob.parser.Parser;
 import bob.storage.Storage;
 import bob.task.TaskList;
@@ -21,7 +21,7 @@ public class ChatBot {
     /**
      * Creates a chatbot with its user interface and input parser.
      *
-     * @throws BobException if saved tasks cannot be loaded
+     * @throws BobException if saved tasks cannot be loaded.
      */
     public ChatBot() throws BobException {
         this("data/bob.txt");
@@ -30,8 +30,8 @@ public class ChatBot {
     /**
      * Creates a chatbot that persists tasks at the supplied path.
      *
-     * @param filePath path of the file used to load and save tasks
-     * @throws BobException if saved tasks cannot be loaded
+     * @param filePath path of the file used to load and save tasks.
+     * @throws BobException if saved tasks cannot be loaded.
      */
     public ChatBot(String filePath) throws BobException {
         this.ui = new Ui();

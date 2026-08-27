@@ -17,7 +17,7 @@ public class UnmarkCommand extends Command {
     /**
      * Creates a command for the specified one-based task number.
      *
-     * @param taskNumber one-based number of the task to unmark
+     * @param taskNumber one-based number of the task to unmark.
      */
     public UnmarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
@@ -26,11 +26,11 @@ public class UnmarkCommand extends Command {
     /**
      * Marks the selected task as not done and persists the updated list.
      *
-     * @param taskList task list to update
-     * @param ui user interface used to display confirmation
-     * @param storage storage used to persist the updated list
-     * @throws BobException if the task number does not identify a task
-     * @throws IOException if the updated task list cannot be saved
+     * @param taskList task list to update.
+     * @param ui user interface used to display confirmation.
+     * @param storage storage used to persist the updated list.
+     * @throws BobException if the task number does not identify a task.
+     * @throws IOException if the updated task list cannot be saved.
      */
     @Override
     public void execute(TaskList taskList, Ui ui, Storage storage) throws BobException, IOException {
