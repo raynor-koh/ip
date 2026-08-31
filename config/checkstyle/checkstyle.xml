@@ -111,7 +111,9 @@
             <property name="option" value="nl"/>
         </module>
         <module name="SeparatorWrap">
-            <property name="tokens" value="COMMA, RBRACK, ARRAY_DECLARATOR, ELLIPSIS, SEMI, LPAREN"/>
+            <!-- LPAREN is intentionally excluded: otherwise lambda expressions such as () -> ...
+                 are incorrectly treated as method calls when they wrap across lines. -->
+            <property name="tokens" value="COMMA, RBRACK, ARRAY_DECLARATOR, ELLIPSIS, SEMI"/>
             <property name="option" value="eol"/>
         </module>
         <module name="Indentation">
