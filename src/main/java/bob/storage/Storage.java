@@ -20,10 +20,10 @@ import bob.task.ToDo;
  * Loads and saves tasks in Bob's pipe-delimited text format.
  */
 public class Storage {
-    private final Path filePath;
-
     /** Separator between fields in a stored task record. */
     public static final String FIELD_SEPARATOR = "|";
+
+    private final Path filePath;
 
     /**
      * Creates storage using Bob's default data file.
