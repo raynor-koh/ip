@@ -2,6 +2,7 @@ package bob.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,7 +15,6 @@ import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.TaskList;
 import bob.task.ToDo;
-import bob.ui.Ui;
 
 /** Tests removing a task through a {@link DeleteCommand}. */
 class DeleteCommandTest {
@@ -22,15 +22,18 @@ class DeleteCommandTest {
     private Path tempDirectory;
 
     @Test
-    void execute_validOneBasedTaskNumber_removesAndSavesTask() throws BobException, IOException {
+    void execute_validOneBasedTaskNumber_removesSavesAndReturnsConfirmation()
+            throws BobException, IOException {
         TaskList taskList = new TaskList(List.of(new ToDo("first task"), new ToDo("second task")));
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
-        new DeleteCommand(1).execute(taskList, new Ui(), storage);
+        String response = new DeleteCommand(1).execute(taskList, storage);
 
         assertEquals(1, taskList.getTaskCount());
         assertEquals("second task", taskList.get(0).getDescription());
         assertEquals("second task", storage.load().get(0).getDescription());
+        assertTrue(response.contains("removed this task"));
+        assertTrue(response.contains("[T][ ] first task"));
     }
 
     @Test
@@ -38,6 +41,6 @@ class DeleteCommandTest {
         TaskList taskList = new TaskList(List.of(new ToDo("read book")));
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
-        assertThrows(BobException.class, () -> new DeleteCommand(2).execute(taskList, new Ui(), storage));
+        assertThrows(BobException.class, () -> new DeleteCommand(2).execute(taskList, storage));
     }
 }

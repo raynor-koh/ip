@@ -6,7 +6,6 @@ import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.Task;
 import bob.task.TaskList;
-import bob.ui.Ui;
 
 /**
  * Command that removes a task from the list.
@@ -27,15 +26,20 @@ public class DeleteCommand extends Command {
      * Removes the selected task and persists the updated list.
      *
      * @param taskList task list to update.
-     * @param ui user interface used to display confirmation.
      * @param storage storage used to persist the updated list.
+     * @return response confirming which task was removed.
      * @throws BobException if the task number does not identify a task.
      * @throws IOException if the updated task list cannot be saved.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws BobException, IOException {
+    public String execute(TaskList taskList, Storage storage) throws BobException, IOException {
         Task deletedTask = taskList.remove(taskNumber - 1);
-        ui.showDeleted(deletedTask, taskList.getTaskCount());
         storage.save(taskList.getTasks());
+
+        int taskCount = taskList.getTaskCount();
+        String taskLabel = taskCount == 1 ? "task" : "tasks";
+        return "Noted. I've removed this task:\n"
+                + deletedTask + "\n"
+                + "Now you have " + taskCount + " " + taskLabel + " in the list.";
     }
 }

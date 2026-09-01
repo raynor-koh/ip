@@ -2,6 +2,7 @@ package bob.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,7 +16,6 @@ import bob.storage.Storage;
 import bob.task.TaskList;
 import bob.task.TaskStatus;
 import bob.task.ToDo;
-import bob.ui.Ui;
 
 /** Tests marking a task as not done through an {@link UnmarkCommand}. */
 class UnmarkCommandTest {
@@ -23,16 +23,19 @@ class UnmarkCommandTest {
     private Path tempDirectory;
 
     @Test
-    void execute_validOneBasedTaskNumber_unmarksAndSavesTask() throws BobException, IOException {
+    void execute_validOneBasedTaskNumber_unmarksSavesAndReturnsConfirmation()
+            throws BobException, IOException {
         ToDo task = new ToDo("read book");
         task.markAsDone();
         TaskList taskList = new TaskList(List.of(task));
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
-        new UnmarkCommand(1).execute(taskList, new Ui(), storage);
+        String response = new UnmarkCommand(1).execute(taskList, storage);
 
         assertEquals(TaskStatus.NOT_DONE, taskList.get(0).getStatus());
         assertEquals(TaskStatus.NOT_DONE, storage.load().get(0).getStatus());
+        assertTrue(response.contains("marked this task as not done yet"));
+        assertTrue(response.contains("[T][ ] read book"));
     }
 
     @Test
@@ -40,6 +43,6 @@ class UnmarkCommandTest {
         TaskList taskList = new TaskList(List.of(new ToDo("read book")));
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
-        assertThrows(BobException.class, () -> new UnmarkCommand(2).execute(taskList, new Ui(), storage));
+        assertThrows(BobException.class, () -> new UnmarkCommand(2).execute(taskList, storage));
     }
 }

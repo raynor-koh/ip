@@ -5,7 +5,6 @@ import java.io.IOException;
 import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.TaskList;
-import bob.ui.Ui;
 
 /**
  * Represents an executable user command.
@@ -19,15 +18,15 @@ public abstract class Command {
     }
 
     /**
-     * Applies this command to the task list and displays its result.
+     * Applies this command and returns the resulting response.
      *
      * @param tasks task list on which the command operates.
-     * @param ui user interface used to display feedback.
      * @param storage storage used to persist task changes.
-     * @throws BobException if the command cannot be applied to the task list.
+     * @return response to display to the user.
+     * @throws BobException if the command cannot be applied.
      * @throws IOException if updated tasks cannot be saved.
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws BobException, IOException;
+    public abstract String execute(TaskList tasks, Storage storage) throws BobException, IOException;
 
     /**
      * Returns whether this command should end the chatbot session.

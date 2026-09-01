@@ -143,6 +143,17 @@ public class Ui {
     }
 
     /**
+     * Displays a response produced by a command.
+     *
+     * @param response response to display.
+     */
+    public void showResponse(String response) {
+        for (String line : response.split("\\R")) {
+            System.out.println(MESSAGE_PREFIX + line);
+        }
+    }
+
+    /**
      * Displays a divider between chatbot messages.
      */
     public void showLine() {

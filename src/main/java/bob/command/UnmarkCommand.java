@@ -6,7 +6,6 @@ import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.Task;
 import bob.task.TaskList;
-import bob.ui.Ui;
 
 /**
  * Command that marks a task as not done.
@@ -27,16 +26,17 @@ public class UnmarkCommand extends Command {
      * Marks the selected task as not done and persists the updated list.
      *
      * @param taskList task list to update.
-     * @param ui user interface used to display confirmation.
      * @param storage storage used to persist the updated list.
+     * @return response confirming that the task was marked as not done.
      * @throws BobException if the task number does not identify a task.
      * @throws IOException if the updated task list cannot be saved.
      */
     @Override
-    public void execute(TaskList taskList, Ui ui, Storage storage) throws BobException, IOException {
+    public String execute(TaskList taskList, Storage storage) throws BobException, IOException {
         Task task = taskList.get(taskNumber - 1);
         task.markAsNotDone();
-        ui.showUnmarked(task);
         storage.save(taskList.getTasks());
+
+        return "OK, I've marked this task as not done yet:\n  " + task;
     }
 }

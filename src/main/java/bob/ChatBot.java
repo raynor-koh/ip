@@ -57,7 +57,8 @@ public class ChatBot {
                 String fullCommand = ui.readCommand();
                 ui.showLine();
                 Command command = parser.parse(fullCommand);
-                command.execute(tasks, ui, storage);
+                String response = command.execute(tasks, storage);
+                ui.showResponse(response);
 
                 if (command.isExit()) {
                     break;
