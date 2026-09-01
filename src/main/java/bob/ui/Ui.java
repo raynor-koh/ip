@@ -57,15 +57,6 @@ public class Ui {
     }
 
     /**
-     * Displays a recoverable input error.
-     *
-     * @param message explanation of the error.
-     */
-    public void showError(String message) {
-        System.out.println(MESSAGE_PREFIX + "I couldn't process that: " + message);
-    }
-
-    /**
      * Displays a response produced by a command.
      *
      * @param response response to display.

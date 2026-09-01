@@ -1,6 +1,7 @@
 package bob;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -63,6 +64,41 @@ class ChatBotTest {
         String displayedText = output.toString(StandardCharsets.UTF_8);
         assertTrue(displayedText.contains("I couldn't process that: I don't recognise that command."));
         assertTrue(displayedText.contains("Bye. Hope to see you again soon!"));
+    }
+
+    @Test
+    void processCommand_validTodo_returnsResponseAndPersistsTask() throws Exception {
+        Path dataFile = tempDirectory.resolve("tasks.txt");
+        ChatBot chatBot = new ChatBot(dataFile.toString());
+
+        ChatResponse response = chatBot.processCommand("todo read book");
+
+        List<Task> storedTasks = new Storage(dataFile.toString()).load();
+        assertTrue(response.text().contains("added: [T][ ] read book"));
+        assertFalse(response.isExit());
+        assertEquals(1, storedTasks.size());
+        assertEquals("read book", storedTasks.get(0).getDescription());
+    }
+
+    @Test
+    void processCommand_invalidCommand_returnsNonExitErrorResponse() throws BobException {
+        ChatBot chatBot = new ChatBot(tempDirectory.resolve("tasks.txt").toString());
+
+        ChatResponse response = chatBot.processCommand("unknown command");
+
+        assertTrue(response.text().startsWith(
+                "I couldn't process that: I don't recognise that command."));
+        assertFalse(response.isExit());
+    }
+
+    @Test
+    void processCommand_bye_returnsExitResponse() throws BobException {
+        ChatBot chatBot = new ChatBot(tempDirectory.resolve("tasks.txt").toString());
+
+        ChatResponse response = chatBot.processCommand("bye");
+
+        assertEquals("Bye. Hope to see you again soon!", response.text());
+        assertTrue(response.isExit());
     }
 
     private ByteArrayOutputStream configureStreams(String input) {

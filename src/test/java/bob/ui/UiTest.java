@@ -68,12 +68,10 @@ class UiTest {
     }
 
     @Test
-    void showErrorAndLine_displaysErrorAndDivider() {
-        ui.showError("invalid command");
+    void showLine_displaysDivider() {
         ui.showLine();
 
         String displayedText = output.toString(StandardCharsets.UTF_8);
-        assertTrue(displayedText.contains("I couldn't process that: invalid command"));
         assertTrue(displayedText.contains("____________________________________________________________"));
     }
 }
