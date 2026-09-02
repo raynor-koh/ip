@@ -1,8 +1,10 @@
 .label {
   -fx-background-color: primary-color;
   -fx-background-radius: 12px 12px 0 12px;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 8, 0.16, 0, 2);
   -fx-font-family: "System";
   -fx-font-size: 14px;
+  -fx-line-spacing: 2px;
   -fx-text-fill: white;
 }
 
@@ -34,6 +36,15 @@
 
 .reply-label.response-find {
   -fx-background-color: find-response-color;
+}
+
+.reply-label.response-info {
+  -fx-background-color: info-response-color;
+}
+
+.reply-label.typing-label {
+  -fx-font-style: italic;
+  -fx-text-fill: muted-text-color;
 }
 
 .reply-label.response-list {

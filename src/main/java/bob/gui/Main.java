@@ -24,10 +24,10 @@ public class Main extends Application {
         MainWindow controller = fxmlLoader.getController();
         controller.setChatBot(new ChatBot());
 
-        stage.setTitle("Bob");
+        stage.setTitle("Bob - Task Assistant");
         stage.setScene(new Scene(root));
-        stage.setMinWidth(417);
-        stage.setMinHeight(300);
+        stage.setMinWidth(440);
+        stage.setMinHeight(420);
         stage.show();
     }
 }
