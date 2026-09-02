@@ -30,6 +30,16 @@ public class TaskList {
     }
 
     /**
+     * Creates a task list containing the supplied tasks.
+     *
+     * @param tasks initial tasks.
+     * @return task list containing the supplied tasks.
+     */
+    public static TaskList of(Task... tasks) {
+        return new TaskList(List.of(tasks));
+    }
+
+    /**
      * Adds a task to the end of the list.
      *
      * @param task task to add.
