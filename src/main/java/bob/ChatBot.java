@@ -56,10 +56,10 @@ public class ChatBot {
         try {
             Command command = parser.parse(fullCommand);
             String response = command.execute(tasks, storage);
-            return new ChatResponse(response, command.isExit());
+            return new ChatResponse(response, command.isExit(), command.getResponseType());
         } catch (BobException | IOException exception) {
             String response = "I couldn't process that: " + exception.getMessage();
-            return new ChatResponse(response, false);
+            return new ChatResponse(response, false, ResponseType.ERROR);
         }
     }
 

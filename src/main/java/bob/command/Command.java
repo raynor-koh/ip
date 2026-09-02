@@ -2,6 +2,7 @@ package bob.command;
 
 import java.io.IOException;
 
+import bob.ResponseType;
 import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.TaskList;
@@ -27,6 +28,13 @@ public abstract class Command {
      * @throws IOException if updated tasks cannot be saved.
      */
     public abstract String execute(TaskList tasks, Storage storage) throws BobException, IOException;
+
+    /**
+     * Returns the semantic type of the response produced by this command.
+     *
+     * @return response type for presentation purposes.
+     */
+    public abstract ResponseType getResponseType();
 
     /**
      * Returns whether this command should end the chatbot session.

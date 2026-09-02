@@ -2,6 +2,7 @@ package bob.command;
 
 import java.util.List;
 
+import bob.ResponseType;
 import bob.storage.Storage;
 import bob.task.Task;
 import bob.task.TaskList;
@@ -41,5 +42,10 @@ public class FindCommand extends Command {
         }
 
         return response.toString();
+    }
+
+    @Override
+    public ResponseType getResponseType() {
+        return ResponseType.FIND;
     }
 }

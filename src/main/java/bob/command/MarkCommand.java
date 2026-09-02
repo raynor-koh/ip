@@ -2,6 +2,7 @@ package bob.command;
 
 import java.io.IOException;
 
+import bob.ResponseType;
 import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.Task;
@@ -38,5 +39,10 @@ public class MarkCommand extends Command {
         storage.save(taskList.getTasks());
 
         return "Nice! I've marked this task as done:\n  " + task;
+    }
+
+    @Override
+    public ResponseType getResponseType() {
+        return ResponseType.MARK;
     }
 }

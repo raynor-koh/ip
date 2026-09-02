@@ -76,6 +76,7 @@ class ChatBotTest {
         List<Task> storedTasks = new Storage(dataFile.toString()).load();
         assertTrue(response.text().contains("added: [T][ ] read book"));
         assertFalse(response.isExit());
+        assertEquals(ResponseType.ADD, response.responseType());
         assertEquals(1, storedTasks.size());
         assertEquals("read book", storedTasks.get(0).getDescription());
     }
@@ -89,6 +90,21 @@ class ChatBotTest {
         assertTrue(response.text().startsWith(
                 "I couldn't process that: I don't recognise that command."));
         assertFalse(response.isExit());
+        assertEquals(ResponseType.ERROR, response.responseType());
+    }
+
+    @Test
+    void processCommand_invalidDeadlineDate_returnsSupportedDateFormatError() throws BobException {
+        ChatBot chatBot = new ChatBot(tempDirectory.resolve("tasks.txt").toString());
+
+        ChatResponse response = chatBot.processCommand("deadline submit report /by Friday");
+
+        assertEquals(
+                "I couldn't process that: Use d/M/yyyy or d/M/yyyy HHmm, "
+                        + "such as 2/12/2019 or 2/12/2019 1800.",
+                response.text());
+        assertFalse(response.isExit());
+        assertEquals(ResponseType.ERROR, response.responseType());
     }
 
     @Test
@@ -99,6 +115,20 @@ class ChatBotTest {
 
         assertEquals("Bye. Hope to see you again soon!", response.text());
         assertTrue(response.isExit());
+        assertEquals(ResponseType.BYE, response.responseType());
+    }
+
+    @Test
+    void processCommand_supportedCommands_returnsMatchingResponseTypes() throws BobException {
+        ChatBot chatBot = new ChatBot(tempDirectory.resolve("tasks.txt").toString());
+
+        assertEquals(ResponseType.ADD, chatBot.processCommand("todo read book").responseType());
+        assertEquals(ResponseType.LIST, chatBot.processCommand("list").responseType());
+        assertEquals(ResponseType.FIND, chatBot.processCommand("find book").responseType());
+        assertEquals(ResponseType.MARK, chatBot.processCommand("mark 1").responseType());
+        assertEquals(ResponseType.UNMARK, chatBot.processCommand("unmark 1").responseType());
+        assertEquals(ResponseType.DELETE, chatBot.processCommand("delete 1").responseType());
+        assertEquals(ResponseType.BYE, chatBot.processCommand("bye").responseType());
     }
 
     private ByteArrayOutputStream configureStreams(String input) {

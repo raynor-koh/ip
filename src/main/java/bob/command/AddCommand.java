@@ -2,6 +2,7 @@ package bob.command;
 
 import java.io.IOException;
 
+import bob.ResponseType;
 import bob.storage.Storage;
 import bob.task.Task;
 import bob.task.TaskList;
@@ -37,5 +38,10 @@ public class AddCommand extends Command {
         return "Got it. I've added this task:\n"
                 + "added: " + task + "\n"
                 + "Now you have " + tasks.getTaskCount() + " tasks in the list.";
+    }
+
+    @Override
+    public ResponseType getResponseType() {
+        return ResponseType.ADD;
     }
 }

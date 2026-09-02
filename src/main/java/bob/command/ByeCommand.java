@@ -1,5 +1,6 @@
 package bob.command;
 
+import bob.ResponseType;
 import bob.storage.Storage;
 import bob.task.TaskList;
 
@@ -23,6 +24,11 @@ public class ByeCommand extends Command {
     @Override
     public String execute(TaskList tasks, Storage storage) {
         return "Bye. Hope to see you again soon!";
+    }
+
+    @Override
+    public ResponseType getResponseType() {
+        return ResponseType.BYE;
     }
 
     /**

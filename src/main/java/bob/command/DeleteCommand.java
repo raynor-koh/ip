@@ -2,6 +2,7 @@ package bob.command;
 
 import java.io.IOException;
 
+import bob.ResponseType;
 import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.Task;
@@ -41,5 +42,10 @@ public class DeleteCommand extends Command {
         return "Noted. I've removed this task:\n"
                 + deletedTask + "\n"
                 + "Now you have " + taskCount + " " + taskLabel + " in the list.";
+    }
+
+    @Override
+    public ResponseType getResponseType() {
+        return ResponseType.DELETE;
     }
 }
