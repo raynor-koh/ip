@@ -61,7 +61,8 @@ public class MainWindow {
         ChatResponse response = chatBot.processCommand(input);
 
         dialogContainer.getChildren().addAll(DialogBox.getUserDialog(input, userImage),
-                                        DialogBox.getBobDialog(response.text(), bobImage));
+                                        DialogBox.getBobDialog(
+                                                response.text(), bobImage, response.responseType()));
 
         userInput.clear();
         userInput.requestFocus();

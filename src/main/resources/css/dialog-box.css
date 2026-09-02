@@ -1,13 +1,53 @@
 .label {
-  -fx-background-color: #d8f8ea;
+  -fx-background-color: primary-color;
   -fx-background-radius: 12px 12px 0 12px;
+  -fx-font-family: "System";
+  -fx-font-size: 14px;
+  -fx-text-fill: white;
 }
 
 .reply-label {
-  -fx-background-color: #e5e9f0;
+  -fx-background-color: bye-response-color;
   -fx-background-radius: 12px 12px 12px 0;
+  -fx-border-color: border-color;
+  -fx-border-radius: 12px 12px 12px 0;
+  -fx-border-width: 1px;
+  -fx-text-fill: text-color;
+}
+
+.reply-label.response-add {
+  -fx-background-color: add-response-color;
+}
+
+.reply-label.response-bye {
+  -fx-background-color: bye-response-color;
+}
+
+.reply-label.response-delete {
+  -fx-background-color: delete-response-color;
+}
+
+.reply-label.response-error {
+  -fx-background-color: error-response-color;
+  -fx-border-color: error-color;
+}
+
+.reply-label.response-find {
+  -fx-background-color: find-response-color;
+}
+
+.reply-label.response-list {
+  -fx-background-color: list-response-color;
+}
+
+.reply-label.response-mark {
+  -fx-background-color: mark-response-color;
+}
+
+.reply-label.response-unmark {
+  -fx-background-color: unmark-response-color;
 }
 
 #displayPicture {
-  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.3, 2, 2);
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 8, 0.25, 2, 2);
 }

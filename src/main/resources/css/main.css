@@ -1,17 +1,93 @@
 .root {
-  -fx-background-color: #f3f7f5;
-}
+  background-color: #12251b;
+  surface-color: rgba(248, 251, 249, 0.92);
+  primary-color: #2f6b4f;
+  primary-hover-color: #3c8060;
+  primary-pressed-color: #24543e;
+  text-color: #1d2b24;
+  muted-text-color: #68776f;
+  border-color: rgba(47, 107, 79, 0.32);
+  success-color: #2f7d4b;
+  error-color: #b42318;
+  add-response-color: rgba(193, 228, 201, 0.96);
+  bye-response-color: rgba(220, 227, 223, 0.96);
+  delete-response-color: rgba(244, 200, 195, 0.96);
+  error-response-color: rgba(246, 186, 181, 0.96);
+  find-response-color: rgba(227, 216, 242, 0.96);
+  list-response-color: rgba(214, 232, 247, 0.96);
+  mark-response-color: rgba(197, 231, 216, 0.96);
+  unmark-response-color: rgba(245, 226, 184, 0.96);
 
-.text-field {
+  -fx-background-color: background-color;
+  -fx-background-image: url("../images/background.png");
+  -fx-background-position: center center;
+  -fx-background-repeat: no-repeat;
+  -fx-background-size: cover;
+  -fx-font-family: "System";
   -fx-font-size: 14px;
 }
 
-.button {
-  -fx-background-color: #36c98f;
-  -fx-font-weight: bold;
+.text-field {
+  -fx-background-color: surface-color;
+  -fx-background-insets: 0;
+  -fx-background-radius: 10px 0 0 10px;
+  -fx-border-color: border-color;
+  -fx-border-radius: 10px 0 0 10px;
+  -fx-border-width: 1px 0 1px 1px;
+  -fx-padding: 0 14px;
+  -fx-prompt-text-fill: muted-text-color;
+  -fx-text-fill: text-color;
 }
 
-.scroll-pane,
+.text-field:focused {
+  -fx-border-color: primary-color;
+  -fx-effect: dropshadow(gaussian, rgba(47, 107, 79, 0.2), 8, 0.2, 0, 0);
+}
+
+.button {
+  -fx-background-color: primary-color;
+  -fx-background-insets: 0;
+  -fx-background-radius: 0 10px 10px 0;
+  -fx-cursor: hand;
+  -fx-font-weight: bold;
+  -fx-text-fill: white;
+}
+
+.button:hover {
+  -fx-background-color: primary-hover-color;
+}
+
+.button:pressed {
+  -fx-background-color: primary-pressed-color;
+}
+
+.button:disabled {
+  -fx-cursor: default;
+  -fx-opacity: 0.55;
+}
+
+.scroll-pane {
+  -fx-background-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding: 12px;
+}
+
 .scroll-pane > .viewport {
   -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+  -fx-background-color: transparent;
+  -fx-pref-width: 10px;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: rgba(47, 107, 79, 0.55);
+  -fx-background-radius: 10px;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+  -fx-opacity: 0;
+  -fx-padding: 0;
 }

@@ -2,7 +2,9 @@ package bob.gui;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Locale;
 
+import bob.ResponseType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,12 +59,19 @@ public class DialogBox extends HBox {
      *
      * @param text message to display.
      * @param image Bob's avatar.
+     * @param responseType semantic type used to style the response.
      * @return Bob dialog box.
      */
-    public static DialogBox getBobDialog(String text, Image image) {
+    public static DialogBox getBobDialog(String text, Image image, ResponseType responseType) {
         DialogBox dialogBox = new DialogBox(text, image);
         dialogBox.flip();
+        dialogBox.applyResponseStyle(responseType);
         return dialogBox;
+    }
+
+    private void applyResponseStyle(ResponseType responseType) {
+        String styleClass = "response-" + responseType.name().toLowerCase(Locale.ROOT);
+        dialog.getStyleClass().add(styleClass);
     }
 
     private void flip() {
