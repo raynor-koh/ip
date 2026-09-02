@@ -2,11 +2,10 @@ package bob.command;
 
 import java.io.IOException;
 
-import bob.exception.BobException;
+import bob.ResponseType;
 import bob.storage.Storage;
 import bob.task.Task;
 import bob.task.TaskList;
-import bob.ui.Ui;
 
 /**
  * Command that adds a task to the task list.
@@ -27,14 +26,22 @@ public class AddCommand extends Command {
      * Adds the task, displays confirmation, and persists the updated list.
      *
      * @param tasks task list to update.
-     * @param ui user interface used to display confirmation.
      * @param storage storage used to persist the updated list.
+     * @return response confirming that the task was added.
      * @throws IOException if the updated task list cannot be saved.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws BobException, IOException {
+    public String execute(TaskList tasks, Storage storage) throws IOException {
         tasks.add(task);
-        ui.showAdded(task, tasks.getTaskCount());
         storage.save(tasks.getTasks());
+
+        return "Got it. I've added this task:\n"
+                + "added: " + task + "\n"
+                + "Now you have " + tasks.getTaskCount() + " tasks in the list.";
+    }
+
+    @Override
+    public ResponseType getResponseType() {
+        return ResponseType.ADD;
     }
 }

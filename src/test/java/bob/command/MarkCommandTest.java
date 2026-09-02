@@ -2,6 +2,7 @@ package bob.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,7 +16,6 @@ import bob.storage.Storage;
 import bob.task.TaskList;
 import bob.task.TaskStatus;
 import bob.task.ToDo;
-import bob.ui.Ui;
 
 /** Tests marking a task as done through a {@link MarkCommand}. */
 class MarkCommandTest {
@@ -23,14 +23,17 @@ class MarkCommandTest {
     private Path tempDirectory;
 
     @Test
-    void execute_validOneBasedTaskNumber_marksAndSavesTask() throws BobException, IOException {
+    void execute_validOneBasedTaskNumber_marksSavesAndReturnsConfirmation()
+            throws BobException, IOException {
         TaskList taskList = new TaskList(List.of(new ToDo("read book")));
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
-        new MarkCommand(1).execute(taskList, new Ui(), storage);
+        String response = new MarkCommand(1).execute(taskList, storage);
 
         assertEquals(TaskStatus.DONE, taskList.get(0).getStatus());
         assertEquals(TaskStatus.DONE, storage.load().get(0).getStatus());
+        assertTrue(response.contains("marked this task as done"));
+        assertTrue(response.contains("[T][X] read book"));
     }
 
     @Test
@@ -38,6 +41,6 @@ class MarkCommandTest {
         TaskList taskList = new TaskList(List.of(new ToDo("read book")));
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
-        assertThrows(BobException.class, () -> new MarkCommand(2).execute(taskList, new Ui(), storage));
+        assertThrows(BobException.class, () -> new MarkCommand(2).execute(taskList, storage));
     }
 }

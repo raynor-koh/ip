@@ -10,7 +10,7 @@ import bob.task.TaskList;
 import bob.ui.Ui;
 
 /**
- * Coordinates the chatbot's input-processing loop.
+ * Processes chatbot commands and coordinates the console input loop.
  */
 public class ChatBot {
     private final Ui ui;
@@ -47,25 +47,37 @@ public class ChatBot {
     }
 
     /**
+     * Processes a user command and returns the response for a user interface to display.
+     *
+     * @param fullCommand complete command entered by the user.
+     * @return result containing the response text and whether the session should end.
+     */
+    public ChatResponse processCommand(String fullCommand) {
+        try {
+            Command command = parser.parse(fullCommand);
+            String response = command.execute(tasks, storage);
+            return new ChatResponse(response, command.isExit(), command.getResponseType());
+        } catch (BobException | IOException exception) {
+            String response = "I couldn't process that: " + exception.getMessage();
+            return new ChatResponse(response, false, ResponseType.ERROR);
+        }
+    }
+
+    /**
      * Runs the chatbot until the user enters an exit command.
      */
     public void run() {
         ui.showWelcome();
 
         while (ui.hasNextLine()) {
-            try {
-                String fullCommand = ui.readCommand();
-                ui.showLine();
-                Command command = parser.parse(fullCommand);
-                command.execute(tasks, ui, storage);
+            String fullCommand = ui.readCommand();
+            ui.showLine();
+            ChatResponse response = processCommand(fullCommand);
+            ui.showResponse(response.text());
+            ui.showLine();
 
-                if (command.isExit()) {
-                    break;
-                }
-            } catch (BobException | IOException exception) {
-                ui.showError(exception.getMessage());
-            } finally {
-                ui.showLine();
+            if (response.isExit()) {
+                break;
             }
         }
         ui.close();

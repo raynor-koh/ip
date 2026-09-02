@@ -9,14 +9,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import bob.task.Task;
-import bob.task.ToDo;
 
 /** Tests console input and output behavior of the user interface. */
 class UiTest {
@@ -53,50 +49,29 @@ class UiTest {
     }
 
     @Test
-    void showWelcomeAndGoodbye_displaysBannerAndMessages() {
+    void showWelcome_displaysBannerAndMessages() {
         ui.showWelcome();
-        ui.showGoodbye();
 
         String displayedText = output.toString(StandardCharsets.UTF_8);
         assertTrue(displayedText.contains("Hello! I'm Bob."));
         assertTrue(displayedText.contains("What can I do for you?"));
         assertTrue(displayedText.contains("____        _"));
-        assertTrue(displayedText.contains("Bye. Hope to see you again soon!"));
     }
 
     @Test
-    void showTaskMessages_displaysTaskDetailsAndCounts() {
-        Task firstTask = new ToDo("first task");
-        Task secondTask = new ToDo("second task");
-        secondTask.markAsDone();
-
-        ui.showAdded(firstTask, 2);
-        ui.showTasks(List.of(firstTask, secondTask), 2);
-        ui.showMatchingTasks(List.of(secondTask));
-        ui.showDeleted(firstTask, 1);
-        ui.showDeleted(secondTask, 0);
-        ui.showMarked(secondTask);
-        ui.showUnmarked(firstTask);
+    void showResponse_multipleLines_displaysEveryLine() {
+        ui.showResponse("First line\nSecond line");
 
         String displayedText = output.toString(StandardCharsets.UTF_8);
-        assertTrue(displayedText.contains("added: [T][ ] first task"));
-        assertTrue(displayedText.contains("Now you have 2 tasks in the list."));
-        assertTrue(displayedText.contains("1.[T][ ] first task"));
-        assertTrue(displayedText.contains("2.[T][X] second task"));
-        assertTrue(displayedText.contains("Here are the matching tasks in your list:"));
-        assertTrue(displayedText.contains("Now you have 1 task in the list."));
-        assertTrue(displayedText.contains("Now you have 0 tasks in the list."));
-        assertTrue(displayedText.contains("marked this task as done"));
-        assertTrue(displayedText.contains("marked this task as not done yet"));
+        assertTrue(displayedText.contains("First line"));
+        assertTrue(displayedText.contains("Second line"));
     }
 
     @Test
-    void showErrorAndLine_displaysErrorAndDivider() {
-        ui.showError("invalid command");
+    void showLine_displaysDivider() {
         ui.showLine();
 
         String displayedText = output.toString(StandardCharsets.UTF_8);
-        assertTrue(displayedText.contains("I couldn't process that: invalid command"));
         assertTrue(displayedText.contains("____________________________________________________________"));
     }
 }

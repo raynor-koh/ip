@@ -22,6 +22,10 @@ import bob.task.ToDo;
  * Converts raw user input into command objects.
  */
 public class Parser {
+    private static final String DEADLINE_EXAMPLE =
+            "deadline submit report /by 2/12/2019 1800";
+    private static final String EVENT_EXAMPLE =
+            "event meeting /from 2/12/2019 1800 /to 2/12/2019 1900";
 
     /**
      * Creates a parser for user commands.
@@ -86,10 +90,10 @@ public class Parser {
     private Command parseDeadline(String argument) throws BobException {
         String[] parts = argument.split("\\s+/by\\s+", 2);
         if (parts.length < 2) {
-            throw new BobException("A deadline needs a due date. Try: deadline submit report /by Friday");
+            throw new BobException("A deadline needs a due date. Try: " + DEADLINE_EXAMPLE);
         }
         String description = requireText(parts[0].trim(), "A deadline needs a description before '/by'.");
-        TaskDateTime dueDate = DateTimeParser.parseUserInput(parts[1].trim());
+        TaskDateTime dueDate = parseDateTime(parts[1].trim());
         return new AddCommand(new Deadline(description, dueDate));
     }
 
@@ -103,20 +107,34 @@ public class Parser {
     private Command parseEvent(String argument) throws BobException {
         String[] fromParts = argument.split("\\s+/from\\s+", 2);
         if (fromParts.length < 2) {
-            throw new BobException("An event needs a time range. Try: event meeting /from 2pm /to 3pm");
+            throw new BobException("An event needs a time range. Try: " + EVENT_EXAMPLE);
         }
         String description = requireText(fromParts[0].trim(),
                 "An event needs a description before '/from'.");
 
         String[] toParts = fromParts[1].split("\\s+/to\\s+", 2);
         if (toParts.length < 2) {
-            throw new BobException(
-                    "An event needs an end time after '/to'. Try: event meeting /from 2pm /to 3pm");
+            throw new BobException("An event needs an end time after '/to'. Try: " + EVENT_EXAMPLE);
         }
-        TaskDateTime from = DateTimeParser.parseUserInput(toParts[0].trim());
-        TaskDateTime to = DateTimeParser.parseUserInput(toParts[1].trim());
+        TaskDateTime from = parseDateTime(toParts[0].trim());
+        TaskDateTime to = parseDateTime(toParts[1].trim());
 
         return new AddCommand(new Event(description, from, to));
+    }
+
+    /**
+     * Parses a task date-time and converts format errors into user-facing chatbot errors.
+     *
+     * @param text date-time entered by the user.
+     * @return parsed task date-time.
+     * @throws BobException if the date-time does not use a supported format.
+     */
+    private TaskDateTime parseDateTime(String text) throws BobException {
+        try {
+            return DateTimeParser.parseUserInput(text);
+        } catch (IllegalArgumentException exception) {
+            throw new BobException(exception.getMessage());
+        }
     }
 
     /**

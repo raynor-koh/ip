@@ -1,6 +1,7 @@
 package bob.parser;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -98,26 +99,54 @@ class ParserTest {
     @Test
     void parse_deadlineWithMissingOrInvalidDetails_exceptionThrown() {
         assertAll(
-                () -> assertThrows(BobException.class, () -> parser.parse("deadline submit report")),
                 () -> assertThrows(BobException.class, () -> parser.parse("deadline /by 2/12/2019")),
-                () -> assertThrows(IllegalArgumentException.class,
+                () -> assertThrows(BobException.class,
                         () -> parser.parse("deadline submit report /by invalid date")),
                 () -> assertThrows(BobException.class,
                         () -> parser.parse("deadline submit | report /by 2/12/2019")));
     }
 
     @Test
+    void parse_deadlineWithoutDate_exceptionSuggestsSupportedDateFormat() {
+        BobException exception = assertThrows(BobException.class,
+                () -> parser.parse("deadline submit report"));
+
+        assertEquals(
+                "A deadline needs a due date. Try: deadline submit report /by 2/12/2019 1800",
+                exception.getMessage());
+    }
+
+    @Test
     void parse_eventWithMissingOrInvalidDetails_exceptionThrown() {
         assertAll(
-                () -> assertThrows(BobException.class, () -> parser.parse("event project meeting")),
                 () -> assertThrows(BobException.class,
                         () -> parser.parse("event /from 2/12/2019 1800 /to 2/12/2019 1900")),
                 () -> assertThrows(BobException.class,
-                        () -> parser.parse("event project meeting /from 2/12/2019 1800")),
-                () -> assertThrows(IllegalArgumentException.class,
                         () -> parser.parse("event project meeting /from invalid /to 2/12/2019 1900")),
                 () -> assertThrows(BobException.class,
                         () -> parser.parse(
                                 "event project | meeting /from 2/12/2019 1800 /to 2/12/2019 1900")));
+    }
+
+    @Test
+    void parse_eventWithoutDateRange_exceptionSuggestsSupportedDateFormat() {
+        BobException exception = assertThrows(BobException.class,
+                () -> parser.parse("event project meeting"));
+
+        assertEquals(
+                "An event needs a time range. Try: "
+                        + "event meeting /from 2/12/2019 1800 /to 2/12/2019 1900",
+                exception.getMessage());
+    }
+
+    @Test
+    void parse_eventWithoutEndDate_exceptionSuggestsSupportedDateFormat() {
+        BobException exception = assertThrows(BobException.class,
+                () -> parser.parse("event project meeting /from 2/12/2019 1800"));
+
+        assertEquals(
+                "An event needs an end time after '/to'. Try: "
+                        + "event meeting /from 2/12/2019 1800 /to 2/12/2019 1900",
+                exception.getMessage());
     }
 }
