@@ -77,3 +77,10 @@ run {
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.addAll(['-Xlint:all'])
 }
+
+tasks.register('runGui', JavaExec) {
+    group = 'application'
+    description = 'Runs the JavaFX GUI'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set('bob.gui.Launcher')
+}
