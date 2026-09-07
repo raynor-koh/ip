@@ -40,12 +40,9 @@ public class Parser {
         }
 
         String[] words = input.trim().split("\\s+", 2);
-        CommandType commandType = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT));
+        CommandType commandType = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT))
+                .orElseThrow(this::createUnknownCommandException);
         String argument = words.length == 2 ? words[1].trim() : "";
-
-        if (commandType == null) {
-            throw createUnknownCommandException();
-        }
 
         return parseCommand(commandType, argument);
     }
