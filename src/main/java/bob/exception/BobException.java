@@ -12,4 +12,14 @@ public class BobException extends Exception {
     public BobException(String message) {
         super(message);
     }
+
+    /**
+     * Creates an exception with a user-facing explanation and underlying cause.
+     *
+     * @param message explanation of the invalid input or operation.
+     * @param cause exception that caused this failure.
+     */
+    public BobException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
