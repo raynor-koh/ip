@@ -25,6 +25,9 @@ public class Storage {
 
     private final Path filePath;
 
+    private record TaskRecord(TaskType type, TaskStatus status) {
+    }
+
     /**
      * Creates storage using Bob's default data file.
      */
@@ -53,19 +56,19 @@ public class Storage {
         String status = task.getStatus().getStorageCode();
 
         switch (task.getType()) {
-            case TODO:
-                return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
-            case DEADLINE:
-                Deadline deadline = (Deadline) task;
-                return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
-                        DateTimeParser.formatForStorage(deadline.getBy()));
-            case EVENT:
-                Event event = (Event) task;
-                return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
-                        DateTimeParser.formatForStorage(event.getFrom()),
-                        DateTimeParser.formatForStorage(event.getTo()));
-            default:
-                throw new IllegalArgumentException("Unsupported task type: " + task.getType());
+        case TODO:
+            return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
+        case DEADLINE:
+            Deadline deadline = (Deadline) task;
+            return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
+                                            DateTimeParser.formatForStorage(deadline.getBy()));
+        case EVENT:
+            Event event = (Event) task;
+            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
+                                            DateTimeParser.formatForStorage(event.getFrom()),
+                                            DateTimeParser.formatForStorage(event.getTo()));
+        default:
+            throw new IllegalArgumentException("Unsupported task type: " + task.getType());
         }
     }
 
@@ -77,10 +80,11 @@ public class Storage {
      */
     public void save(List<Task> tasks) throws IOException {
         try {
-            Files.createDirectories(filePath.getParent());
-            List<String> lines = tasks.stream()
-                    .map(this::serializeTask)
-                    .toList();
+            Path parentDirectory = filePath.getParent();
+            if (parentDirectory != null) {
+                Files.createDirectories(parentDirectory);
+            }
+            List<String> lines = tasks.stream().map(this::serializeTask).toList();
 
             Files.write(filePath, lines, StandardCharsets.UTF_8);
         } catch (IOException exception) {
@@ -97,6 +101,26 @@ public class Storage {
      * @throws IOException if the stored record is malformed.
      */
     public Task deserializeTask(String[] parts, int lineNumber) throws IOException {
+        TaskRecord record = validateRecord(parts, lineNumber);
+        Task task = createTask(parts, record.type(), lineNumber);
+
+        if (record.status() == TaskStatus.DONE) {
+            task.markAsDone();
+        }
+
+        return task;
+    }
+
+    /**
+     * Validates the common fields in a stored task record.
+     *
+     * @param parts fields from a pipe-delimited storage record.
+     * @param lineNumber zero-based line number used in error messages.
+     * @return validated task type and status.
+     * @throws IOException if the record has an invalid type, status, or field
+     * count.
+     */
+    private TaskRecord validateRecord(String[] parts, int lineNumber) throws IOException {
         if (parts.length == 0 || parts[0].isBlank()) {
             throw corruptedFile(lineNumber, "missing task type");
         }
@@ -121,46 +145,50 @@ public class Storage {
 
         if (parts.length != type.getStorageFieldCount()) {
             throw corruptedFile(lineNumber, "expected " + type.getStorageFieldCount() + " fields but found "
-                    + parts.length);
+                                            + parts.length);
         }
 
-        Task task;
+        return new TaskRecord(type, status);
+    }
 
+    /**
+     * Constructs a task from the type-specific fields in a storage record.
+     *
+     * @param parts fields from a pipe-delimited storage record.
+     * @param type validated task type.
+     * @param lineNumber zero-based line number used in error messages.
+     * @return task represented by the record.
+     * @throws IOException if a date field is malformed.
+     */
+    private Task createTask(String[] parts, TaskType type, int lineNumber) throws IOException {
         switch (type) {
-            case TODO:
-                task = new ToDo(parts[2]);
-                break;
-            case DEADLINE:
-                try {
-                    task = new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
-                } catch (DateTimeParseException exception) {
-                    throw corruptedFile(lineNumber, "invalid deadline date");
-                }
-                break;
-            case EVENT:
-                try {
-                    task = new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
-                            DateTimeParser.parseStorage(parts[4]));
-                } catch (DateTimeParseException exception) {
-                    throw corruptedFile(lineNumber, "invalid event date");
-                }
-                break;
-            default:
-                throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
+        case TODO:
+            return new ToDo(parts[2]);
+        case DEADLINE:
+            try {
+                return new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
+            } catch (DateTimeParseException exception) {
+                throw corruptedFile(lineNumber, "invalid deadline date");
+            }
+        case EVENT:
+            try {
+                return new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
+                                                DateTimeParser.parseStorage(parts[4]));
+            } catch (DateTimeParseException exception) {
+                throw corruptedFile(lineNumber, "invalid event date");
+            }
+        default:
+            throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
         }
-
-        if (status == TaskStatus.DONE) {
-            task.markAsDone();
-        }
-
-        return task;
     }
 
     /**
      * Loads tasks from the storage file.
      *
-     * @return tasks reconstructed from storage, or an empty list if no file exists.
-     * @throws IOException if the file cannot be read or contains malformed data.
+     * @return tasks reconstructed from storage, or an empty list if no file
+     * exists.
+     * @throws IOException if the file cannot be read or contains malformed
+     * data.
      */
     public List<Task> load() throws IOException {
         List<Task> tasks = new ArrayList<>();
@@ -191,8 +219,8 @@ public class Storage {
      * @return exception containing the line and reason.
      */
     private IOException corruptedFile(int lineNumber, String reason) {
-        return new IOException("Could not load saved tasks: corrupted data on line " + (lineNumber + 1) + " ("
-                + reason + ").");
+        return new IOException("Could not load saved tasks: corrupted data on line " + (lineNumber + 1) + " (" + reason
+                                        + ").");
     }
 
 }

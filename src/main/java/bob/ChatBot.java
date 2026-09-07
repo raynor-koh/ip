@@ -42,7 +42,7 @@ public class ChatBot {
         try {
             this.tasks = new TaskList(storage.load());
         } catch (IOException exception) {
-            throw new BobException("I could not load your saved tasks");
+            throw new BobException("I could not load your saved tasks", exception);
         }
     }
 

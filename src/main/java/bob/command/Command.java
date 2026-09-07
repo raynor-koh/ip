@@ -1,10 +1,12 @@
 package bob.command;
 
 import java.io.IOException;
+import java.util.List;
 
 import bob.ResponseType;
 import bob.exception.BobException;
 import bob.storage.Storage;
+import bob.task.Task;
 import bob.task.TaskList;
 
 /**
@@ -43,5 +45,48 @@ public abstract class Command {
      */
     public boolean isExit() {
         return false;
+    }
+
+    /**
+     * Formats tasks as a numbered response under the supplied heading.
+     *
+     * @param heading response heading.
+     * @param tasks tasks to include in the response.
+     * @return formatted response containing the numbered tasks.
+     */
+    protected String formatTasks(String heading, List<Task> tasks) {
+        StringBuilder response = new StringBuilder(heading);
+
+        for (int i = 0; i < tasks.size(); i++) {
+            response.append('\n')
+                    .append(i + 1)
+                    .append('.')
+                    .append(tasks.get(i));
+        }
+
+        return response.toString();
+    }
+
+    /**
+     * Returns the task identified by a one-based command number.
+     *
+     * @param taskList task list to search.
+     * @param taskNumber one-based task number.
+     * @return task at the requested number.
+     * @throws BobException if the task number does not identify a task.
+     */
+    protected Task getTask(TaskList taskList, int taskNumber) throws BobException {
+        return taskList.get(taskNumber - 1);
+    }
+
+    /**
+     * Saves the current task list.
+     *
+     * @param taskList task list to save.
+     * @param storage storage used to persist the task list.
+     * @throws IOException if the task list cannot be saved.
+     */
+    protected void saveTasks(TaskList taskList, Storage storage) throws IOException {
+        storage.save(taskList.getTasks());
     }
 }

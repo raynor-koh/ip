@@ -15,6 +15,8 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
     private static final String MAIN_WINDOW_FXML = "/view/MainWindow.fxml";
+    private static final double MIN_WINDOW_WIDTH = 440.0;
+    private static final double MIN_WINDOW_HEIGHT = 420.0;
 
     @Override
     public void start(Stage stage) throws IOException, BobException {
@@ -26,8 +28,8 @@ public class Main extends Application {
 
         stage.setTitle("Bob - Task Assistant");
         stage.setScene(new Scene(root));
-        stage.setMinWidth(440);
-        stage.setMinHeight(420);
+        stage.setMinWidth(MIN_WINDOW_WIDTH);
+        stage.setMinHeight(MIN_WINDOW_HEIGHT);
         stage.show();
     }
 }
