@@ -34,6 +34,9 @@ public class MainWindow {
     private static final String STATUS_TYPING_STYLE = "status-typing";
     private static final String STATUS_ENDED_STYLE = "status-ended";
     private static final String INPUT_INVALID_STYLE = "input-invalid";
+    private static final String STATUS_TYPING_TEXT = "Bob is typing";
+    private static final String STATUS_ENDED_TEXT = "Session ended";
+    private static final String STATUS_READY_TEXT = "Ready";
     private static final String EMPTY_INPUT_MESSAGE = "Enter a command, or open Help for examples.";
     private static final double HEADER_AVATAR_SIZE = 42.0;
     private static final Duration RESPONSE_DELAY = Duration.millis(650);
@@ -149,7 +152,7 @@ public class MainWindow {
      */
     static String getTypingText(int frameIndex) {
         int dotCount = Math.floorMod(frameIndex, TYPING_FRAME_COUNT) + 1;
-        return "Bob is typing" + ".".repeat(dotCount);
+        return STATUS_TYPING_TEXT + ".".repeat(dotCount);
     }
 
     /**
@@ -161,8 +164,8 @@ public class MainWindow {
     private void showPendingResponse(DialogBox typingDialog, ChatResponse response) {
         setComposerDisabled(true);
         statusIndicator.getStyleClass().add(STATUS_TYPING_STYLE);
-        statusIndicator.setAccessibleText("Bob is typing");
-        statusTooltip.setText("Bob is typing");
+        statusIndicator.setAccessibleText(STATUS_TYPING_TEXT);
+        statusTooltip.setText(STATUS_TYPING_TEXT);
 
         Timeline typingAnimation = createTypingAnimation(typingDialog);
         PauseTransition responseDelay = new PauseTransition(RESPONSE_DELAY);
@@ -203,14 +206,14 @@ public class MainWindow {
 
         if (response.isExit()) {
             statusIndicator.getStyleClass().add(STATUS_ENDED_STYLE);
-            statusIndicator.setAccessibleText("Session ended");
-            statusTooltip.setText("Session ended");
+            statusIndicator.setAccessibleText(STATUS_ENDED_TEXT);
+            statusTooltip.setText(STATUS_ENDED_TEXT);
             return;
         }
 
         setComposerDisabled(false);
-        statusIndicator.setAccessibleText("Ready");
-        statusTooltip.setText("Ready");
+        statusIndicator.setAccessibleText(STATUS_READY_TEXT);
+        statusTooltip.setText(STATUS_READY_TEXT);
         userInput.requestFocus();
     }
 
