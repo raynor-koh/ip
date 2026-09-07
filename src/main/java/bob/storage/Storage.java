@@ -80,7 +80,10 @@ public class Storage {
      */
     public void save(List<Task> tasks) throws IOException {
         try {
-            Files.createDirectories(filePath.getParent());
+            Path parentDirectory = filePath.getParent();
+            if (parentDirectory != null) {
+                Files.createDirectories(parentDirectory);
+            }
             List<String> lines = new ArrayList<>();
 
             for (Task task : tasks) {
