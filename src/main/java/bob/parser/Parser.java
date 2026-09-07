@@ -1,7 +1,5 @@
 package bob.parser;
 
-import java.util.Locale;
-
 import bob.command.AddCommand;
 import bob.command.ByeCommand;
 import bob.command.Command;
@@ -40,7 +38,7 @@ public class Parser {
         }
 
         String[] words = input.trim().split("\\s+", 2);
-        CommandType commandType = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT))
+        CommandType commandType = CommandType.fromKeyword(words[0])
                 .orElseThrow(this::createUnknownCommandException);
         String argument = words.length == 2 ? words[1].trim() : "";
 
