@@ -2,8 +2,10 @@ package bob.parser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 import bob.task.TaskDateTime;
 
@@ -53,11 +55,12 @@ public final class DateTimeParser {
      * @return human-readable date or date-time.
      */
     public static String formatForDisplay(TaskDateTime value) {
-        if (value.getTime().isEmpty()) {
+        Optional<LocalTime> time = value.getTime();
+        if (time.isEmpty()) {
             return value.getDate().format(DISPLAY_DATE_FORMAT);
         }
 
-        LocalDateTime dateTime = LocalDateTime.of(value.getDate(), value.getTime().get());
+        LocalDateTime dateTime = LocalDateTime.of(value.getDate(), time.get());
 
         return dateTime.format(DISPLAY_DATE_TIME_FORMAT);
     }
@@ -69,11 +72,12 @@ public final class DateTimeParser {
      * @return ISO date or date-time representation.
      */
     public static String formatForStorage(TaskDateTime value) {
-        if (value.getTime().isEmpty()) {
+        Optional<LocalTime> time = value.getTime();
+        if (time.isEmpty()) {
             return value.getDate().toString();
         }
 
-        return LocalDateTime.of(value.getDate(), value.getTime().get()).toString();
+        return LocalDateTime.of(value.getDate(), time.get()).toString();
     }
 
     /**
