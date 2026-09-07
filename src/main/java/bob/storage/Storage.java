@@ -59,10 +59,12 @@ public class Storage {
         case TODO:
             return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
         case DEADLINE:
+            assert task instanceof Deadline : "DEADLINE tasks must be Deadline instances";
             Deadline deadline = (Deadline) task;
             return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
                                             DateTimeParser.formatForStorage(deadline.getBy()));
         case EVENT:
+            assert task instanceof Event : "EVENT tasks must be Event instances";
             Event event = (Event) task;
             return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
                                             DateTimeParser.formatForStorage(event.getFrom()),

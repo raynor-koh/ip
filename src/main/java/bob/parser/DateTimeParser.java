@@ -14,11 +14,9 @@ import bob.task.TaskDateTime;
  */
 public final class DateTimeParser {
     private static final DateTimeFormatter USER_DATE_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu");
-    private static final DateTimeFormatter USER_DATE_TIME_FORMAT =
-            DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
+    private static final DateTimeFormatter USER_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu");
-    private static final DateTimeFormatter DISPLAY_DATE_TIME_FORMAT =
-            DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
+    private static final DateTimeFormatter DISPLAY_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
 
     private DateTimeParser() {
         // Utility class; do not instantiate.
@@ -27,9 +25,11 @@ public final class DateTimeParser {
     /**
      * Parses a user-entered date or date-time.
      *
-     * @param text date in {@code d/M/yyyy} format, optionally followed by a time.
+     * @param text date in {@code d/M/yyyy} format, optionally followed by a
+     * time.
      * @return parsed task date and optional time.
-     * @throws IllegalArgumentException if the text does not use a supported format.
+     * @throws IllegalArgumentException if the text does not use a supported
+     * format.
      */
     public static TaskDateTime parseUserInput(String text) {
         try {
@@ -43,8 +43,8 @@ public final class DateTimeParser {
             return new TaskDateTime(dateTime.toLocalDate(), dateTime.toLocalTime());
 
         } catch (DateTimeParseException exception) {
-            throw new IllegalArgumentException(
-                    "Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.", exception);
+            throw new IllegalArgumentException("Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.",
+                                            exception);
         }
     }
 
@@ -60,6 +60,7 @@ public final class DateTimeParser {
             return value.getDate().format(DISPLAY_DATE_FORMAT);
         }
 
+        assert value.getTime().isPresent() : "A formatted time must be present after the empty check";
         LocalDateTime dateTime = LocalDateTime.of(value.getDate(), time.get());
 
         return dateTime.format(DISPLAY_DATE_TIME_FORMAT);
@@ -77,6 +78,7 @@ public final class DateTimeParser {
             return value.getDate().toString();
         }
 
+        assert value.getTime().isPresent() : "A stored time must be present after the empty check";
         return LocalDateTime.of(value.getDate(), time.get()).toString();
     }
 

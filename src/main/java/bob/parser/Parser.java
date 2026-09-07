@@ -156,6 +156,7 @@ public class Parser {
             if (taskNumber <= 0) {
                 throw new BobException("Task numbers start at 1. Use 'list' to see the available tasks.");
             }
+            assert taskNumber > 0 : "Parsed task numbers must be positive and one-based";
             return taskNumber;
         } catch (NumberFormatException exception) {
             throw new BobException("'" + command.getKeyword()
