@@ -1,5 +1,6 @@
 package bob.gui;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
@@ -269,8 +270,11 @@ public class MainWindow {
     }
 
     private static Image loadImage(String path) {
-        InputStream imageStream = Objects.requireNonNull(MainWindow.class.getResourceAsStream(path),
-                "Missing image resource: " + path);
-        return new Image(imageStream);
+        try (InputStream imageStream = Objects.requireNonNull(MainWindow.class.getResourceAsStream(path),
+                "Missing image resource: " + path)) {
+            return new Image(imageStream);
+        } catch (IOException exception) {
+            throw new IllegalStateException("Unable to close image resource: " + path, exception);
+        }
     }
 }
