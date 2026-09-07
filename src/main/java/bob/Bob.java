@@ -9,12 +9,6 @@ public class Bob {
     private static final String DEFAULT_FILE_PATH = "data/bob.txt";
 
     /**
-     * Creates the application entry-point object.
-     */
-    public Bob() {
-    }
-
-    /**
      * Starts the chatbot.
      *
      * @param args Command-line arguments, currently unused.

@@ -12,12 +12,6 @@ import bob.task.TaskList;
  */
 public class ListCommand extends Command {
     /**
-     * Creates a command that displays the task list.
-     */
-    public ListCommand() {
-    }
-
-    /**
      * Displays every task in the current task list.
      *
      * @param tasks task list to display.

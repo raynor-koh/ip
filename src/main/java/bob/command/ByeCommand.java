@@ -9,12 +9,6 @@ import bob.task.TaskList;
  */
 public class ByeCommand extends Command {
     /**
-     * Creates a command that ends the chatbot session.
-     */
-    public ByeCommand() {
-    }
-
-    /**
      * Displays the farewell message.
      *
      * @param tasks current task list.

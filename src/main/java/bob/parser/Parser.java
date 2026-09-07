@@ -28,12 +28,6 @@ public class Parser {
             "event meeting /from 2/12/2019 1800 /to 2/12/2019 1900";
 
     /**
-     * Creates a parser for user commands.
-     */
-    public Parser() {
-    }
-
-    /**
      * Parses a line of user input into an executable command.
      *
      * @param input complete line entered by the user.
