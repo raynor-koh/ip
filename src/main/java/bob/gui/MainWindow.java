@@ -38,6 +38,8 @@ public class MainWindow {
     private static final double HEADER_AVATAR_SIZE = 42.0;
     private static final Duration RESPONSE_DELAY = Duration.millis(650);
     private static final Duration INPUT_FEEDBACK_DURATION = Duration.seconds(2.5);
+    private static final Duration TYPING_FRAME_DURATION = Duration.millis(180);
+    private static final int TYPING_FRAME_COUNT = 3;
 
     @FXML
     private ScrollPane scrollPane;
@@ -146,7 +148,7 @@ public class MainWindow {
      * @return typing message containing between one and three dots.
      */
     static String getTypingText(int frameIndex) {
-        int dotCount = Math.floorMod(frameIndex, 3) + 1;
+        int dotCount = Math.floorMod(frameIndex, TYPING_FRAME_COUNT) + 1;
         return "Bob is typing" + ".".repeat(dotCount);
     }
 
@@ -176,9 +178,10 @@ public class MainWindow {
     private Timeline createTypingAnimation(DialogBox typingDialog) {
         Timeline animation = new Timeline(
                 new KeyFrame(Duration.ZERO, event -> typingDialog.setDialogText(getTypingText(0))),
-                new KeyFrame(Duration.millis(180), event -> typingDialog.setDialogText(getTypingText(1))),
-                new KeyFrame(Duration.millis(360), event -> typingDialog.setDialogText(getTypingText(2))),
-                new KeyFrame(Duration.millis(540)));
+                new KeyFrame(TYPING_FRAME_DURATION, event -> typingDialog.setDialogText(getTypingText(1))),
+                new KeyFrame(TYPING_FRAME_DURATION.multiply(2),
+                        event -> typingDialog.setDialogText(getTypingText(2))),
+                new KeyFrame(TYPING_FRAME_DURATION.multiply(TYPING_FRAME_COUNT)));
         animation.setCycleCount(Animation.INDEFINITE);
         return animation;
     }
