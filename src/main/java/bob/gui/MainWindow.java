@@ -107,13 +107,14 @@ public class MainWindow {
 
     @FXML
     private void handleUserInput() {
-        Optional<String> validationMessage = validateInput(userInput.getText());
+        String inputText = userInput.getText();
+        Optional<String> validationMessage = validateInput(inputText);
         if (validationMessage.isPresent()) {
             showInputFeedback(validationMessage.get());
             return;
         }
 
-        String input = userInput.getText().trim();
+        String input = inputText.trim();
         removeWelcomeDialog();
         setHelpPanelVisible(false);
 
