@@ -5,7 +5,7 @@ package bob.task;
  */
 public abstract class Task {
     /** Description of the work represented by this task. */
-    protected String description;
+    private final String description;
     private TaskStatus status;
     private final TaskType type;
 
