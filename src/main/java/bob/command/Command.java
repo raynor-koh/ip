@@ -1,10 +1,12 @@
 package bob.command;
 
 import java.io.IOException;
+import java.util.List;
 
 import bob.ResponseType;
 import bob.exception.BobException;
 import bob.storage.Storage;
+import bob.task.Task;
 import bob.task.TaskList;
 
 /**
@@ -43,5 +45,25 @@ public abstract class Command {
      */
     public boolean isExit() {
         return false;
+    }
+
+    /**
+     * Formats tasks as a numbered response under the supplied heading.
+     *
+     * @param heading response heading.
+     * @param tasks tasks to include in the response.
+     * @return formatted response containing the numbered tasks.
+     */
+    protected String formatTasks(String heading, List<Task> tasks) {
+        StringBuilder response = new StringBuilder(heading);
+
+        for (int i = 0; i < tasks.size(); i++) {
+            response.append('\n')
+                    .append(i + 1)
+                    .append('.')
+                    .append(tasks.get(i));
+        }
+
+        return response.toString();
     }
 }
