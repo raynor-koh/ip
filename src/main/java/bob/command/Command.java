@@ -66,4 +66,27 @@ public abstract class Command {
 
         return response.toString();
     }
+
+    /**
+     * Returns the task identified by a one-based command number.
+     *
+     * @param taskList task list to search.
+     * @param taskNumber one-based task number.
+     * @return task at the requested number.
+     * @throws BobException if the task number does not identify a task.
+     */
+    protected Task getTask(TaskList taskList, int taskNumber) throws BobException {
+        return taskList.get(taskNumber - 1);
+    }
+
+    /**
+     * Saves the current task list.
+     *
+     * @param taskList task list to save.
+     * @param storage storage used to persist the task list.
+     * @throws IOException if the task list cannot be saved.
+     */
+    protected void saveTasks(TaskList taskList, Storage storage) throws IOException {
+        storage.save(taskList.getTasks());
+    }
 }
