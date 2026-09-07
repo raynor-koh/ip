@@ -20,6 +20,32 @@ Example: `keyword (optional arguments)`
 expected output
 ```
 
+## Searching by word prefixes
+
+Use `search` to find tasks whose descriptions contain every query term as the beginning
+of a word. Matching is case-insensitive, results remain in task-list order, and each
+result keeps its original task-list number.
+
+Example:
+
+```text
+search pro meet
+```
+
+This matches a task such as:
+
+```text
+project meeting
+```
+
+If no tasks match, Bob displays:
+
+```text
+No matching tasks found.
+```
+
+The existing `find` command remains available with its original substring-matching behavior.
+
 ## Feature ABC
 
 // Feature details

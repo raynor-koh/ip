@@ -13,6 +13,7 @@ import bob.command.DeleteCommand;
 import bob.command.FindCommand;
 import bob.command.ListCommand;
 import bob.command.MarkCommand;
+import bob.command.SearchCommand;
 import bob.command.UnmarkCommand;
 import bob.exception.BobException;
 
@@ -41,6 +42,11 @@ class ParserTest {
     }
 
     @Test
+    void parse_searchWithQuery_returnsSearchCommand() throws BobException {
+        assertInstanceOf(SearchCommand.class, parser.parse("search boo read"));
+    }
+
+    @Test
     void parse_addCommandsWithValidDetails_returnsAddCommand() {
         assertAll(
                 () -> assertInstanceOf(AddCommand.class, parser.parse("todo read a book")),
@@ -65,12 +71,17 @@ class ParserTest {
 
     @Test
     void parse_unknownCommand_bobExceptionThrown() {
-        assertThrows(BobException.class, () -> parser.parse("search book"));
+        assertThrows(BobException.class, () -> parser.parse("lookup book"));
     }
 
     @Test
     void parse_findWithoutKeyword_bobExceptionThrown() {
         assertThrows(BobException.class, () -> parser.parse("find"));
+    }
+
+    @Test
+    void parse_searchWithoutQuery_bobExceptionThrown() {
+        assertThrows(BobException.class, () -> parser.parse("search"));
     }
 
     @Test
