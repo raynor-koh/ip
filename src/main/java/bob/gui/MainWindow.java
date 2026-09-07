@@ -1,5 +1,6 @@
 package bob.gui;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
@@ -34,10 +35,15 @@ public class MainWindow {
     private static final String STATUS_TYPING_STYLE = "status-typing";
     private static final String STATUS_ENDED_STYLE = "status-ended";
     private static final String INPUT_INVALID_STYLE = "input-invalid";
+    private static final String STATUS_TYPING_TEXT = "Bob is typing";
+    private static final String STATUS_ENDED_TEXT = "Session ended";
+    private static final String STATUS_READY_TEXT = "Ready";
     private static final String EMPTY_INPUT_MESSAGE = "Enter a command, or open Help for examples.";
     private static final double HEADER_AVATAR_SIZE = 42.0;
     private static final Duration RESPONSE_DELAY = Duration.millis(650);
     private static final Duration INPUT_FEEDBACK_DURATION = Duration.seconds(2.5);
+    private static final Duration TYPING_FRAME_DURATION = Duration.millis(180);
+    private static final int TYPING_FRAME_COUNT = 3;
 
     @FXML
     private ScrollPane scrollPane;
@@ -101,13 +107,14 @@ public class MainWindow {
 
     @FXML
     private void handleUserInput() {
-        Optional<String> validationMessage = validateInput(userInput.getText());
+        String inputText = userInput.getText();
+        Optional<String> validationMessage = validateInput(inputText);
         if (validationMessage.isPresent()) {
             showInputFeedback(validationMessage.get());
             return;
         }
 
-        String input = userInput.getText().trim();
+        String input = inputText.trim();
         removeWelcomeDialog();
         setHelpPanelVisible(false);
 
@@ -146,8 +153,8 @@ public class MainWindow {
      * @return typing message containing between one and three dots.
      */
     static String getTypingText(int frameIndex) {
-        int dotCount = Math.floorMod(frameIndex, 3) + 1;
-        return "Bob is typing" + ".".repeat(dotCount);
+        int dotCount = Math.floorMod(frameIndex, TYPING_FRAME_COUNT) + 1;
+        return STATUS_TYPING_TEXT + ".".repeat(dotCount);
     }
 
     /**
@@ -159,8 +166,8 @@ public class MainWindow {
     private void showPendingResponse(DialogBox typingDialog, ChatResponse response) {
         setComposerDisabled(true);
         statusIndicator.getStyleClass().add(STATUS_TYPING_STYLE);
-        statusIndicator.setAccessibleText("Bob is typing");
-        statusTooltip.setText("Bob is typing");
+        statusIndicator.setAccessibleText(STATUS_TYPING_TEXT);
+        statusTooltip.setText(STATUS_TYPING_TEXT);
 
         Timeline typingAnimation = createTypingAnimation(typingDialog);
         PauseTransition responseDelay = new PauseTransition(RESPONSE_DELAY);
@@ -176,9 +183,10 @@ public class MainWindow {
     private Timeline createTypingAnimation(DialogBox typingDialog) {
         Timeline animation = new Timeline(
                 new KeyFrame(Duration.ZERO, event -> typingDialog.setDialogText(getTypingText(0))),
-                new KeyFrame(Duration.millis(180), event -> typingDialog.setDialogText(getTypingText(1))),
-                new KeyFrame(Duration.millis(360), event -> typingDialog.setDialogText(getTypingText(2))),
-                new KeyFrame(Duration.millis(540)));
+                new KeyFrame(TYPING_FRAME_DURATION, event -> typingDialog.setDialogText(getTypingText(1))),
+                new KeyFrame(TYPING_FRAME_DURATION.multiply(2),
+                        event -> typingDialog.setDialogText(getTypingText(2))),
+                new KeyFrame(TYPING_FRAME_DURATION.multiply(TYPING_FRAME_COUNT)));
         animation.setCycleCount(Animation.INDEFINITE);
         return animation;
     }
@@ -200,14 +208,14 @@ public class MainWindow {
 
         if (response.isExit()) {
             statusIndicator.getStyleClass().add(STATUS_ENDED_STYLE);
-            statusIndicator.setAccessibleText("Session ended");
-            statusTooltip.setText("Session ended");
+            statusIndicator.setAccessibleText(STATUS_ENDED_TEXT);
+            statusTooltip.setText(STATUS_ENDED_TEXT);
             return;
         }
 
         setComposerDisabled(false);
-        statusIndicator.setAccessibleText("Ready");
-        statusTooltip.setText("Ready");
+        statusIndicator.setAccessibleText(STATUS_READY_TEXT);
+        statusTooltip.setText(STATUS_READY_TEXT);
         userInput.requestFocus();
     }
 
@@ -263,8 +271,11 @@ public class MainWindow {
     }
 
     private static Image loadImage(String path) {
-        InputStream imageStream = Objects.requireNonNull(MainWindow.class.getResourceAsStream(path),
-                "Missing image resource: " + path);
-        return new Image(imageStream);
+        try (InputStream imageStream = Objects.requireNonNull(MainWindow.class.getResourceAsStream(path),
+                "Missing image resource: " + path)) {
+            return new Image(imageStream);
+        } catch (IOException exception) {
+            throw new IllegalStateException("Unable to close image resource: " + path, exception);
+        }
     }
 }

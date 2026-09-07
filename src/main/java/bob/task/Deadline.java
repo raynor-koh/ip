@@ -7,7 +7,7 @@ import bob.parser.DateTimeParser;
  */
 public class Deadline extends Task {
     /** Date and optional time by which the task is due. */
-    protected TaskDateTime by;
+    private final TaskDateTime by;
 
     /**
      * Creates a deadline task.

@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -67,6 +69,20 @@ class StorageTest {
 
         assertEquals(1, loadedTasks.size());
         assertEquals("new task", loadedTasks.get(0).getDescription());
+    }
+
+    @Test
+    void save_fileWithoutParentDirectory_savesSuccessfully() throws IOException {
+        Path filePath = Path.of("storage-test-" + UUID.randomUUID() + ".txt");
+        try {
+            Storage storage = new Storage(filePath.toString());
+
+            storage.save(List.of(new ToDo("read book")));
+
+            assertEquals("T|0|read book" + System.lineSeparator(), Files.readString(filePath));
+        } finally {
+            Files.deleteIfExists(filePath);
+        }
     }
 
     @Test

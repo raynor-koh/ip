@@ -32,16 +32,7 @@ public class FindCommand extends Command {
     @Override
     public String execute(TaskList tasks, Storage storage) {
         List<Task> matchingTasks = tasks.find(keyword);
-        StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
-
-        for (int i = 0; i < matchingTasks.size(); i++) {
-            response.append('\n')
-                    .append(i + 1)
-                    .append('.')
-                    .append(matchingTasks.get(i));
-        }
-
-        return response.toString();
+        return formatTasks("Here are the matching tasks in your list:", matchingTasks);
     }
 
     @Override

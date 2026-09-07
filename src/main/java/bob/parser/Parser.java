@@ -1,7 +1,5 @@
 package bob.parser;
 
-import java.util.Locale;
-
 import bob.command.AddCommand;
 import bob.command.ByeCommand;
 import bob.command.Command;
@@ -28,12 +26,6 @@ public class Parser {
             "event meeting /from 2/12/2019 1800 /to 2/12/2019 1900";
 
     /**
-     * Creates a parser for user commands.
-     */
-    public Parser() {
-    }
-
-    /**
      * Parses a line of user input into an executable command.
      *
      * @param input complete line entered by the user.
@@ -46,13 +38,22 @@ public class Parser {
         }
 
         String[] words = input.trim().split("\\s+", 2);
-        CommandType commandType = CommandType.fromKeyword(words[0].toLowerCase(Locale.ROOT));
+        CommandType commandType = CommandType.fromKeyword(words[0])
+                .orElseThrow(this::createUnknownCommandException);
         String argument = words.length == 2 ? words[1].trim() : "";
 
-        if (commandType == null) {
-            throw createUnknownCommandException();
-        }
+        return parseCommand(commandType, argument);
+    }
 
+    /**
+     * Creates the command represented by a validated command type and argument.
+     *
+     * @param commandType parsed command type.
+     * @param argument text following the command keyword.
+     * @return command represented by the input.
+     * @throws BobException if the argument is invalid.
+     */
+    private Command parseCommand(CommandType commandType, String argument) throws BobException {
         switch (commandType) {
             case BYE:
                 requireNoArgument(argument, commandType);

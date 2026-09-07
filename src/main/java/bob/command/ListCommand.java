@@ -12,12 +12,6 @@ import bob.task.TaskList;
  */
 public class ListCommand extends Command {
     /**
-     * Creates a command that displays the task list.
-     */
-    public ListCommand() {
-    }
-
-    /**
      * Displays every task in the current task list.
      *
      * @param tasks task list to display.
@@ -27,16 +21,7 @@ public class ListCommand extends Command {
     @Override
     public String execute(TaskList tasks, Storage storage) {
         List<Task> currentTasks = tasks.getTasks();
-        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
-
-        for (int i = 0; i < currentTasks.size(); i++) {
-            response.append('\n')
-                    .append(i + 1)
-                    .append('.')
-                    .append(currentTasks.get(i));
-        }
-
-        return response.toString();
+        return formatTasks("Here are the tasks in your list:", currentTasks);
     }
 
     @Override

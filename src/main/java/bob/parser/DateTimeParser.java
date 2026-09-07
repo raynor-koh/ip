@@ -2,8 +2,10 @@ package bob.parser;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Optional;
 
 import bob.task.TaskDateTime;
 
@@ -12,11 +14,9 @@ import bob.task.TaskDateTime;
  */
 public final class DateTimeParser {
     private static final DateTimeFormatter USER_DATE_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu");
-    private static final DateTimeFormatter USER_DATE_TIME_FORMAT =
-            DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
+    private static final DateTimeFormatter USER_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("d/M/uuuu HHmm");
     private static final DateTimeFormatter DISPLAY_DATE_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu");
-    private static final DateTimeFormatter DISPLAY_DATE_TIME_FORMAT =
-            DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
+    private static final DateTimeFormatter DISPLAY_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
 
     private DateTimeParser() {
         // Utility class; do not instantiate.
@@ -25,9 +25,11 @@ public final class DateTimeParser {
     /**
      * Parses a user-entered date or date-time.
      *
-     * @param text date in {@code d/M/yyyy} format, optionally followed by a time.
+     * @param text date in {@code d/M/yyyy} format, optionally followed by a
+     * time.
      * @return parsed task date and optional time.
-     * @throws IllegalArgumentException if the text does not use a supported format.
+     * @throws IllegalArgumentException if the text does not use a supported
+     * format.
      */
     public static TaskDateTime parseUserInput(String text) {
         try {
@@ -41,8 +43,8 @@ public final class DateTimeParser {
             return new TaskDateTime(dateTime.toLocalDate(), dateTime.toLocalTime());
 
         } catch (DateTimeParseException exception) {
-            throw new IllegalArgumentException(
-                    "Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.", exception);
+            throw new IllegalArgumentException("Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.",
+                                            exception);
         }
     }
 
@@ -53,12 +55,13 @@ public final class DateTimeParser {
      * @return human-readable date or date-time.
      */
     public static String formatForDisplay(TaskDateTime value) {
-        if (value.getTime().isEmpty()) {
+        Optional<LocalTime> time = value.getTime();
+        if (time.isEmpty()) {
             return value.getDate().format(DISPLAY_DATE_FORMAT);
         }
 
         assert value.getTime().isPresent() : "A formatted time must be present after the empty check";
-        LocalDateTime dateTime = LocalDateTime.of(value.getDate(), value.getTime().get());
+        LocalDateTime dateTime = LocalDateTime.of(value.getDate(), time.get());
 
         return dateTime.format(DISPLAY_DATE_TIME_FORMAT);
     }
@@ -70,12 +73,13 @@ public final class DateTimeParser {
      * @return ISO date or date-time representation.
      */
     public static String formatForStorage(TaskDateTime value) {
-        if (value.getTime().isEmpty()) {
+        Optional<LocalTime> time = value.getTime();
+        if (time.isEmpty()) {
             return value.getDate().toString();
         }
 
         assert value.getTime().isPresent() : "A stored time must be present after the empty check";
-        return LocalDateTime.of(value.getDate(), value.getTime().get()).toString();
+        return LocalDateTime.of(value.getDate(), time.get()).toString();
     }
 
     /**

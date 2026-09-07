@@ -65,9 +65,7 @@ public class TaskList {
      * @throws BobException if the index is outside the list.
      */
     public Task get(int index) throws BobException {
-        if (!isValidIndex(index)) {
-            throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
-        }
+        requireValidIndex(index);
         return tasks.get(index);
     }
 
@@ -100,10 +98,20 @@ public class TaskList {
      * @throws BobException if the index is outside the list.
      */
     public Task remove(int index) throws BobException {
+        requireValidIndex(index);
+        return tasks.remove(index);
+    }
+
+    /**
+     * Validates that an index identifies a task.
+     *
+     * @param index zero-based task index to validate.
+     * @throws BobException if the index is outside the list.
+     */
+    private void requireValidIndex(int index) throws BobException {
         if (!isValidIndex(index)) {
             throw new BobException("That task number does not exist. Use 'list' to see the available tasks.");
         }
-        return tasks.remove(index);
     }
 
     /**
