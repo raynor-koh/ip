@@ -25,6 +25,9 @@ public class Storage {
 
     private final Path filePath;
 
+    private record TaskRecord(TaskType type, TaskStatus status) {
+    }
+
     /**
      * Creates storage using Bob's default data file.
      */
@@ -99,6 +102,25 @@ public class Storage {
      * @throws IOException if the stored record is malformed.
      */
     public Task deserializeTask(String[] parts, int lineNumber) throws IOException {
+        TaskRecord record = validateRecord(parts, lineNumber);
+        Task task = createTask(parts, record.type(), lineNumber);
+
+        if (record.status() == TaskStatus.DONE) {
+            task.markAsDone();
+        }
+
+        return task;
+    }
+
+    /**
+     * Validates the common fields in a stored task record.
+     *
+     * @param parts fields from a pipe-delimited storage record.
+     * @param lineNumber zero-based line number used in error messages.
+     * @return validated task type and status.
+     * @throws IOException if the record has an invalid type, status, or field count.
+     */
+    private TaskRecord validateRecord(String[] parts, int lineNumber) throws IOException {
         if (parts.length == 0 || parts[0].isBlank()) {
             throw corruptedFile(lineNumber, "missing task type");
         }
@@ -126,36 +148,38 @@ public class Storage {
                     + parts.length);
         }
 
-        Task task;
+        return new TaskRecord(type, status);
+    }
 
+    /**
+     * Constructs a task from the type-specific fields in a storage record.
+     *
+     * @param parts fields from a pipe-delimited storage record.
+     * @param type validated task type.
+     * @param lineNumber zero-based line number used in error messages.
+     * @return task represented by the record.
+     * @throws IOException if a date field is malformed.
+     */
+    private Task createTask(String[] parts, TaskType type, int lineNumber) throws IOException {
         switch (type) {
             case TODO:
-                task = new ToDo(parts[2]);
-                break;
+                return new ToDo(parts[2]);
             case DEADLINE:
                 try {
-                    task = new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
+                    return new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
                 } catch (DateTimeParseException exception) {
                     throw corruptedFile(lineNumber, "invalid deadline date");
                 }
-                break;
             case EVENT:
                 try {
-                    task = new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
+                    return new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
                             DateTimeParser.parseStorage(parts[4]));
                 } catch (DateTimeParseException exception) {
                     throw corruptedFile(lineNumber, "invalid event date");
                 }
-                break;
             default:
                 throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
         }
-
-        if (status == TaskStatus.DONE) {
-            task.markAsDone();
-        }
-
-        return task;
     }
 
     /**
