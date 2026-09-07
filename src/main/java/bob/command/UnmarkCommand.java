@@ -34,9 +34,9 @@ public class UnmarkCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Storage storage) throws BobException, IOException {
-        Task task = taskList.get(taskNumber - 1);
+        Task task = getTask(taskList, taskNumber);
         task.markAsNotDone();
-        storage.save(taskList.getTasks());
+        saveTasks(taskList, storage);
 
         return "OK, I've marked this task as not done yet:\n  " + task;
     }

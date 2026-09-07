@@ -35,7 +35,7 @@ public class DeleteCommand extends Command {
     @Override
     public String execute(TaskList taskList, Storage storage) throws BobException, IOException {
         Task deletedTask = taskList.remove(taskNumber - 1);
-        storage.save(taskList.getTasks());
+        saveTasks(taskList, storage);
 
         int taskCount = taskList.getTaskCount();
         String taskLabel = taskCount == 1 ? "task" : "tasks";

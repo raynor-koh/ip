@@ -34,9 +34,9 @@ public class MarkCommand extends Command {
      */
     @Override
     public String execute(TaskList taskList, Storage storage) throws BobException, IOException {
-        Task task = taskList.get(taskNumber - 1);
+        Task task = getTask(taskList, taskNumber);
         task.markAsDone();
-        storage.save(taskList.getTasks());
+        saveTasks(taskList, storage);
 
         return "Nice! I've marked this task as done:\n  " + task;
     }

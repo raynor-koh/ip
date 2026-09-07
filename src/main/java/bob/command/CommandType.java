@@ -1,5 +1,7 @@
 package bob.command;
 
+import java.util.Optional;
+
 /**
  * Represents a command that can be entered by the user.
  */
@@ -47,14 +49,14 @@ public enum CommandType {
      * Finds the command type represented by a keyword, ignoring letter case.
      *
      * @param keyword keyword to look up.
-     * @return matching command type, or null if the keyword is unknown.
+     * @return optional matching command type, empty if the keyword is unknown.
      */
-    public static CommandType fromKeyword(String keyword) {
+    public static Optional<CommandType> fromKeyword(String keyword) {
         for (CommandType commandType : values()) {
             if (commandType.keyword.equalsIgnoreCase(keyword)) {
-                return commandType;
+                return Optional.of(commandType);
             }
         }
-        return null;
+        return Optional.empty();
     }
 }
