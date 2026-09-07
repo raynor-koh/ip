@@ -53,6 +53,18 @@ public class Parser {
             throw createUnknownCommandException();
         }
 
+        return parseCommand(commandType, argument);
+    }
+
+    /**
+     * Creates the command represented by a validated command type and argument.
+     *
+     * @param commandType parsed command type.
+     * @param argument text following the command keyword.
+     * @return command represented by the input.
+     * @throws BobException if the argument is invalid.
+     */
+    private Command parseCommand(CommandType commandType, String argument) throws BobException {
         switch (commandType) {
             case BYE:
                 requireNoArgument(argument, commandType);
