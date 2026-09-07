@@ -91,6 +91,29 @@ public class TaskList {
     }
 
     /**
+     * Returns tasks whose descriptions contain every query term as a word prefix, ignoring letter case.
+     *
+     * @param query whitespace-separated word prefixes to search for.
+     * @return matching tasks in their original list order.
+     */
+    public List<Task> search(String query) {
+        List<String> terms = List.of(query.toLowerCase(Locale.ROOT).trim().split("\\s+"));
+        return tasks.stream().filter(task -> matchesAllTerms(task, terms)).toList();
+    }
+
+    /**
+     * Checks whether a task description contains a word beginning with every search term.
+     *
+     * @param task task whose description is checked.
+     * @param terms normalized search terms.
+     * @return true if every term matches a description word prefix.
+     */
+    private boolean matchesAllTerms(Task task, List<String> terms) {
+        List<String> words = List.of(task.getDescription().toLowerCase(Locale.ROOT).split("\\s+"));
+        return terms.stream().allMatch(term -> words.stream().anyMatch(word -> word.startsWith(term)));
+    }
+
+    /**
      * Removes and returns the task at a zero-based index.
      *
      * @param index zero-based task index.

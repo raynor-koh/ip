@@ -115,4 +115,39 @@ class TaskListTest {
 
         assertEquals(List.of(), taskList.find("book"));
     }
+
+    @Test
+    void search_prefixTermsWithDifferentCase_returnsMatchingTasksInOriginalOrder() {
+        Task firstMatch = new ToDo("buy books");
+        Task nonMatch = new ToDo("write report");
+        Task secondMatch = new ToDo("read a book");
+        TaskList taskList = TaskList.of(firstMatch, nonMatch, secondMatch);
+
+        assertEquals(List.of(firstMatch, secondMatch), taskList.search("BOO"));
+    }
+
+    @Test
+    void search_multipleTerms_requiresEveryTermToMatch() {
+        Task matchingTask = new ToDo("project meeting");
+        Task missingTerm = new ToDo("project report");
+        TaskList taskList = TaskList.of(matchingTask, missingTerm);
+
+        assertEquals(List.of(matchingTask), taskList.search("pro meet"));
+    }
+
+    @Test
+    void search_partialWordPrefix_matchesOnlyWordPrefixes() {
+        Task prefixMatch = new ToDo("buy books");
+        Task substringOnly = new ToDo("notebook");
+        TaskList taskList = TaskList.of(prefixMatch, substringOnly);
+
+        assertEquals(List.of(prefixMatch), taskList.search("boo"));
+    }
+
+    @Test
+    void search_noMatchingDescription_returnsEmptyList() {
+        TaskList taskList = TaskList.of(new ToDo("write report"));
+
+        assertEquals(List.of(), taskList.search("book"));
+    }
 }

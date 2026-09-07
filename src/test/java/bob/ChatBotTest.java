@@ -125,6 +125,7 @@ class ChatBotTest {
         assertEquals(ResponseType.ADD, chatBot.processCommand("todo read book").responseType());
         assertEquals(ResponseType.LIST, chatBot.processCommand("list").responseType());
         assertEquals(ResponseType.FIND, chatBot.processCommand("find book").responseType());
+        assertEquals(ResponseType.FIND, chatBot.processCommand("search book").responseType());
         assertEquals(ResponseType.MARK, chatBot.processCommand("mark 1").responseType());
         assertEquals(ResponseType.UNMARK, chatBot.processCommand("unmark 1").responseType());
         assertEquals(ResponseType.DELETE, chatBot.processCommand("delete 1").responseType());

@@ -22,6 +22,6 @@ class CommandTypeTest {
 
     @Test
     void fromKeyword_unknownKeyword_returnsEmptyOptional() {
-        assertTrue(CommandType.fromKeyword("search").isEmpty());
+        assertTrue(CommandType.fromKeyword("unknown").isEmpty());
     }
 }

@@ -160,6 +160,12 @@
                                            wrapText="true" />
                                 </HBox>
                                 <HBox alignment="TOP_LEFT" spacing="10.0" styleClass="command-row">
+                                    <Label minWidth="72.0" styleClass="command-name" text="search" />
+                                    <Label styleClass="command-description"
+                                           text="search PREFIX [PREFIX ...]"
+                                           wrapText="true" />
+                                </HBox>
+                                <HBox alignment="TOP_LEFT" spacing="10.0" styleClass="command-row">
                                     <Label minWidth="72.0" styleClass="command-name" text="mark" />
                                     <Label styleClass="command-description"
                                            text="mark NUMBER"

@@ -12,6 +12,8 @@ public enum CommandType {
     LIST("list"),
     /** Finds tasks by description keyword. */
     FIND("find"),
+    /** Searches task descriptions using word-prefix terms. */
+    SEARCH("search"),
     /** Marks a task as done. */
     MARK("mark"),
     /** Marks a task as not done. */
