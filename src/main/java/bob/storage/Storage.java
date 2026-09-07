@@ -78,11 +78,9 @@ public class Storage {
     public void save(List<Task> tasks) throws IOException {
         try {
             Files.createDirectories(filePath.getParent());
-            List<String> lines = new ArrayList<>();
-
-            for (Task task : tasks) {
-                lines.add(serializeTask(task));
-            }
+            List<String> lines = tasks.stream()
+                    .map(this::serializeTask)
+                    .toList();
 
             Files.write(filePath, lines, StandardCharsets.UTF_8);
         } catch (IOException exception) {
