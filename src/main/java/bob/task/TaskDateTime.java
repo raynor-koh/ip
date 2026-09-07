@@ -19,6 +19,7 @@ public class TaskDateTime {
      * @param time optional time of day; null represents a date without a time.
      */
     public TaskDateTime(LocalDate date, LocalTime time) {
+        assert date != null : "A task date-time must have a date";
         this.date = date;
         this.time = time;
     }

@@ -17,6 +17,7 @@ public class Deadline extends Task {
      */
     public Deadline(String description, TaskDateTime by) {
         super(description, TaskType.DEADLINE);
+        assert by != null : "A deadline must have a due date";
         this.by = by;
     }
 
