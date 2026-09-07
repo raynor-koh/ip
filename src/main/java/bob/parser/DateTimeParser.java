@@ -57,6 +57,7 @@ public final class DateTimeParser {
             return value.getDate().format(DISPLAY_DATE_FORMAT);
         }
 
+        assert value.getTime().isPresent() : "A formatted time must be present after the empty check";
         LocalDateTime dateTime = LocalDateTime.of(value.getDate(), value.getTime().get());
 
         return dateTime.format(DISPLAY_DATE_TIME_FORMAT);
@@ -73,6 +74,7 @@ public final class DateTimeParser {
             return value.getDate().toString();
         }
 
+        assert value.getTime().isPresent() : "A stored time must be present after the empty check";
         return LocalDateTime.of(value.getDate(), value.getTime().get()).toString();
     }
 
