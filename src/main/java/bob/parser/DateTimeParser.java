@@ -26,10 +26,10 @@ public final class DateTimeParser {
      * Parses a user-entered date or date-time.
      *
      * @param text date in {@code d/M/yyyy} format, optionally followed by a
-     * time.
+     *     time.
      * @return parsed task date and optional time.
      * @throws IllegalArgumentException if the text does not use a supported
-     * format.
+     *     format.
      */
     public static TaskDateTime parseUserInput(String text) {
         try {

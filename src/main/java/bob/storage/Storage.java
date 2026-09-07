@@ -56,21 +56,21 @@ public class Storage {
         String status = task.getStatus().getStorageCode();
 
         switch (task.getType()) {
-        case TODO:
-            return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
-        case DEADLINE:
-            assert task instanceof Deadline : "DEADLINE tasks must be Deadline instances";
-            Deadline deadline = (Deadline) task;
-            return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
-                                            DateTimeParser.formatForStorage(deadline.getBy()));
-        case EVENT:
-            assert task instanceof Event : "EVENT tasks must be Event instances";
-            Event event = (Event) task;
-            return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
-                                            DateTimeParser.formatForStorage(event.getFrom()),
-                                            DateTimeParser.formatForStorage(event.getTo()));
-        default:
-            throw new IllegalArgumentException("Unsupported task type: " + task.getType());
+            case TODO:
+                return String.join(FIELD_SEPARATOR, type, status, task.getDescription());
+            case DEADLINE:
+                assert task instanceof Deadline : "DEADLINE tasks must be Deadline instances";
+                Deadline deadline = (Deadline) task;
+                return String.join(FIELD_SEPARATOR, type, status, deadline.getDescription(),
+                                                DateTimeParser.formatForStorage(deadline.getBy()));
+            case EVENT:
+                assert task instanceof Event : "EVENT tasks must be Event instances";
+                Event event = (Event) task;
+                return String.join(FIELD_SEPARATOR, type, status, event.getDescription(),
+                                                DateTimeParser.formatForStorage(event.getFrom()),
+                                                DateTimeParser.formatForStorage(event.getTo()));
+            default:
+                throw new IllegalArgumentException("Unsupported task type: " + task.getType());
         }
     }
 
@@ -120,7 +120,7 @@ public class Storage {
      * @param lineNumber zero-based line number used in error messages.
      * @return validated task type and status.
      * @throws IOException if the record has an invalid type, status, or field
-     * count.
+     *     count.
      */
     private TaskRecord validateRecord(String[] parts, int lineNumber) throws IOException {
         if (parts.length == 0 || parts[0].isBlank()) {
@@ -164,23 +164,23 @@ public class Storage {
      */
     private Task createTask(String[] parts, TaskType type, int lineNumber) throws IOException {
         switch (type) {
-        case TODO:
-            return new ToDo(parts[2]);
-        case DEADLINE:
-            try {
-                return new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
-            } catch (DateTimeParseException exception) {
-                throw corruptedFile(lineNumber, "invalid deadline date");
-            }
-        case EVENT:
-            try {
-                return new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
-                                                DateTimeParser.parseStorage(parts[4]));
-            } catch (DateTimeParseException exception) {
-                throw corruptedFile(lineNumber, "invalid event date");
-            }
-        default:
-            throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
+            case TODO:
+                return new ToDo(parts[2]);
+            case DEADLINE:
+                try {
+                    return new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
+                } catch (DateTimeParseException exception) {
+                    throw corruptedFile(lineNumber, "invalid deadline date");
+                }
+            case EVENT:
+                try {
+                    return new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
+                                                    DateTimeParser.parseStorage(parts[4]));
+                } catch (DateTimeParseException exception) {
+                    throw corruptedFile(lineNumber, "invalid event date");
+                }
+            default:
+                throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
         }
     }
 
@@ -188,9 +188,9 @@ public class Storage {
      * Loads tasks from the storage file.
      *
      * @return tasks reconstructed from storage, or an empty list if no file
-     * exists.
+     *     exists.
      * @throws IOException if the file cannot be read or contains malformed
-     * data.
+     *     data.
      */
     public List<Task> load() throws IOException {
         List<Task> tasks = new ArrayList<>();
