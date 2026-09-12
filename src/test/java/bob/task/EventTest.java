@@ -1,6 +1,8 @@
 package bob.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,10 +24,32 @@ class EventTest {
 
     @Test
     void toString_dateOnlyRange_includesFormattedStartAndEnd() {
-        Event event = new Event("camp",
-                new TaskDateTime(LocalDate.of(2019, 12, 2), null),
-                new TaskDateTime(LocalDate.of(2019, 12, 4), null));
+        TaskDateTime from = new TaskDateTime(LocalDate.of(2019, 12, 2), null);
+        TaskDateTime to = new TaskDateTime(LocalDate.of(2019, 12, 4), null);
+        Event event = new Event("camp", from, to);
 
         assertEquals("[E][ ] camp (from: Dec 02 2019 to: Dec 04 2019)", event.toString());
+        assertSame(from, event.getFrom());
+        assertSame(to, event.getTo());
+    }
+
+    @Test
+    void constructor_nullStartDate_assertionErrorThrown() {
+        TaskDateTime end = new TaskDateTime(LocalDate.of(2019, 12, 4), null);
+
+        AssertionError exception = assertThrows(AssertionError.class,
+                () -> new Event("camp", null, end));
+
+        assertEquals("An event must have a start date-time", exception.getMessage());
+    }
+
+    @Test
+    void constructor_nullEndDate_assertionErrorThrown() {
+        TaskDateTime start = new TaskDateTime(LocalDate.of(2019, 12, 2), null);
+
+        AssertionError exception = assertThrows(AssertionError.class,
+                () -> new Event("camp", start, null));
+
+        assertEquals("An event must have an end date-time", exception.getMessage());
     }
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -86,6 +87,32 @@ class StorageTest {
     }
 
     @Test
+    void save_filePathIsDirectory_ioExceptionIncludesFilePath() {
+        Storage storage = new Storage(tempDirectory.toString());
+
+        IOException exception = assertThrows(IOException.class,
+                () -> storage.save(List.of(new ToDo("read book"))));
+
+        assertEquals("Could not save tasks to " + tempDirectory + ".", exception.getMessage());
+    }
+
+    @Test
+    void save_mismatchedDeadlineTask_assertionErrorThrown() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+        Task mismatchedTask = new TestTask("deadline", TaskType.DEADLINE);
+
+        assertThrows(AssertionError.class, () -> storage.save(List.of(mismatchedTask)));
+    }
+
+    @Test
+    void save_mismatchedEventTask_assertionErrorThrown() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+        Task mismatchedTask = new TestTask("event", TaskType.EVENT);
+
+        assertThrows(AssertionError.class, () -> storage.save(List.of(mismatchedTask)));
+    }
+
+    @Test
     void deserializeTask_validRecord_returnsTaskWithStoredStatus() throws IOException {
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
@@ -123,10 +150,57 @@ class StorageTest {
                 exception.getMessage());
     }
 
+    @Test
+    void deserializeTask_invalidDeadlineDate_ioExceptionIncludesLineNumber() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+
+        IOException exception = assertThrows(IOException.class,
+                () -> storage.deserializeTask(new String[]{"D", "0", "submit report", "2019-02-30"}, 2));
+
+        assertEquals("Could not load saved tasks: corrupted data on line 3 (invalid deadline date).",
+                exception.getMessage());
+    }
+
+    @Test
+    void deserializeTask_invalidEventDate_ioExceptionIncludesLineNumber() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+
+        IOException exception = assertThrows(IOException.class,
+                () -> storage.deserializeTask(new String[]{"E", "0", "meeting", "2019-02-30", "2019-03-01"}, 1));
+
+        assertEquals("Could not load saved tasks: corrupted data on line 2 (invalid event date).",
+                exception.getMessage());
+    }
+
+    @Test
+    void load_blankLine_ioExceptionIncludesLineNumber() throws IOException {
+        Path filePath = tempDirectory.resolve("tasks.txt");
+        Files.writeString(filePath, "T|0|read book\n\n", StandardCharsets.UTF_8);
+
+        IOException exception = assertThrows(IOException.class,
+                () -> new Storage(filePath.toString()).load());
+
+        assertEquals("Could not load saved tasks: corrupted data on line 2 (missing task type).",
+                exception.getMessage());
+    }
+
+    @Test
+    void load_filePathIsDirectory_ioExceptionThrown() {
+        Storage storage = new Storage(tempDirectory.toString());
+
+        assertThrows(IOException.class, storage::load);
+    }
+
     private void assertTask(TaskType expectedType, TaskStatus expectedStatus, String expectedDescription,
             Task actualTask) {
         assertEquals(expectedType, actualTask.getType());
         assertEquals(expectedStatus, actualTask.getStatus());
         assertEquals(expectedDescription, actualTask.getDescription());
+    }
+
+    private static class TestTask extends Task {
+        TestTask(String description, TaskType type) {
+            super(description, type);
+        }
     }
 }

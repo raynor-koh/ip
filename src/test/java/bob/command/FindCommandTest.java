@@ -1,5 +1,6 @@
 package bob.command;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,5 +31,12 @@ class FindCommandTest {
     @Test
     void isExit_returnsFalse() {
         assertFalse(new FindCommand("book").isExit());
+    }
+
+    @Test
+    void execute_noTasksMatch_returnsHeadingWithoutTaskLines() {
+        String response = new FindCommand("book").execute(TaskList.of(new ToDo("write report")), new Storage());
+
+        assertEquals("Here are the matching tasks in your list:", response);
     }
 }

@@ -1,5 +1,6 @@
 package bob.command;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,5 +28,11 @@ class ListCommandTest {
     @Test
     void isExit_returnsFalse() {
         assertFalse(new ListCommand().isExit());
+    }
+
+    @Test
+    void execute_emptyTaskList_returnsHeadingWithoutTaskLines() {
+        assertEquals("Here are the tasks in your list:",
+                new ListCommand().execute(new TaskList(), new Storage()));
     }
 }
