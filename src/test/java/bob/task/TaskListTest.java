@@ -167,4 +167,12 @@ class TaskListTest {
 
         assertEquals(List.of(matchingTask), taskList.search("  PRO   mee  "));
     }
+
+    @Test
+    void containsEquivalentTask_sameDetails_returnsExpectedResult() {
+        TaskList taskList = TaskList.of(new ToDo("read book"));
+
+        assertEquals(true, taskList.containsEquivalentTask(new ToDo("read book")));
+        assertEquals(false, taskList.containsEquivalentTask(new ToDo("write book")));
+    }
 }

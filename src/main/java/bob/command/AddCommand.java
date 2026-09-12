@@ -3,6 +3,7 @@ package bob.command;
 import java.io.IOException;
 
 import bob.ResponseType;
+import bob.exception.BobException;
 import bob.storage.Storage;
 import bob.task.Task;
 import bob.task.TaskList;
@@ -31,7 +32,10 @@ public class AddCommand extends Command {
      * @throws IOException if the updated task list cannot be saved.
      */
     @Override
-    public String execute(TaskList tasks, Storage storage) throws IOException {
+    public String execute(TaskList tasks, Storage storage) throws BobException, IOException {
+        if (tasks.containsEquivalentTask(task)) {
+            throw new BobException("That task is already in your list.");
+        }
         tasks.add(task);
         saveTasks(tasks, storage);
 
