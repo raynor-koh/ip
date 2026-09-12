@@ -34,22 +34,22 @@ class EventTest {
     }
 
     @Test
-    void constructor_nullStartDate_assertionErrorThrown() {
+    void constructor_nullStartDate_illegalArgumentExceptionThrown() {
         TaskDateTime end = new TaskDateTime(LocalDate.of(2019, 12, 4), null);
 
-        AssertionError exception = assertThrows(AssertionError.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Event("camp", null, end));
 
-        assertEquals("An event must have a start date-time", exception.getMessage());
+        assertEquals("An event needs both a start and an end date-time.", exception.getMessage());
     }
 
     @Test
-    void constructor_nullEndDate_assertionErrorThrown() {
+    void constructor_nullEndDate_illegalArgumentExceptionThrown() {
         TaskDateTime start = new TaskDateTime(LocalDate.of(2019, 12, 2), null);
 
-        AssertionError exception = assertThrows(AssertionError.class,
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Event("camp", start, null));
 
-        assertEquals("An event must have an end date-time", exception.getMessage());
+        assertEquals("An event needs both a start and an end date-time.", exception.getMessage());
     }
 }
