@@ -13,11 +13,32 @@ import bob.task.TaskList;
  * Represents an executable user command.
  */
 public abstract class Command {
-
     /**
      * Creates a command.
      */
     protected Command() {
+    }
+
+    /** Formats the fixed add-task response. */
+    protected String addResponse(Task task, int count) {
+        return "Excellent! I've added this task:\nadded: " + task
+                + "\nYou now have " + count + " tasks to conquer.";
+    }
+
+    /** Formats the fixed delete-task response. */
+    protected String deleteResponse(Task task, int count) {
+        String label = count == 1 ? "task" : "tasks";
+        return "Consider it cleared:\n" + task + "\nThere are " + count + " " + label + " left in your list.";
+    }
+
+    /** Formats the fixed completion response. */
+    protected String markResponse(Task task) {
+        return "Great work! This task is complete:\n  " + task;
+    }
+
+    /** Formats the fixed reopening response. */
+    protected String unmarkResponse(Task task) {
+        return "No problem—I've reopened this task:\n  " + task;
     }
 
     /**

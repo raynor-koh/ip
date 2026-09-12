@@ -2,11 +2,11 @@ package bob.ui;
 
 import java.util.Scanner;
 
+
 /**
  * Handles console input and presents chatbot messages to the user.
  */
 public class Ui {
-    private static final String CHATBOT_NAME = "Bob";
     private static final String LINE_PREFIX = "    ";
     private static final String MESSAGE_PREFIX = "     ";
     private static final String DIVIDER =
@@ -45,13 +45,11 @@ public class Ui {
         scanner.close();
     }
 
-    /**
-     * Displays the chatbot banner and greeting.
-     */
+    /** Displays the fixed chatbot greeting and banner. */
     public void showWelcome() {
         showLine();
         showBanner();
-        System.out.println(MESSAGE_PREFIX + "Hello! I'm " + CHATBOT_NAME + ".");
+        System.out.println(MESSAGE_PREFIX + "Hi! I'm Bob, your task companion.");
         System.out.println(MESSAGE_PREFIX + "What can I do for you?");
         showLine();
     }

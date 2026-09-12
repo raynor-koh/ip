@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -30,12 +31,11 @@ import javafx.util.Duration;
 public class MainWindow {
     private static final String USER_IMAGE_PATH = "/images/huahua.png";
     private static final String BOB_IMAGE_PATH = "/images/yuai.png";
-    private static final String WELCOME_MESSAGE = "Hello! I'm Bob, your personal task assistant.\n\n"
-            + "Try \"todo read a book\" to add your first task.";
+    private static final String BOB_GREETING = "Hi! I'm Bob, your task companion.";
+    private static final String STATUS_TYPING_TEXT = "Bob is thinking";
     private static final String STATUS_TYPING_STYLE = "status-typing";
     private static final String STATUS_ENDED_STYLE = "status-ended";
     private static final String INPUT_INVALID_STYLE = "input-invalid";
-    private static final String STATUS_TYPING_TEXT = "Bob is typing";
     private static final String STATUS_ENDED_TEXT = "Session ended";
     private static final String STATUS_READY_TEXT = "Ready";
     private static final String EMPTY_INPUT_MESSAGE = "Enter a command, or open Help for examples.";
@@ -67,6 +67,12 @@ public class MainWindow {
     private Label statusIndicator;
 
     @FXML
+    private Label appTitle;
+
+    @FXML
+    private AnchorPane rootPane;
+
+    @FXML
     private Tooltip statusTooltip;
 
     @FXML
@@ -84,7 +90,6 @@ public class MainWindow {
 
     @FXML
     private void initialize() {
-        AvatarView.configure(headerAvatar, bobImage, HEADER_AVATAR_SIZE);
         dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) -> scrollPane.setVvalue(1.0));
         userInput.textProperty().addListener((observable, oldText, newText) -> {
             if (!newText.isBlank()) {
@@ -101,7 +106,12 @@ public class MainWindow {
      */
     public void setChatBot(ChatBot chatBot) {
         this.chatBot = Objects.requireNonNull(chatBot);
-        welcomeDialog = DialogBox.getBobDialog(WELCOME_MESSAGE, bobImage, ResponseType.INFO);
+        AvatarView.configure(headerAvatar, bobImage, HEADER_AVATAR_SIZE);
+        appTitle.setText("Bob");
+        rootPane.getStyleClass().add("theme-ocean");
+        String welcomeMessage = BOB_GREETING + "\n\n"
+                + "Try \"todo read a book\" to add your first task.";
+        welcomeDialog = DialogBox.getBobDialog(welcomeMessage, bobImage, ResponseType.INFO);
         addDialog(welcomeDialog);
     }
 

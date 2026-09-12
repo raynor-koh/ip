@@ -15,7 +15,7 @@ class ByeCommandTest {
     void execute_returnsGoodbyeMessage() {
         String response = new ByeCommand().execute(new TaskList(), new Storage());
 
-        assertEquals("Bye. Hope to see you again soon!", response);
+        assertEquals("See you next time. Keep reaching for the stars!", response);
     }
 
     @Test

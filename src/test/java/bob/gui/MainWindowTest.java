@@ -13,11 +13,11 @@ class MainWindowTest {
     @Test
     void getTypingText_consecutiveFrames_cyclesThroughOneToThreeDots() {
         assertAll(
-                () -> assertEquals("Bob is typing.", MainWindow.getTypingText(0)),
-                () -> assertEquals("Bob is typing..", MainWindow.getTypingText(1)),
-                () -> assertEquals("Bob is typing...", MainWindow.getTypingText(2)),
-                () -> assertEquals("Bob is typing.", MainWindow.getTypingText(3)),
-                () -> assertEquals("Bob is typing...", MainWindow.getTypingText(-1)));
+                () -> assertEquals("Bob is thinking.", MainWindow.getTypingText(0)),
+                () -> assertEquals("Bob is thinking..", MainWindow.getTypingText(1)),
+                () -> assertEquals("Bob is thinking...", MainWindow.getTypingText(2)),
+                () -> assertEquals("Bob is thinking.", MainWindow.getTypingText(3)),
+                () -> assertEquals("Bob is thinking...", MainWindow.getTypingText(-1)));
     }
 
     @Test

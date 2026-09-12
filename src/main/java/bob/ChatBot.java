@@ -58,7 +58,7 @@ public class ChatBot {
             String response = command.execute(tasks, storage);
             return new ChatResponse(response, command.isExit(), command.getResponseType());
         } catch (BobException | IOException exception) {
-            String response = "I couldn't process that: " + exception.getMessage();
+            String response = "I hit a problem: " + exception.getMessage();
             return new ChatResponse(response, false, ResponseType.ERROR);
         }
     }

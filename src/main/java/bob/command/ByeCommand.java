@@ -8,6 +8,10 @@ import bob.task.TaskList;
  * Command that displays a farewell and ends the chatbot session.
  */
 public class ByeCommand extends Command {
+    /** Creates a farewell command. */
+    public ByeCommand() {
+    }
+
     /**
      * Displays the farewell message.
      *
@@ -17,7 +21,7 @@ public class ByeCommand extends Command {
      */
     @Override
     public String execute(TaskList tasks, Storage storage) {
-        return "Bye. Hope to see you again soon!";
+        return "See you next time. Keep reaching for the stars!";
     }
 
     @Override

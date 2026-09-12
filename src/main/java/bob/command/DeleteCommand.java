@@ -38,10 +38,7 @@ public class DeleteCommand extends Command {
         saveTasks(taskList, storage);
 
         int taskCount = taskList.getTaskCount();
-        String taskLabel = taskCount == 1 ? "task" : "tasks";
-        return "Noted. I've removed this task:\n"
-                + deletedTask + "\n"
-                + "Now you have " + taskCount + " " + taskLabel + " in the list.";
+        return deleteResponse(deletedTask, taskCount);
     }
 
     @Override

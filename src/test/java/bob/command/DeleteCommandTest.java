@@ -32,7 +32,7 @@ class DeleteCommandTest {
         assertEquals(1, taskList.getTaskCount());
         assertEquals("second task", taskList.get(0).getDescription());
         assertEquals("second task", storage.load().get(0).getDescription());
-        assertTrue(response.contains("removed this task"));
+        assertTrue(response.contains("Consider it cleared"));
         assertTrue(response.contains("[T][ ] first task"));
     }
 

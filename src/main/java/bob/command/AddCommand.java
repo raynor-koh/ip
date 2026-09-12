@@ -39,9 +39,7 @@ public class AddCommand extends Command {
         tasks.add(task);
         saveTasks(tasks, storage);
 
-        return "Got it. I've added this task:\n"
-                + "added: " + task + "\n"
-                + "Now you have " + tasks.getTaskCount() + " tasks in the list.";
+        return addResponse(task, tasks.getTaskCount());
     }
 
     @Override
