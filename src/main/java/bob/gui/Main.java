@@ -24,7 +24,7 @@ public class Main extends Application {
         Parent root = fxmlLoader.load();
 
         MainWindow controller = fxmlLoader.getController();
-        controller.setChatBot(new ChatBot());
+        controller.setChatBot(new ChatBot("data/bob.txt"));
 
         stage.setTitle("Bob - Task Assistant");
         stage.setScene(new Scene(root));

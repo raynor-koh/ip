@@ -53,7 +53,7 @@ class UiTest {
         ui.showWelcome();
 
         String displayedText = output.toString(StandardCharsets.UTF_8);
-        assertTrue(displayedText.contains("Hello! I'm Bob."));
+        assertTrue(displayedText.contains("Hi! I'm Bob, your task companion."));
         assertTrue(displayedText.contains("What can I do for you?"));
         assertTrue(displayedText.contains("____        _"));
     }

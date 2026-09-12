@@ -21,7 +21,7 @@ class SearchCommandTest {
 
         String response = new SearchCommand("boo").execute(taskList, new Storage());
 
-        assertEquals("Here are the matching tasks in your list:\n"
+        assertEquals("Here are the matching missions:\n"
                 + "1.[T][ ] buy books\n3.[T][ ] read a book", response);
     }
 
@@ -29,7 +29,7 @@ class SearchCommandTest {
     void execute_noTasksMatch_returnsNoMatchMessage() {
         TaskList taskList = TaskList.of(new ToDo("write report"));
 
-        assertEquals("No matching tasks found.",
+        assertEquals("I couldn't find any matching missions.",
                 new SearchCommand("book").execute(taskList, new Storage()));
     }
 

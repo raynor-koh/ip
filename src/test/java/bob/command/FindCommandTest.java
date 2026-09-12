@@ -22,7 +22,7 @@ class FindCommandTest {
 
         String response = new FindCommand("book").execute(taskList, new Storage());
 
-        assertTrue(response.contains("Here are the matching tasks in your list:"));
+        assertTrue(response.contains("Here are the matching missions:"));
         assertTrue(response.contains("1.[T][ ] read book"));
         assertTrue(response.contains("2.[T][ ] return BOOK"));
         assertFalse(response.contains("write report"));
@@ -37,6 +37,6 @@ class FindCommandTest {
     void execute_noTasksMatch_returnsHeadingWithoutTaskLines() {
         String response = new FindCommand("book").execute(TaskList.of(new ToDo("write report")), new Storage());
 
-        assertEquals("Here are the matching tasks in your list:", response);
+        assertEquals("Here are the matching missions:", response);
     }
 }

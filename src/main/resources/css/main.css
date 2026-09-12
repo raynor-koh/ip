@@ -36,6 +36,23 @@
   -fx-padding: 10px 16px;
 }
 
+/* Applied by MainWindow according to the selected chatbot personality. */
+.theme-ocean .app-header {
+  -fx-background-color: linear-gradient(to right, #12344d, #226b82);
+}
+
+.theme-ocean .button:not(.header-help-button) {
+  -fx-background-color: #267d9a;
+}
+
+.theme-sunrise .app-header {
+  -fx-background-color: linear-gradient(to right, #542b3c, #a9564d);
+}
+
+.theme-sunrise .button:not(.header-help-button) {
+  -fx-background-color: #b85c4c;
+}
+
 .app-title {
   -fx-font-size: 18px;
   -fx-font-weight: bold;

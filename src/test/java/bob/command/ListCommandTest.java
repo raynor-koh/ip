@@ -32,7 +32,7 @@ class ListCommandTest {
 
     @Test
     void execute_emptyTaskList_returnsHeadingWithoutTaskLines() {
-        assertEquals("Here are the tasks in your list:",
+        assertEquals("Here's your mission list:",
                 new ListCommand().execute(new TaskList(), new Storage()));
     }
 }

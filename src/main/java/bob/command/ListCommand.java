@@ -11,6 +11,10 @@ import bob.task.TaskList;
  * Command that displays all stored tasks.
  */
 public class ListCommand extends Command {
+    /** Creates a list command. */
+    public ListCommand() {
+    }
+
     /**
      * Displays every task in the current task list.
      *
@@ -21,7 +25,7 @@ public class ListCommand extends Command {
     @Override
     public String execute(TaskList tasks, Storage storage) {
         List<Task> currentTasks = tasks.getTasks();
-        return formatTasks("Here are the tasks in your list:", currentTasks);
+        return formatTasks("Here's your mission list:", currentTasks);
     }
 
     @Override

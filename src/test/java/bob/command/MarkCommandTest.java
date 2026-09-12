@@ -32,7 +32,7 @@ class MarkCommandTest {
 
         assertEquals(TaskStatus.DONE, taskList.get(0).getStatus());
         assertEquals(TaskStatus.DONE, storage.load().get(0).getStatus());
-        assertTrue(response.contains("marked this task as done"));
+        assertTrue(response.contains("Great work! This task is complete"));
         assertTrue(response.contains("[T][X] read book"));
     }
 

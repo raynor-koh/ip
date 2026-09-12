@@ -52,7 +52,7 @@ class ChatBotTest {
         String displayedText = output.toString(StandardCharsets.UTF_8);
         assertTrue(displayedText.contains("added: [T][ ] read book"));
         assertTrue(displayedText.contains("1.[T][X] read book"));
-        assertTrue(displayedText.contains("Bye. Hope to see you again soon!"));
+        assertTrue(displayedText.contains("See you next time. Keep reaching for the stars!"));
     }
 
     @Test
@@ -63,8 +63,8 @@ class ChatBotTest {
         chatBot.run();
 
         String displayedText = output.toString(StandardCharsets.UTF_8);
-        assertTrue(displayedText.contains("I couldn't process that: I don't recognise that command."));
-        assertTrue(displayedText.contains("Bye. Hope to see you again soon!"));
+        assertTrue(displayedText.contains("I hit a problem: I don't recognise that command."));
+        assertTrue(displayedText.contains("See you next time. Keep reaching for the stars!"));
     }
 
     @Test
@@ -89,7 +89,7 @@ class ChatBotTest {
         ChatResponse response = chatBot.processCommand("unknown command");
 
         assertTrue(response.text().startsWith(
-                "I couldn't process that: I don't recognise that command."));
+                "I hit a problem: I don't recognise that command."));
         assertFalse(response.isExit());
         assertEquals(ResponseType.ERROR, response.responseType());
     }
@@ -101,7 +101,7 @@ class ChatBotTest {
         ChatResponse response = chatBot.processCommand("deadline submit report /by Friday");
 
         assertEquals(
-                "I couldn't process that: Use d/M/yyyy or d/M/yyyy HHmm, "
+                "I hit a problem: Use d/M/yyyy or d/M/yyyy HHmm, "
                         + "such as 2/12/2019 or 2/12/2019 1800.",
                 response.text());
         assertFalse(response.isExit());
@@ -114,7 +114,7 @@ class ChatBotTest {
 
         ChatResponse response = chatBot.processCommand("bye");
 
-        assertEquals("Bye. Hope to see you again soon!", response.text());
+        assertEquals("See you next time. Keep reaching for the stars!", response.text());
         assertTrue(response.isExit());
         assertEquals(ResponseType.BYE, response.responseType());
     }

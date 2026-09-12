@@ -34,7 +34,7 @@ class UnmarkCommandTest {
 
         assertEquals(TaskStatus.NOT_DONE, taskList.get(0).getStatus());
         assertEquals(TaskStatus.NOT_DONE, storage.load().get(0).getStatus());
-        assertTrue(response.contains("marked this task as not done yet"));
+        assertTrue(response.contains("reopened this task"));
         assertTrue(response.contains("[T][ ] read book"));
     }
 

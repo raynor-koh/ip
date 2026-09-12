@@ -33,10 +33,10 @@ public class SearchCommand extends Command {
     public String execute(TaskList tasks, Storage storage) {
         List<Task> matchingTasks = tasks.search(query);
         if (matchingTasks.isEmpty()) {
-            return "No matching tasks found.";
+            return "I couldn't find any matching missions.";
         }
 
-        StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
+        StringBuilder response = new StringBuilder("Here are the matching missions:");
         List<Task> allTasks = tasks.getTasks();
         for (Task matchingTask : matchingTasks) {
             response.append('\n')
