@@ -11,6 +11,7 @@ import bob.parser.DateTimeParser;
 import bob.task.Deadline;
 import bob.task.Event;
 import bob.task.Task;
+import bob.task.TaskList;
 import bob.task.TaskStatus;
 import bob.task.TaskType;
 import bob.task.ToDo;
@@ -164,22 +165,32 @@ public class Storage {
     private Task createTask(String[] parts, TaskType type, int lineNumber) throws IOException {
         switch (type) {
             case TODO:
+                requireStoredDescription(parts[2], lineNumber);
                 return new ToDo(parts[2]);
             case DEADLINE:
                 try {
+                    requireStoredDescription(parts[2], lineNumber);
                     return new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
                 } catch (IllegalArgumentException exception) {
                     throw corruptedFile(lineNumber, "invalid deadline date");
                 }
             case EVENT:
                 try {
+                    requireStoredDescription(parts[2], lineNumber);
                     return new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
                                                     DateTimeParser.parseStorage(parts[4]));
                 } catch (IllegalArgumentException exception) {
-                    throw corruptedFile(lineNumber, "invalid event date");
+                    throw corruptedFile(lineNumber, "invalid event date or range");
                 }
             default:
                 throw corruptedFile(lineNumber, "unsupported task type '" + type + "'");
+        }
+    }
+
+    /** Validates the description field read from persistent storage. */
+    private void requireStoredDescription(String description, int lineNumber) throws IOException {
+        if (description == null || description.isBlank() || description.contains(FIELD_SEPARATOR)) {
+            throw corruptedFile(lineNumber, "missing or invalid task description");
         }
     }
 
@@ -206,6 +217,9 @@ public class Storage {
             String[] parts = line.split("\\s*\\|\\s*", -1);
 
             Task task = deserializeTask(parts, lineNumber);
+            if (new TaskList(tasks).containsEquivalentTask(task)) {
+                throw corruptedFile(lineNumber, "duplicate task");
+            }
             tasks.add(task);
         }
 

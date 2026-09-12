@@ -1,5 +1,7 @@
 package bob.task;
 
+import java.time.LocalDateTime;
+
 import bob.parser.DateTimeParser;
 
 /**
@@ -18,10 +20,24 @@ public class Event extends Task {
      */
     public Event(String description, TaskDateTime from, TaskDateTime to) {
         super(description, TaskType.EVENT);
-        assert from != null : "An event must have a start date-time";
-        assert to != null : "An event must have an end date-time";
+        if (from == null || to == null) {
+            throw new IllegalArgumentException("An event needs both a start and an end date-time.");
+        }
+        if (!toLocalDateTime(from).isBefore(toLocalDateTime(to))) {
+            throw new IllegalArgumentException("An event's end time must be later than its start time.");
+        }
         this.from = from;
         this.to = to;
+    }
+
+    /**
+     * Converts a task date-time to a comparable value, treating a date-only value as midnight.
+     *
+     * @param value task date-time to convert.
+     * @return comparable local date-time.
+     */
+    private static LocalDateTime toLocalDateTime(TaskDateTime value) {
+        return LocalDateTime.of(value.getDate(), value.getTime().orElse(java.time.LocalTime.MIDNIGHT));
     }
 
     /**

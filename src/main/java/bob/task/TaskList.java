@@ -49,6 +49,43 @@ public class TaskList {
     }
 
     /**
+     * Returns whether a task with the same user-visible details already exists.
+     *
+     * @param candidate task to compare with existing tasks.
+     * @return true if an equivalent task is already present.
+     */
+    public boolean containsEquivalentTask(Task candidate) {
+        return tasks.stream().anyMatch(task -> hasSameDetails(task, candidate));
+    }
+
+    /**
+     * Compares task details, including dates for dated task types.
+     *
+     * @param first first task to compare.
+     * @param second second task to compare.
+     * @return true if both tasks have identical details.
+     */
+    private boolean hasSameDetails(Task first, Task second) {
+        if (first == null || second == null || first.getType() != second.getType()
+                || !first.getDescription().equals(second.getDescription())) {
+            return false;
+        }
+        if (first instanceof Deadline firstDeadline && second instanceof Deadline secondDeadline) {
+            return hasSameDateTime(firstDeadline.getBy(), secondDeadline.getBy());
+        }
+        if (first instanceof Event firstEvent && second instanceof Event secondEvent) {
+            return hasSameDateTime(firstEvent.getFrom(), secondEvent.getFrom())
+                    && hasSameDateTime(firstEvent.getTo(), secondEvent.getTo());
+        }
+        return true;
+    }
+
+    /** Returns whether two task date-times have identical date and optional time values. */
+    private boolean hasSameDateTime(TaskDateTime first, TaskDateTime second) {
+        return first.getDate().equals(second.getDate()) && first.getTime().equals(second.getTime());
+    }
+
+    /**
      * Returns a read-only view of the tasks.
      *
      * @return unmodifiable task list.

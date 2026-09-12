@@ -210,4 +210,20 @@ class ParserTest {
                         + "event meeting /from 2/12/2019 1800 /to 2/12/2019 1900",
                 exception.getMessage());
     }
+    @Test
+    void parse_invalidEventRange_bobExceptionThrown() {
+        assertThrows(BobException.class, () -> parser.parse(
+                "event meeting /from 2/12/2019 1900 /to 2/12/2019 1800"));
+    }
+
+    @Test
+    void parse_repeatedDateParameter_bobExceptionThrown() {
+        assertThrows(BobException.class, () -> parser.parse(
+                "event meeting /from 2/12/2019 1800 /from 2/12/2019 1900 /to 2/12/2019 2000"));
+    }
+
+    @Test
+    void parse_impossibleCalendarDate_bobExceptionThrown() {
+        assertThrows(BobException.class, () -> parser.parse("deadline submit report /by 30/2/2024"));
+    }
 }

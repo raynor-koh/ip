@@ -168,7 +168,7 @@ class StorageTest {
         IOException exception = assertThrows(IOException.class,
                 () -> storage.deserializeTask(new String[]{"E", "0", "meeting", "2019-02-30", "2019-03-01"}, 1));
 
-        assertEquals("Could not load saved tasks: corrupted data on line 2 (invalid event date).",
+        assertEquals("Could not load saved tasks: corrupted data on line 2 (invalid event date or range).",
                 exception.getMessage());
     }
 
@@ -189,6 +189,14 @@ class StorageTest {
         Storage storage = new Storage(tempDirectory.toString());
 
         assertThrows(IOException.class, storage::load);
+    }
+
+    @Test
+    void load_impossibleStoredDate_ioExceptionThrown() throws IOException {
+        Path filePath = tempDirectory.resolve("tasks.txt");
+        Files.writeString(filePath, "D|0|submit report|2024-02-30");
+
+        assertThrows(IOException.class, () -> new Storage(filePath.toString()).load());
     }
 
     private void assertTask(TaskType expectedType, TaskStatus expectedStatus, String expectedDescription,
