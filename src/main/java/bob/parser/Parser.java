@@ -92,6 +92,7 @@ public class Parser {
      * @throws BobException if the description or due date is missing.
      */
     private Command parseDeadline(String argument) throws BobException {
+        requireSingleParameter(argument, "/by", DEADLINE_EXAMPLE);
         String[] parts = argument.split("\\s+/by\\s+", 2);
         if (parts.length < 2) {
             throw new BobException("A deadline needs a due date. Try: " + DEADLINE_EXAMPLE);
@@ -109,6 +110,8 @@ public class Parser {
      * @throws BobException if the description or either date is missing.
      */
     private Command parseEvent(String argument) throws BobException {
+        requireSingleParameter(argument, "/from", EVENT_EXAMPLE);
+        requireSingleParameter(argument, "/to", EVENT_EXAMPLE);
         String[] fromParts = argument.split("\\s+/from\\s+", 2);
         if (fromParts.length < 2) {
             throw new BobException("An event needs a time range. Try: " + EVENT_EXAMPLE);
@@ -123,7 +126,32 @@ public class Parser {
         TaskDateTime from = parseDateTime(toParts[0].trim());
         TaskDateTime to = parseDateTime(toParts[1].trim());
 
-        return new AddCommand(new Event(description, from, to));
+        try {
+            return new AddCommand(new Event(description, from, to));
+        } catch (IllegalArgumentException exception) {
+            throw new BobException(exception.getMessage());
+        }
+    }
+
+    /**
+     * Rejects repeated or malformed date-range parameters.
+     *
+     * @param argument command argument to inspect.
+     * @param parameter parameter name to require once.
+     * @param example usage example for the error response.
+     * @throws BobException if the parameter is missing or repeated.
+     */
+    private void requireSingleParameter(String argument, String parameter, String example) throws BobException {
+        int occurrences = 0;
+        String[] tokens = argument.trim().split("\\s+");
+        for (String token : tokens) {
+            if (token.equals(parameter)) {
+                occurrences++;
+            }
+        }
+        if (occurrences > 1) {
+            throw new BobException("The parameter '" + parameter + "' may be specified only once. Try: " + example);
+        }
     }
 
     /**
