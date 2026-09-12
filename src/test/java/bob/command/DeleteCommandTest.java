@@ -52,6 +52,6 @@ class DeleteCommandTest {
         String response = new DeleteCommand(1).execute(taskList, storage);
 
         assertEquals(0, taskList.getTaskCount());
-        assertTrue(response.contains("Now you have 0 tasks in the list."));
+        assertTrue(response.contains("There are 0 tasks left in your list."));
     }
 }

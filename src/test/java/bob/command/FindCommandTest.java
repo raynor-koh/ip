@@ -37,6 +37,6 @@ class FindCommandTest {
     void execute_noTasksMatch_returnsHeadingWithoutTaskLines() {
         String response = new FindCommand("book").execute(TaskList.of(new ToDo("write report")), new Storage());
 
-        assertEquals("Here are the matching tasks in your list:", response);
+        assertEquals("Here are the matching missions:", response);
     }
 }
