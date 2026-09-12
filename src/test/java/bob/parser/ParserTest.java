@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import bob.command.AddCommand;
 import bob.command.ByeCommand;
@@ -16,10 +18,15 @@ import bob.command.MarkCommand;
 import bob.command.SearchCommand;
 import bob.command.UnmarkCommand;
 import bob.exception.BobException;
+import bob.storage.Storage;
+import bob.task.TaskList;
 
 /** Tests conversion of user input into executable commands. */
 class ParserTest {
     private final Parser parser = new Parser();
+
+    @TempDir
+    private java.nio.file.Path tempDirectory;
 
     @Test
     void parse_commandsWithoutArguments_returnsMatchingCommand() {
@@ -54,6 +61,25 @@ class ParserTest {
                         parser.parse("deadline submit report /by 2/12/2019 1800")),
                 () -> assertInstanceOf(AddCommand.class,
                         parser.parse("event project meeting /from 2/12/2019 1800 /to 2/12/2019 1900")));
+    }
+
+    @Test
+    void parse_addCommands_preservesDescriptionsAndDateTimes() throws Exception {
+        TaskList tasks = new TaskList();
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+
+        String todoResponse = parser.parse("todo read a book").execute(tasks, storage);
+        String deadlineResponse = parser.parse("deadline submit report /by 2/12/2019 1800")
+                .execute(tasks, storage);
+        String eventResponse = parser.parse("event project meeting /from 2/12/2019 1800 /to 3/12/2019")
+                .execute(tasks, storage);
+
+        assertEquals("read a book", tasks.get(0).getDescription());
+        assertEquals("submit report", tasks.get(1).getDescription());
+        assertEquals("project meeting", tasks.get(2).getDescription());
+        assertTrue(deadlineResponse.contains("Dec 02 2019 18:00"));
+        assertTrue(eventResponse.contains("Dec 03 2019"));
+        assertTrue(todoResponse.contains("[T][ ] read a book"));
     }
 
     @Test
@@ -98,6 +124,13 @@ class ParserTest {
                 () -> assertThrows(BobException.class, () -> parser.parse("unmark zero")),
                 () -> assertThrows(BobException.class, () -> parser.parse("delete 0")),
                 () -> assertThrows(BobException.class, () -> parser.parse("delete -1")));
+    }
+
+    @Test
+    void parse_taskMutationCommandWithNonWholeNumber_bobExceptionThrown() {
+        BobException exception = assertThrows(BobException.class, () -> parser.parse("mark 1.5"));
+
+        assertEquals("'mark' needs a whole-number task index, such as 1.", exception.getMessage());
     }
 
     @Test

@@ -43,6 +43,7 @@ class DateTimeParserTest {
     void parseUserInput_invalidFormat_illegalArgumentExceptionThrown() {
         assertThrows(IllegalArgumentException.class, () -> DateTimeParser.parseUserInput("2 December 2019"));
         assertThrows(IllegalArgumentException.class, () -> DateTimeParser.parseUserInput("2/12/2019 18:00"));
+        assertThrows(IllegalArgumentException.class, () -> DateTimeParser.parseUserInput("2/12/19"));
     }
 
     @Test
@@ -95,5 +96,13 @@ class DateTimeParserTest {
                 () -> DateTimeParser.parseStorage("2/12/2019"));
 
         assertEquals("Invalid stored date-time: 2/12/2019", exception.getMessage());
+    }
+
+    @Test
+    void parseStorage_invalidDateTime_illegalArgumentExceptionThrown() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> DateTimeParser.parseStorage("2019-02-30T18:05"));
+
+        assertEquals("Invalid stored date-time: 2019-02-30T18:05", exception.getMessage());
     }
 }

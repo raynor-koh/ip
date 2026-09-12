@@ -117,6 +117,15 @@ class TaskListTest {
     }
 
     @Test
+    void find_emptyKeyword_returnsAllTasksInOriginalOrder() {
+        Task firstTask = new ToDo("first task");
+        Task secondTask = new ToDo("second task");
+        TaskList taskList = TaskList.of(firstTask, secondTask);
+
+        assertEquals(List.of(firstTask, secondTask), taskList.find(""));
+    }
+
+    @Test
     void search_prefixTermsWithDifferentCase_returnsMatchingTasksInOriginalOrder() {
         Task firstMatch = new ToDo("buy books");
         Task nonMatch = new ToDo("write report");
@@ -149,5 +158,13 @@ class TaskListTest {
         TaskList taskList = TaskList.of(new ToDo("write report"));
 
         assertEquals(List.of(), taskList.search("book"));
+    }
+
+    @Test
+    void search_queryWithExtraWhitespace_ignoresWhitespace() {
+        Task matchingTask = new ToDo("project meeting");
+        TaskList taskList = TaskList.of(matchingTask);
+
+        assertEquals(List.of(matchingTask), taskList.search("  PRO   mee  "));
     }
 }

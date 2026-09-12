@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,14 +168,14 @@ public class Storage {
             case DEADLINE:
                 try {
                     return new Deadline(parts[2], DateTimeParser.parseStorage(parts[3]));
-                } catch (DateTimeParseException exception) {
+                } catch (IllegalArgumentException exception) {
                     throw corruptedFile(lineNumber, "invalid deadline date");
                 }
             case EVENT:
                 try {
                     return new Event(parts[2], DateTimeParser.parseStorage(parts[3]),
                                                     DateTimeParser.parseStorage(parts[4]));
-                } catch (DateTimeParseException exception) {
+                } catch (IllegalArgumentException exception) {
                     throw corruptedFile(lineNumber, "invalid event date");
                 }
             default:

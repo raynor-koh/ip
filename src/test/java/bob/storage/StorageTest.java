@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -120,6 +121,40 @@ class StorageTest {
                 () -> storage.deserializeTask(new String[]{"D", "0", "submit report"}, 4));
 
         assertEquals("Could not load saved tasks: corrupted data on line 5 (expected 4 fields but found 3).",
+                exception.getMessage());
+    }
+
+    @Test
+    void deserializeTask_invalidDeadlineDate_ioExceptionIncludesLineNumber() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+
+        IOException exception = assertThrows(IOException.class,
+                () -> storage.deserializeTask(new String[]{"D", "0", "submit report", "2019-02-30"}, 2));
+
+        assertEquals("Could not load saved tasks: corrupted data on line 3 (invalid deadline date).",
+                exception.getMessage());
+    }
+
+    @Test
+    void deserializeTask_invalidEventDate_ioExceptionIncludesLineNumber() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+
+        IOException exception = assertThrows(IOException.class,
+                () -> storage.deserializeTask(new String[]{"E", "0", "meeting", "2019-02-30", "2019-03-01"}, 1));
+
+        assertEquals("Could not load saved tasks: corrupted data on line 2 (invalid event date).",
+                exception.getMessage());
+    }
+
+    @Test
+    void load_blankLine_ioExceptionIncludesLineNumber() throws IOException {
+        Path filePath = tempDirectory.resolve("tasks.txt");
+        Files.writeString(filePath, "T|0|read book\n\n", StandardCharsets.UTF_8);
+
+        IOException exception = assertThrows(IOException.class,
+                () -> new Storage(filePath.toString()).load());
+
+        assertEquals("Could not load saved tasks: corrupted data on line 2 (missing task type).",
                 exception.getMessage());
     }
 
