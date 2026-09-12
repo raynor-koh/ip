@@ -43,4 +43,15 @@ class DeleteCommandTest {
 
         assertThrows(BobException.class, () -> new DeleteCommand(2).execute(taskList, storage));
     }
+
+    @Test
+    void execute_lastTask_usesPluralTaskLabelWhenListIsEmpty() throws Exception {
+        TaskList taskList = TaskList.of(new ToDo("read book"));
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+
+        String response = new DeleteCommand(1).execute(taskList, storage);
+
+        assertEquals(0, taskList.getTaskCount());
+        assertTrue(response.contains("Now you have 0 tasks in the list."));
+    }
 }

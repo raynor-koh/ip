@@ -2,6 +2,7 @@ package bob;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -130,6 +131,14 @@ class ChatBotTest {
         assertEquals(ResponseType.UNMARK, chatBot.processCommand("unmark 1").responseType());
         assertEquals(ResponseType.DELETE, chatBot.processCommand("delete 1").responseType());
         assertEquals(ResponseType.BYE, chatBot.processCommand("bye").responseType());
+    }
+
+    @Test
+    void constructor_directoryAsDataPath_bobExceptionThrown() {
+        BobException exception = assertThrows(BobException.class,
+                () -> new ChatBot(tempDirectory.toString()));
+
+        assertEquals("I could not load your saved tasks", exception.getMessage());
     }
 
     private ByteArrayOutputStream configureStreams(String input) {

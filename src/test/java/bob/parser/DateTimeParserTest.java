@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +48,15 @@ class DateTimeParserTest {
     }
 
     @Test
+    void parseUserInput_invalidTime_illegalArgumentExceptionIncludesFormatGuidance() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> DateTimeParser.parseUserInput("2/12/2019 2460"));
+
+        assertEquals("Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.",
+                exception.getMessage());
+    }
+
+    @Test
     void formatForDisplay_dateOnly_returnsReadableDate() {
         TaskDateTime value = new TaskDateTime(LocalDate.of(2019, 12, 2), null);
 
@@ -61,6 +71,16 @@ class DateTimeParserTest {
     }
 
     @Test
+    void formatForDisplay_inconsistentTimeValue_assertionErrorThrown() {
+        TaskDateTime value = new InconsistentTaskDateTime();
+
+        AssertionError exception = assertThrows(AssertionError.class,
+                () -> DateTimeParser.formatForDisplay(value));
+
+        assertEquals("A formatted time must be present after the empty check", exception.getMessage());
+    }
+
+    @Test
     void formatForStorage_dateOnly_returnsIsoDate() {
         TaskDateTime value = new TaskDateTime(LocalDate.of(2019, 12, 2), null);
 
@@ -72,6 +92,16 @@ class DateTimeParserTest {
         TaskDateTime value = new TaskDateTime(LocalDate.of(2019, 12, 2), LocalTime.of(18, 5));
 
         assertEquals("2019-12-02T18:05", DateTimeParser.formatForStorage(value));
+    }
+
+    @Test
+    void formatForStorage_inconsistentTimeValue_assertionErrorThrown() {
+        TaskDateTime value = new InconsistentTaskDateTime();
+
+        AssertionError exception = assertThrows(AssertionError.class,
+                () -> DateTimeParser.formatForStorage(value));
+
+        assertEquals("A stored time must be present after the empty check", exception.getMessage());
     }
 
     @Test
@@ -104,5 +134,27 @@ class DateTimeParserTest {
                 () -> DateTimeParser.parseStorage("2019-02-30T18:05"));
 
         assertEquals("Invalid stored date-time: 2019-02-30T18:05", exception.getMessage());
+    }
+
+    @Test
+    void parseStorage_invalidDate_illegalArgumentExceptionIncludesInput() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> DateTimeParser.parseStorage("2019-02-30"));
+
+        assertEquals("Invalid stored date-time: 2019-02-30", exception.getMessage());
+    }
+
+    private static class InconsistentTaskDateTime extends TaskDateTime {
+        private int timeAccessCount;
+
+        InconsistentTaskDateTime() {
+            super(LocalDate.of(2019, 12, 2), LocalTime.NOON);
+        }
+
+        @Override
+        public Optional<LocalTime> getTime() {
+            timeAccessCount++;
+            return timeAccessCount == 1 ? Optional.of(LocalTime.NOON) : Optional.empty();
+        }
     }
 }

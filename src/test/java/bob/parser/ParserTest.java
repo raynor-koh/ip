@@ -134,6 +134,14 @@ class ParserTest {
     }
 
     @Test
+    void parse_taskMutationCommandWithOverflowingIndex_bobExceptionThrown() {
+        BobException exception = assertThrows(BobException.class,
+                () -> parser.parse("delete 999999999999999999999"));
+
+        assertEquals("'delete' needs a whole-number task index, such as 1.", exception.getMessage());
+    }
+
+    @Test
     void parse_todoWithInvalidDescription_bobExceptionThrown() {
         assertAll(
                 () -> assertThrows(BobException.class, () -> parser.parse("todo")),
@@ -170,6 +178,15 @@ class ParserTest {
                 () -> assertThrows(BobException.class,
                         () -> parser.parse(
                                 "event project | meeting /from 2/12/2019 1800 /to 2/12/2019 1900")));
+    }
+
+    @Test
+    void parse_eventWithInvalidEndDate_bobExceptionThrown() {
+        BobException exception = assertThrows(BobException.class,
+                () -> parser.parse("event project meeting /from 2/12/2019 1800 /to invalid"));
+
+        assertEquals("Use d/M/yyyy or d/M/yyyy HHmm, such as 2/12/2019 or 2/12/2019 1800.",
+                exception.getMessage());
     }
 
     @Test

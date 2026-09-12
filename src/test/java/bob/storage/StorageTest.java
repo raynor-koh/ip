@@ -87,6 +87,32 @@ class StorageTest {
     }
 
     @Test
+    void save_filePathIsDirectory_ioExceptionIncludesFilePath() {
+        Storage storage = new Storage(tempDirectory.toString());
+
+        IOException exception = assertThrows(IOException.class,
+                () -> storage.save(List.of(new ToDo("read book"))));
+
+        assertEquals("Could not save tasks to " + tempDirectory + ".", exception.getMessage());
+    }
+
+    @Test
+    void save_mismatchedDeadlineTask_assertionErrorThrown() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+        Task mismatchedTask = new TestTask("deadline", TaskType.DEADLINE);
+
+        assertThrows(AssertionError.class, () -> storage.save(List.of(mismatchedTask)));
+    }
+
+    @Test
+    void save_mismatchedEventTask_assertionErrorThrown() {
+        Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
+        Task mismatchedTask = new TestTask("event", TaskType.EVENT);
+
+        assertThrows(AssertionError.class, () -> storage.save(List.of(mismatchedTask)));
+    }
+
+    @Test
     void deserializeTask_validRecord_returnsTaskWithStoredStatus() throws IOException {
         Storage storage = new Storage(tempDirectory.resolve("tasks.txt").toString());
 
@@ -158,10 +184,23 @@ class StorageTest {
                 exception.getMessage());
     }
 
+    @Test
+    void load_filePathIsDirectory_ioExceptionThrown() {
+        Storage storage = new Storage(tempDirectory.toString());
+
+        assertThrows(IOException.class, storage::load);
+    }
+
     private void assertTask(TaskType expectedType, TaskStatus expectedStatus, String expectedDescription,
             Task actualTask) {
         assertEquals(expectedType, actualTask.getType());
         assertEquals(expectedStatus, actualTask.getStatus());
         assertEquals(expectedDescription, actualTask.getDescription());
+    }
+
+    private static class TestTask extends Task {
+        TestTask(String description, TaskType type) {
+            super(description, type);
+        }
     }
 }
